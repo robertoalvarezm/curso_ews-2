@@ -74,17 +74,20 @@ Forma normal: $$\dot{x} = \mu - x^2$$.
 
 Los puntos de equilibrio son:
 
-$$x^* = \pm\sqrt{\mu}$$ **existen solo para** $\mu \ge 0$: un par (uno estable, $$+\sqrt{\mu}$$; uno inestable, $$-\sqrt{\mu}$$) que **colisiona y se aniquila** en $\mu=0$.
+$$x^* = \pm\sqrt{\mu}$$ **existen solo para** $\mu \ge 0$: un par, uno estable, $$x_1^*=+\sqrt{\mu}$$; uno inestable, $$x_2^*=-\sqrt{\mu}$$ que **colisiona y se aniquila** en $\mu=0$.
 
 Es la bifurcación de **creación/destrucción** de equilibrios: la responsable de los *tipping points* abruptos que veremos en levaduras y cianobacterias [@dai2012; @veraart2012].
 
 ### Transcrítica {#sec-tc}
 
-Forma normal: $\dot{x} = \mu x - x^2 = x(\mu - x)$. Hay siempre dos puntos fijos, $x^*=0$ y $x^*=\mu$, que **intercambian estabilidad** al cruzarse en $\mu=0$. Ningún equilibrio desaparece; cambia quién es el atractor. Aparece donde un estado (p. ej. extinción, $x^*=0$) siempre existe pero gana o pierde estabilidad.
+Forma normal: $$\dot{x} = \mu x - x^2 = x(\mu - x)$$. 
+
+Hay siempre dos puntos fijos, $$x_1^*=0$$ y $$x_2^*=\mu$$, que **intercambian estabilidad** al cruzarse en $\mu=0$. Ningún equilibrio desaparece; cambia quién es el atractor. Aparece donde un estado (p. ej. extinción, $x^*=0$) siempre existe pero gana o pierde estabilidad.
+
 
 ### Pitchfork (tridente) {#sec-pf}
 
-Forma normal **supercrítica**: $\dot{x} = \mu x - x^3$. Para $\mu<0$ solo está $x^*=0$ (estable); en $\mu=0$ se vuelve inestable y nacen dos ramas estables simétricas $x^* = \pm\sqrt{\mu}$. Es la firma de la **ruptura de simetría** y de la **biestabilidad**. Su variante **subcrítica**, $\dot{x}=\mu x + x^3$, produce ramas inestables y suele acompañarse de histéresis (capítulo 3).
+Forma normal **supercrítica**: $$\dot{x} = \mu x - x^3$$. Para $\mu<0$ solo está $$x_1^*=0$$ (estable); en $\mu=0$ se vuelve inestable y nacen dos ramas estables simétricas $$x_{2,3}^* = \pm\sqrt{\mu}$$. Es la firma de la **ruptura de simetría** y de la **biestabilidad**. Su variante **subcrítica**, $$\dot{x}=\mu x + x^3$$, produce ramas inestables y suele acompañarse de histéresis (capítulo 3).
 
 ## Diagramas de bifurcación con código {#sec-diagramas}
 
