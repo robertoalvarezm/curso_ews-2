@@ -28,6 +28,77 @@ $$
 \underbrace{\rho_1 = e^{-\lambda \Delta t}}_{\text{autocorrelación de retardo-1}} .
 $$ {#eq-ews}
 
+
+::: {.callout-note collapse="true"}
+## Profundización (opcional): ¿de dónde sale σ²/(2λ)? [Avanzado]{.avanzado-tag}
+
+Partimos del proceso de Ornstein–Uhlenbeck $dx = -\lambda x\,dt + \sigma\,dW$.
+
+**Balance del segundo momento (vía Itô).** Para $g(x)=x^2$, el lema de Itô da
+$d(x^2)=2x\,dx+\tfrac12\cdot 2\,(dx)^2$, y con la regla $(dW)^2=dt$ (luego $(dx)^2=\sigma^2 dt$):
+
+$$
+d(x^2) = \big(-2\lambda x^2 + \sigma^2\big)\,dt + 2\sigma x\,dW .
+$$
+
+Tomando esperanza, el término de ruido se anula porque $\mathbb{E}[x\,dW]=0$:
+
+$$
+\frac{d\,\mathbb{E}[x^2]}{dt} = -2\lambda\,\mathbb{E}[x^2] + \sigma^2 .
+$$
+
+En estado estacionario la distribución no cambia, así que la derivada es cero:
+
+$$
+0 = -2\lambda\,\mathbb{E}[x^2] + \sigma^2 \;\Longrightarrow\; \mathbb{E}[x^2]=\frac{\sigma^2}{2\lambda}.
+$$
+
+Como la media decae a cero ($\dot{\mathbb{E}}[x]=-\lambda\,\mathbb{E}[x]$), se concluye que
+$\operatorname{Var}(x)=\mathbb{E}[x^2]=\dfrac{\sigma^2}{2\lambda}$.
+
+**Vía Fokker–Planck.** La densidad estacionaria con corriente nula cumple
+$-\lambda x\,p_s=\tfrac{\sigma^2}{2}\,p_s'$, cuya solución es la gaussiana
+$p_s(x)\propto \exp(-\lambda x^2/\sigma^2)$. Comparando con $\exp(-x^2/2\operatorname{Var})$ se recupera
+$\operatorname{Var}(x)=\sigma^2/(2\lambda)$.
+
+**Y la autocorrelación.** La autocovarianza estacionaria es $C(\tau)=\operatorname{Var}(x)\,e^{-\lambda|\tau|}$,
+así que $\rho_1 = C(\Delta t)/C(0) = e^{-\lambda\Delta t}$. Ambas señales tienen el mismo origen: la pérdida de la tasa de retorno $\lambda$.
+
+**Verificación numérica.** Simulamos el OU (como AR(1), que es su discretización de Euler–Maruyama) y comparamos la varianza muestral con $\sigma^2/(2\lambda)$:
+
+```{pyodide}
+import numpy as np
+from scipy.signal import lfilter
+import matplotlib.pyplot as plt
+
+def var_muestral_ou(lmbda, sigma=0.1, dt=0.01, n=100000, seed=0):
+    rng = np.random.default_rng(seed)
+    phi = 1 - lmbda*dt                 # x_t = phi*x_{t-1} + ruido_t  (AR(1))
+    ruido = sigma*np.sqrt(dt)*rng.standard_normal(n)
+    x = lfilter([1.0], [1.0, -phi], ruido)
+    return x[n//10:].var()             # descartar el transitorio inicial
+
+sigma = 0.1
+lams = np.array([2.0, 1.0, 0.5, 0.2, 0.1, 0.05])
+muestral = np.array([var_muestral_ou(l, sigma=sigma) for l in lams])
+teorica  = sigma**2 / (2*lams)
+
+print(f"{'lambda':>7} {'Var muestral':>14} {'sigma^2/(2L)':>14}")
+for l, m, t in zip(lams, muestral, teorica):
+    print(f"{l:7.2f} {m:14.5f} {t:14.5f}")
+
+plt.figure(figsize=(5.6, 3.6))
+plt.loglog(lams, teorica,  '-', color="#1f5673", label=r"teórica  $\sigma^2/(2\lambda)$")
+plt.loglog(lams, muestral, 'o', color="#6b2233", label="muestral (simulación)")
+plt.xlabel(r"$\lambda$"); plt.ylabel("Var(x)")
+plt.title("La varianza estacionaria diverge como 1/λ")
+plt.legend(); plt.tight_layout(); plt.show()
+```
+
+Los puntos caen sobre la recta teórica: al dividir $\lambda$ entre 2, la varianza se duplica. La pequeña diferencia residual es el error de discretización (la varianza exacta del AR(1) es $\sigma^2/(2\lambda-\lambda^2\Delta t)$, que tiende a $\sigma^2/(2\lambda)$ cuando $\Delta t\to 0$).
+:::
+
+
 Cuando $\lambda \to 0$: la **varianza explota** y la **autocorrelación tiende a 1**. Son las dos señales de alerta temprana canónicas [@scheffer2009; @dakos2012].
 
 Mueve $\lambda$ y observa ambas predicciones:

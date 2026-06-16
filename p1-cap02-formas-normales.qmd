@@ -74,16 +74,7 @@ Forma normal: $$\dot{x} = \mu - x^2$$.
 
 Los puntos de equilibrio son:
 
-| Punto de equilibrio | $r < 0$                          | r=0 |$r>0$| 
-|---------------------|-------------------------------|-----|---------|
-                     
- |$x_1^*=\sqrt{\mu}$     | No existen en \$\\mathcal R\$ |     |. |
-|                     |                               |     |.    |
-|                     |                               |     |      |
-
-: Estabilidades del modelo saddle-node
-
-$x^* = \pm\sqrt{\mu}$ **existen solo para** $\mu \ge 0$: un par (uno estable, $+\sqrt{\mu}$; uno inestable, $-\sqrt{\mu}$) que **colisiona y se aniquila** en $\mu=0$.
+$$x^* = \pm\sqrt{\mu}$$ **existen solo para** $\mu \ge 0$: un par (uno estable, $$+\sqrt{\mu}$$; uno inestable, $$-\sqrt{\mu}$$) que **colisiona y se aniquila** en $\mu=0$.
 
 Es la bifurcación de **creación/destrucción** de equilibrios: la responsable de los *tipping points* abruptos que veremos en levaduras y cianobacterias [@dai2012; @veraart2012].
 
