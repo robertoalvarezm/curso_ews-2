@@ -22,14 +22,10 @@ $$ {#eq-potencial}
 La imagen es intuitiva: una canica que rueda cuesta abajo por el paisaje $V(x)$. Los **mínimos** de $V$ son puntos fijos **estables**; los **máximos**, inestables. La profundidad de un pozo mide la **resiliencia** del estado: cuánta perturbación hace falta para sacar a la canica de él.
 
 
-
-## La catástrofe en cúspide: biestabilidad, pliegues e histéresis {#sec-cusp}
-
-
-## La catástrofe en cúspide: biestabilidad, pliegues e histéresis {#sec-cusp}
+## La catástrofe en la cúspide: biestabilidad, pliegues e histéresis {#sec-cusp}
 
 
-Hasta ahora variábamos un solo parámetro. Pero un sistema real suele tener un parámetro que **inclina** el paisaje ($\alpha$, un forzamiento) y otro que controla su **forma** ($\mu$, qué tan profundo es el doble pozo). La forma normal que reúne ambos efectos es el modelo de la **catástrofe en cúspide**:
+Hasta ahora variábamos un solo parámetro. Pero un sistema real suele tener un parámetro que **cambia la inclinación** el paisaje ($\alpha$, un forzamiento) y otro que controla su **forma** ($\mu$, qué tan profundo es el doble pozo). La forma normal que reúne ambos efectos es el modelo de la **catástrofe (en cúspide)**:
 
 $$
 \dot{x} = f(x) = \alpha + \mu x - x^3 .
@@ -142,7 +138,7 @@ plt.xlabel("μ"); plt.ylabel("α"); plt.title("Región de biestabilidad en el pl
 plt.legend(); plt.tight_layout(); plt.show()
 ```
 
-Dentro de la cuña gris hay tres equilibrios; fuera, solo uno. Las dos curvas son las **líneas de pliegue**: cruzarlas equivale a perder un pozo.
+Dentro de la zona gris hay tres equilibrios; fuera, solo uno. Las dos curvas son las **líneas de pliegue**: cruzarlas equivale a perder un pozo.
 
 ### La superficie plegada de equilibrios {#sec-cusp-superficie}
 
@@ -173,7 +169,7 @@ ax.set_title("Superficie de equilibrios x*(μ, α)")
 ax.legend(loc="upper left", fontsize=8); plt.tight_layout(); plt.show()
 ```
 
-La lengüeta media (en rojo) es la rama **inestable**: existe solo dentro de la cúspide y es la que provoca los saltos.
+La curva de enmedio (en rojo) es la rama **inestable**: existe solo dentro de la cúspide y es la que provoca los saltos.
 
 ### Histéresis: el efecto de memoria {#sec-cusp-histeresis}
 
@@ -235,7 +231,81 @@ legend("topleft", c("α creciente", "α decreciente"),
        col = c("#1f5673", "#b03a2e"), lwd = 2, bty = "n")
 ```
 
-:::
+
+
+```{ojs}
+//| echo: false
+viewof alfa = Inputs.range([-0.6, 0.6], {value: 0.1, step: 0.005, label: "α (forzamiento)"})
+```
+
+```{ojs}
+//| echo: false
+mu_fijo = 0.75                      // μ > 0  (cámbialo por un slider si quieres)
+xc = Math.sqrt(mu_fijo / 3)         // posición de los pliegues en x
+```
+
+```{ojs}
+//| echo: false
+curva = d3.range(-1.5, 1.501, 0.004).map(x => ({
+  x,
+  alpha: x**3 - mu_fijo*x,
+  estable: (mu_fijo - 3*x*x) < 0,
+  rama: x < -xc ? "inferior" : (x > xc ? "superior" : "media")
+}))
+```
+
+```{ojs}
+//| echo: false
+equilibrios = {
+  const f = x => alfa + mu_fijo*x - x**3;        // raíces de α + μx − x³ = 0
+  const xs = d3.range(-1.7, 1.701, 0.001);
+  const out = [];
+  for (let i = 1; i < xs.length; i++) {
+    if (f(xs[i-1]) * f(xs[i]) < 0) {
+      let lo = xs[i-1], hi = xs[i];
+      for (let k = 0; k < 50; k++) { const m = (lo+hi)/2; if (f(lo)*f(m) <= 0) hi = m; else lo = m; }
+      const r = (lo+hi)/2;
+      out.push({alpha: alfa, x: r, estable: (mu_fijo - 3*r*r) < 0});
+    }
+  }
+  return out;
+}
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  height: 360, marginLeft: 50,
+  x: {label: "α (forzamiento)", domain: [-0.7, 0.7]},
+  y: {label: "x*", domain: [-1.5, 1.5]},
+  marks: [
+    Plot.ruleX([0], {stroke: "#ddd"}),
+    Plot.ruleY([0], {stroke: "#ddd"}),
+    // ramas estables (sólidas), separadas por z para no unirlas
+    Plot.line(curva.filter(d => d.estable),
+              {x: "alpha", y: "x", z: "rama", stroke: "#1f5673", strokeWidth: 2.2}),
+    // rama inestable (discontinua)
+    Plot.line(curva.filter(d => !d.estable),
+              {x: "alpha", y: "x", stroke: "#b03a2e", strokeWidth: 2.2, strokeDasharray: "5 4"}),
+    // posición actual de α
+    Plot.ruleX([alfa], {stroke: "#6b2233", strokeDasharray: "3 3"}),
+    // equilibrios para el α actual
+    Plot.dot(equilibrios,
+             {x: "alpha", y: "x", r: 6, stroke: "white",
+              fill: d => d.estable ? "#1f5673" : "#b03a2e"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+html`<div style="font-family:system-ui;font-size:1rem;line-height:1.6">
+<b>α = ${alfa.toFixed(3)}</b> &nbsp;→&nbsp; ${equilibrios.length} equilibrio(s),
+${equilibrios.length === 3 ? "régimen <b>biestable</b>" : "régimen <b>monoestable</b>"}<br>
+${equilibrios.map(e => `x* = ${e.x.toFixed(3)} <span style="color:${e.estable ? "#1f5673" : "#b03a2e"}">(${e.estable ? "estable" : "inestable"})</span>`).join(" &nbsp;·&nbsp; ")}
+</div>`
+```
+
 
 ### El potencial inclinado {#sec-cusp-potencial}
 
@@ -260,55 +330,7 @@ Plot.plot({
 ```
 
 ::: {.dato-interesante}
-**Para la memoria.** Un registro de polvo en sedimentos oceánicos frente a la costa africana muestra que hace ~5 500 años el "Sahara verde" colapsó a desierto de forma **abrupta**, pese a que el forzamiento (la radiación solar por cambios orbitales) variaba de manera **lenta y suave** (deMenocal et al. 2000; Scheffer et al. 2001). Es la firma de un pliegue: cambios graduales en el control, respuesta brusca del estado.
-:::
-
-### Ejercicios {#sec-ej-cusp}
-
-::: {.callout-tip}
-## Ejercicio C.1 — Deriva los pliegues
-A partir de $f=0$ y $f'=0$, demuestra @eq-cusp-xc y @eq-cusp-alphac.
-
-::: {.callout-note collapse="true"}
-## Solución
-$f'(x)=\mu-3x^2=0 \Rightarrow x_c=\pm\sqrt{\mu/3}$ (requiere $\mu\ge 0$). Como en el pliegue $\alpha=x^3-\mu x$, sustituye $x_c^2=\mu/3$: $\alpha_c=x_c(x_c^2-\mu)=x_c(\mu/3-\mu)=-\tfrac{2\mu}{3}x_c=\mp\tfrac{2\mu}{3}\sqrt{\mu/3}$.
-:::
-:::
-
-::: {.callout-tip}
-## Ejercicio C.2 — Computacional
-En la celda de histéresis cambia `mu` a `0.3` y luego a `1.2`. ¿Cómo varía el ancho del lazo? ¿Qué pasa con `mu = -0.2`?
-
-::: {.callout-note collapse="true"}
-## Solución
-El ancho del lazo es $2\alpha_c\propto\mu^{3/2}$: crece con $\mu$ (más ancho en 1.2, más angosto en 0.3). Con $\mu\le 0$ no hay biestabilidad: $\alpha_c$ no es real, el sistema es monoestable y **no hay lazo** ni salto.
-:::
-:::
-
-::: {.callout-tip}
-## Ejercicio C.3 — Interpretación
-El registro del Sahara es una caída brusca tras milenios de descenso lento. Argumenta si es compatible con un pliegue y qué esperarías ver en la **varianza** justo antes del salto.
-
-::: {.callout-note collapse="true"}
-## Solución
-Es compatible con una saddle-node: forzamiento suave, salto abrupto e (idealmente) histéresis. Antes del pliegue, por enlentecimiento crítico, esperaríamos un aumento de varianza y de autocorrelación —las EWS de la [Parte III](p3-cap05-ews-fundamento.qmd)—, sujeto a las limitaciones de muestreo del registro.
-:::
-:::
-
-::: {.callout-note collapse="true"}
-## Profundización (opcional): el tiempo de relajación diverge [Avanzado]{.avanzado-tag}
-Tomando el modelo simétrico $\dot{x}=\mu x-x^3$, el tiempo característico para volver al equilibrio es $\tau=1/|f'(x^*)|$. En la rama $x^*=\sqrt{\mu}$ se tiene $f'(\sqrt\mu)=\mu-3\mu=-2\mu$, así que $\tau=1/(2\mu)$; en la rama $x^*=0$ (para $\mu<0$), $f'(0)=\mu$ y $\tau=1/|\mu|$. En ambos lados $\tau\to\infty$ cuando $\mu\to 0$: **enlentecimiento crítico**, el puente directo a las señales de alerta temprana.
-
-```{pyodide}
-import numpy as np, matplotlib.pyplot as plt
-mp = np.linspace(0.01, 0.3, 200)
-mn = np.linspace(-0.3, -0.01, 200)
-plt.figure(figsize=(5.8, 3.7))
-plt.plot(mp, 1/(2*mp),       color="#1f5673", label=r"rama $\sqrt{\mu}$:  $\tau=1/2\mu$")
-plt.plot(mn, 1/np.abs(mn),   color="#b03a2e", label=r"rama $0$:  $\tau=1/|\mu|$")
-plt.xlabel("μ"); plt.ylabel(r"tiempo de relajación  $\tau=1/|f'(x^*)|$")
-plt.title("Divergencia de τ en μ → 0"); plt.legend(); plt.tight_layout(); plt.show()
-```
+**Dato interesante.** Un registro de polvo en sedimentos oceánicos frente a la costa africana muestra que hace ~5 500 años el "Sahara verde" colapsó a desierto de forma **abrupta**, pese a que el forzamiento (la radiación solar por cambios orbitales) variaba de manera **lenta y suave** (deMenocal et al. 2000; Scheffer et al. 2001). Es la firma de un pliegue: cambios graduales en el control, respuesta brusca del estado.
 :::
 
 
@@ -413,6 +435,57 @@ legend("topleft", c("h creciente", "h decreciente"),
 :::
 
 El lazo abierto entre ambas curvas **es** la histéresis: los saltos ocurren a distinto $h$ según la dirección del barrido.
+
+
+### Ejercicios {#sec-ej-cusp}
+
+::: {.callout-tip}
+## Ejercicio C.1 — Deriva los pliegues
+A partir de $f=0$ y $f'=0$, demuestra @eq-cusp-xc y @eq-cusp-alphac.
+
+::: {.callout-note collapse="true"}
+## Solución
+$f'(x)=\mu-3x^2=0 \Rightarrow x_c=\pm\sqrt{\mu/3}$ (requiere $\mu\ge 0$). Como en el pliegue $\alpha=x^3-\mu x$, sustituye $x_c^2=\mu/3$: $\alpha_c=x_c(x_c^2-\mu)=x_c(\mu/3-\mu)=-\tfrac{2\mu}{3}x_c=\mp\tfrac{2\mu}{3}\sqrt{\mu/3}$.
+:::
+:::
+
+::: {.callout-tip}
+## Ejercicio C.2 — Computacional
+En la celda de histéresis cambia `mu` a `0.3` y luego a `1.2`. ¿Cómo varía el ancho del lazo? ¿Qué pasa con `mu = -0.2`?
+
+::: {.callout-note collapse="true"}
+## Solución
+El ancho de la curva es $2\alpha_c\propto\mu^{3/2}$: crece con $\mu$ (más ancho en 1.2, más angosto en 0.3). Con $\mu\le 0$ no hay biestabilidad: $\alpha_c$ no es real, el sistema es monoestable y **no hay lazo** ni salto.
+:::
+:::
+
+::: {.callout-tip}
+## Ejercicio C.3 — Interpretación
+El registro del Sahara es una caída brusca tras milenios de descenso lento. Argumenta si es compatible con un pliegue y qué esperarías ver en la **varianza** justo antes del salto.
+
+::: {.callout-note collapse="true"}
+## Solución
+Es compatible con una saddle-node: forzamiento suave, salto abrupto e (idealmente) histéresis. Antes del pliegue, por enlentecimiento crítico, esperaríamos un aumento de varianza y de autocorrelación —las EWS de la [Parte III](p3-cap05-ews-fundamento.qmd)—, sujeto a las limitaciones de muestreo del registro.
+:::
+:::
+
+::: {.callout-note collapse="true"}
+## Profundización (opcional): el tiempo de relajación diverge [Avanzado]{.avanzado-tag}
+Tomando el modelo simétrico $\dot{x}=\mu x-x^3$, el tiempo característico para volver al equilibrio es $\tau=1/|f'(x^*)|$. En la rama $x^*=\sqrt{\mu}$ se tiene $f'(\sqrt\mu)=\mu-3\mu=-2\mu$, así que $\tau=1/(2\mu)$; en la rama $x^*=0$ (para $\mu<0$), $f'(0)=\mu$ y $\tau=1/|\mu|$. En ambos lados $\tau\to\infty$ cuando $\mu\to 0$: **enlentecimiento crítico**, el puente directo a las señales de alerta temprana.
+
+```{pyodide}
+import numpy as np, matplotlib.pyplot as plt
+mp = np.linspace(0.01, 0.3, 200)
+mn = np.linspace(-0.3, -0.01, 200)
+plt.figure(figsize=(5.8, 3.7))
+plt.plot(mp, 1/(2*mp),       color="#1f5673", label=r"rama $\sqrt{\mu}$:  $\tau=1/2\mu$")
+plt.plot(mn, 1/np.abs(mn),   color="#b03a2e", label=r"rama $0$:  $\tau=1/|\mu|$")
+plt.xlabel("μ"); plt.ylabel(r"tiempo de relajación  $\tau=1/|f'(x^*)|$")
+plt.title("Divergencia de τ en μ → 0"); plt.legend(); plt.tight_layout(); plt.show()
+```
+:::
+
+
 
 ## Ejercicios {#sec-ej3}
 
