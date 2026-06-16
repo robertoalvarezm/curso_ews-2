@@ -1,8 +1,10 @@
 project:
   type: website
-  output-dir: _site
+  output-dir: docs
   render:
     - "*.qmd"
+    
+
 
 website:
   title: "Matemáticas de las transiciones críticas en biología"
