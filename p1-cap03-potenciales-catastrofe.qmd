@@ -1,49 +1,67 @@
 ---
 title: "Potenciales, biestabilidad y bifurcación catastrófica"
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
 {{< include _extensions/r-wasm/live/_knitr.qmd >}}
 
-::: {.objetivos}
+::: objetivos
 **Objetivos de aprendizaje**
 
-- Reescribir $\dot{x}=f(x)$ como descenso por un **paisaje de potencial** $V(x)$.
+- Reescribir $\dot{x}=f(x)$ como descenso por un **paisaje de
+  potencial** $V(x)$.
 - Entender la **biestabilidad** como un potencial de doble pozo.
-- Explicar la **bifurcación catastrófica** (fold) y el fenómeno de **histéresis** mediante el paisaje y un ciclo de barrido.
+- Explicar la **bifurcación catastrófica** (fold) y el fenómeno de
+  **histéresis** mediante el paisaje y un ciclo de barrido.
 :::
 
 ## El paisaje de potencial {#sec-potencial}
 
-Cuando la dinámica es 1-D siempre podemos escribirla como un **gradiente**:
-$$
-\dot{x} = -\,\frac{dV}{dx}, \qquad V(x) = -\!\int f(x)\,dx .
-$$ {#eq-potencial}
+Cuando la dinámica es 1-D siempre podemos escribirla como un
+**gradiente**:
+$$\dot{x} = -\,\frac{dV}{dx}, \qquad V(x) = -\!\int f(x)\,dx .$$
+ {#eq-potencial}
 
-La imagen es intuitiva: una canica que rueda cuesta abajo por el paisaje $V(x)$. Los **mínimos** de $V$ son puntos fijos **estables**; los **máximos**, inestables. La profundidad de un pozo mide la **resiliencia** del estado: cuánta perturbación hace falta para sacar a la canica de él.
-
+La imagen es intuitiva: una canica que rueda cuesta abajo por el paisaje
+$V(x)$. Los **mínimos** de $V$ son puntos fijos **estables**; los
+**máximos**, inestables. La profundidad de un pozo mide la
+**resiliencia** del estado: cuánta perturbación hace falta para sacar a
+la canica de él.
 
 ## La catástrofe en la cúspide: biestabilidad, pliegues e histéresis {#sec-cusp}
 
+Hasta ahora variábamos un solo parámetro. Pero un sistema real suele
+tener un parámetro que **cambia la inclinación** el paisaje ($\alpha$,
+un forzamiento) y otro que controla su **forma** ($\mu$, qué tan
+profundo es el doble pozo). La forma normal que reúne ambos efectos es
+el modelo de la **catástrofe (en cúspide)**:
 
-Hasta ahora variábamos un solo parámetro. Pero un sistema real suele tener un parámetro que **cambia la inclinación** el paisaje ($\alpha$, un forzamiento) y otro que controla su **forma** ($\mu$, qué tan profundo es el doble pozo). La forma normal que reúne ambos efectos es el modelo de la **catástrofe (en cúspide)**:
+$$\dot{x} = f(x) = \alpha + \mu x - x^3 .$$
+ {#eq-cusp}
 
-$$
-\dot{x} = f(x) = \alpha + \mu x - x^3 .
-$$ {#eq-cusp}
-
-::: {.dato-historico}
-**Apunte histórico.** La *teoría de catástrofes* fue formulada por el matemático **René Thom** (1972) y popularizada por **Christopher Zeeman** (1977). Clasifica las formas en que un sistema suave puede dar saltos cualitativos; la **cúspide** es la más célebre de las siete catástrofes elementales y aparece una y otra vez en ecología, clima y dinámica social.
+::: dato-historico
+**Apunte histórico.** La *teoría de catástrofes* fue formulada por el
+matemático **René Thom** (1972) y popularizada por **Christopher
+Zeeman** (1977). Clasifica las formas en que un sistema suave puede dar
+saltos cualitativos; la **cúspide** es la más célebre de las siete
+catástrofes elementales y aparece una y otra vez en ecología, clima y
+dinámica social.
 :::
 
 ### Puntos fijos: un atajo gráfico {#sec-cusp-fijos}
 
-Los puntos fijos cumplen $\alpha+\mu x^*-(x^*)^3=0$, una **cúbica** que puede tener **una o tres** raíces reales. En vez de resolverla, conviene reescribirla como una intersección:
+Los puntos fijos cumplen $\alpha+\mu x^*-(x^*)^3=0$, una **cúbica** que
+puede tener **una o tres** raíces reales. En vez de resolverla, conviene
+reescribirla como una intersección:
 
-$$
-\underbrace{\mu x - x^3}_{y_1(x)} \;=\; \underbrace{-\alpha}_{y_2}.
-$$ {#eq-cusp-graf}
+$$\underbrace{\mu x - x^3}_{y_1(x)} \;=\; \underbrace{-\alpha}_{y_2}.$$
+ {#eq-cusp-graf}
 
-Los equilibrios son los cruces de la curva cúbica $y_1$ con la recta horizontal $y_2=-\alpha$. Mueve $\mu$ (forma) y $\alpha$ (inclinación) y observa cómo pasamos de **uno** a **tres** cruces:
+Los equilibrios son los cruces de la curva cúbica $y_1$ con la recta
+horizontal $y_2=-\alpha$. Mueve $\mu$ (forma) y $\alpha$ (inclinación) y
+observa cómo pasamos de **uno** a **tres** cruces:
 
 ```{ojs}
 //| echo: false
@@ -102,24 +120,29 @@ ${raices.map(r => `x* = ${r.x.toFixed(3)} <span style="color:${r.estable ? "#1f5
 ### Estabilidad: ¿quién es atractor? {#sec-cusp-estab}
 
 La estabilidad se decide con el signo de
-$$
-f'(x) = \mu - 3x^2 .
-$$ {#eq-cusp-fprime}
+$$f'(x) = \mu - 3x^2 .$$
+ {#eq-cusp-fprime}
 
-Un equilibrio es **estable** si $f'(x^*)<0$, es decir $x^{*2}>\mu/3$. Cuando hay tres raíces, las **dos exteriores** cumplen esto (estables) y la **central** tiene $x^{*2}<\mu/3$ (inestable): es la **barrera** que separa los dos pozos. Reaparece el patrón estable–inestable–estable de la biestabilidad, ahora controlado por dos perillas.
+Un equilibrio es **estable** si $f'(x^*)<0$, es decir $x^{*2}>\mu/3$.
+Cuando hay tres raíces, las **dos exteriores** cumplen esto (estables) y
+la **central** tiene $x^{*2}<\mu/3$ (inestable): es la **barrera** que
+separa los dos pozos. Reaparece el patrón estable–inestable–estable de
+la biestabilidad, ahora controlado por dos perillas.
 
 ### Los pliegues y la cúspide {#sec-cusp-pliegues}
 
-Un **pliegue** (saddle-node) ocurre cuando dos equilibrios chocan y se aniquilan: ahí $f=0$ **y** $f'=0$ a la vez. De @eq-cusp-fprime,
-$$
-x_c = \pm\sqrt{\tfrac{\mu}{3}} ,
-$$ {#eq-cusp-xc}
-y sustituyendo en $\alpha = x^3-\mu x$ se obtiene el valor crítico del forzamiento:
-$$
-\alpha_c = \pm\frac{2\mu}{3}\sqrt{\frac{\mu}{3}} = \pm\frac{2}{3\sqrt{3}}\,\mu^{3/2}.
-$$ {#eq-cusp-alphac}
+Un **pliegue** (saddle-node) ocurre cuando dos equilibrios chocan y se
+aniquilan: ahí $f=0$ **y** $f'=0$ a la vez. De @eq-cusp-fprime,
+$$x_c = \pm\sqrt{\tfrac{\mu}{3}} ,$$
+ {#eq-cusp-xc} y sustituyendo en $\alpha = x^3-\mu x$ se obtiene el
+valor crítico del forzamiento:
+$$\alpha_c = \pm\frac{2\mu}{3}\sqrt{\frac{\mu}{3}} = \pm\frac{2}{3\sqrt{3}}\,\mu^{3/2}.$$
+ {#eq-cusp-alphac}
 
-Equivalente: la cúbica $x^3-\mu x-\alpha=0$ tiene tres raíces reales cuando su discriminante es positivo, $4\mu^3-27\alpha^2>0$, es decir $|\alpha|<\frac{2}{3\sqrt3}\mu^{3/2}$. Esa frontera dibuja una **cúspide** en el plano de parámetros:
+Equivalente: la cúbica $x^3-\mu x-\alpha=0$ tiene tres raíces reales
+cuando su discriminante es positivo, $4\mu^3-27\alpha^2>0$, es decir
+$|\alpha|<\frac{2}{3\sqrt3}\mu^{3/2}$. Esa frontera dibuja una
+**cúspide** en el plano de parámetros:
 
 ```{pyodide}
 import numpy as np, matplotlib.pyplot as plt
@@ -138,11 +161,15 @@ plt.xlabel("μ"); plt.ylabel("α"); plt.title("Región de biestabilidad en el pl
 plt.legend(); plt.tight_layout(); plt.show()
 ```
 
-Dentro de la zona gris hay tres equilibrios; fuera, solo uno. Las dos curvas son las **líneas de pliegue**: cruzarlas equivale a perder un pozo.
+Dentro de la zona gris hay tres equilibrios; fuera, solo uno. Las dos
+curvas son las **líneas de pliegue**: cruzarlas equivale a perder un
+pozo.
 
 ### La superficie plegada de equilibrios {#sec-cusp-superficie}
 
-Si para cada $(\mu,\alpha)$ graficamos todos los $x^*$, obtenemos la célebre **superficie plegada**: una hoja que se enrolla sobre sí misma justo en la cúspide.
+Si para cada $(\mu,\alpha)$ graficamos todos los $x^*$, obtenemos la
+célebre **superficie plegada**: una hoja que se enrolla sobre sí misma
+justo en la cúspide.
 
 ```{pyodide}
 import numpy as np, matplotlib.pyplot as plt
@@ -169,14 +196,17 @@ ax.set_title("Superficie de equilibrios x*(μ, α)")
 ax.legend(loc="upper left", fontsize=8); plt.tight_layout(); plt.show()
 ```
 
-La curva de enmedio (en rojo) es la rama **inestable**: existe solo dentro de la cúspide y es la que provoca los saltos.
+La curva de enmedio (en rojo) es la rama **inestable**: existe solo
+dentro de la cúspide y es la que provoca los saltos.
 
 ### Histéresis: el efecto de memoria {#sec-cusp-histeresis}
 
-Fija $\mu>0$ y barre $\alpha$ despacio, dejando relajar el sistema en cada paso. Como hay **dos** pliegues (en $+\alpha_c$ y $-\alpha_c$), el salto de bajada ocurre a un valor de $\alpha$ distinto que el de subida: el sistema **recuerda** por dónde venía.
+Fija $\mu>0$ y barre $\alpha$ despacio, dejando relajar el sistema en
+cada paso. Como hay **dos** pliegues (en $+\alpha_c$ y $-\alpha_c$), el
+salto de bajada ocurre a un valor de $\alpha$ distinto que el de subida:
+el sistema **recuerda** por dónde venía.
 
-::: {.panel-tabset}
-
+:::::::::::::::::: panel-tabset
 ## Python
 
 ```{pyodide}
@@ -230,18 +260,18 @@ abline(v = c(ac, -ac), lty = 3, col = "gray")
 legend("topleft", c("α creciente", "α decreciente"),
        col = c("#1f5673", "#b03a2e"), lwd = 2, bty = "n")
 ```
-
+:::::::::::::::::: 
 
 
 ```{ojs}
 //| echo: false
-viewof alfa = Inputs.range([-0.6, 0.6], {value: 0.1, step: 0.005, label: "α (forzamiento)"})
+viewof alfaS = Inputs.range([-0.6, 0.6], {value: 0.1, step: 0.005, label: "α (forzamiento)"})
 ```
 
 ```{ojs}
 //| echo: false
-mu_fijo = 0.75                      // μ > 0  (cámbialo por un slider si quieres)
-xc = Math.sqrt(mu_fijo / 3)         // posición de los pliegues en x
+mu_fijo = 0.75
+xc = Math.sqrt(mu_fijo / 3)
 ```
 
 ```{ojs}
@@ -257,7 +287,7 @@ curva = d3.range(-1.5, 1.501, 0.004).map(x => ({
 ```{ojs}
 //| echo: false
 equilibrios = {
-  const f = x => alfa + mu_fijo*x - x**3;        // raíces de α + μx − x³ = 0
+  const f = x => alfaS + mu_fijo*x - x**3;
   const xs = d3.range(-1.7, 1.701, 0.001);
   const out = [];
   for (let i = 1; i < xs.length; i++) {
@@ -265,7 +295,7 @@ equilibrios = {
       let lo = xs[i-1], hi = xs[i];
       for (let k = 0; k < 50; k++) { const m = (lo+hi)/2; if (f(lo)*f(m) <= 0) hi = m; else lo = m; }
       const r = (lo+hi)/2;
-      out.push({alpha: alfa, x: r, estable: (mu_fijo - 3*r*r) < 0});
+      out.push({alpha: alfaS, x: r, estable: (mu_fijo - 3*r*r) < 0});
     }
   }
   return out;
@@ -281,15 +311,11 @@ Plot.plot({
   marks: [
     Plot.ruleX([0], {stroke: "#ddd"}),
     Plot.ruleY([0], {stroke: "#ddd"}),
-    // ramas estables (sólidas), separadas por z para no unirlas
     Plot.line(curva.filter(d => d.estable),
               {x: "alpha", y: "x", z: "rama", stroke: "#1f5673", strokeWidth: 2.2}),
-    // rama inestable (discontinua)
     Plot.line(curva.filter(d => !d.estable),
               {x: "alpha", y: "x", stroke: "#b03a2e", strokeWidth: 2.2, strokeDasharray: "5 4"}),
-    // posición actual de α
-    Plot.ruleX([alfa], {stroke: "#6b2233", strokeDasharray: "3 3"}),
-    // equilibrios para el α actual
+    Plot.ruleX([alfaS], {stroke: "#6b2233", strokeDasharray: "3 3"}),
     Plot.dot(equilibrios,
              {x: "alpha", y: "x", r: 6, stroke: "white",
               fill: d => d.estable ? "#1f5673" : "#b03a2e"})
@@ -300,21 +326,21 @@ Plot.plot({
 ```{ojs}
 //| echo: false
 html`<div style="font-family:system-ui;font-size:1rem;line-height:1.6">
-<b>α = ${alfa.toFixed(3)}</b> &nbsp;→&nbsp; ${equilibrios.length} equilibrio(s),
+<b>α = ${alfaS.toFixed(3)}</b> &nbsp;→&nbsp; ${equilibrios.length} equilibrio(s),
 ${equilibrios.length === 3 ? "régimen <b>biestable</b>" : "régimen <b>monoestable</b>"}<br>
 ${equilibrios.map(e => `x* = ${e.x.toFixed(3)} <span style="color:${e.estable ? "#1f5673" : "#b03a2e"}">(${e.estable ? "estable" : "inestable"})</span>`).join(" &nbsp;·&nbsp; ")}
 </div>`
 ```
 
-
 ### El potencial inclinado {#sec-cusp-potencial}
 
 Todo esto se lee en el paisaje de potencial $\dot{x}=-V'(x)$:
-$$
-V_{\mu,\alpha}(x) = -\alpha\,x - \mu\,\frac{x^2}{2} + \frac{x^4}{4} .
-$$ {#eq-cusp-pot}
+$$V_{\mu,\alpha}(x) = -\alpha\,x - \mu\,\frac{x^2}{2} + \frac{x^4}{4} .$$
+ {#eq-cusp-pot}
 
-El término $-\mu\,x^2/2$ crea el doble pozo (si $\mu>0$) y $-\alpha x$ lo **inclina**. Mueve los mismos deslizadores de arriba y observa cómo un pozo se hace somero hasta desaparecer (un pliegue):
+El término $-\mu\,x^2/2$ crea el doble pozo (si $\mu>0$) y $-\alpha x$
+lo **inclina**. Mueve los mismos deslizadores de arriba y observa cómo
+un pozo se hace somero hasta desaparecer (un pliegue):
 
 ```{ojs}
 //| echo: false
@@ -329,19 +355,26 @@ Plot.plot({
 })
 ```
 
-::: {.dato-interesante}
-**Dato interesante.** Un registro de polvo en sedimentos oceánicos frente a la costa africana muestra que hace ~5 500 años el "Sahara verde" colapsó a desierto de forma **abrupta**, pese a que el forzamiento (la radiación solar por cambios orbitales) variaba de manera **lenta y suave** (deMenocal et al. 2000; Scheffer et al. 2001). Es la firma de un pliegue: cambios graduales en el control, respuesta brusca del estado.
+::: dato-interesante
+**Dato interesante.** Un registro de polvo en sedimentos oceánicos
+frente a la costa africana muestra que hace \~5 500 años el "Sahara
+verde" colapsó a desierto de forma **abrupta**, pese a que el
+forzamiento (la radiación solar por cambios orbitales) variaba de manera
+**lenta y suave** (deMenocal et al. 2000; Scheffer et al. 2001). Es la
+firma de un pliegue: cambios graduales en el control, respuesta brusca
+del estado.
 :::
-
 
 ## Biestabilidad: el doble pozo {#sec-doblepozo}
 
 Tomemos $\dot{x} = -x^3 + x + h$, cuyo potencial es
-$$
-V(x) = \frac{x^4}{4} - \frac{x^2}{2} - h\,x .
-$$ {#eq-doblepozo}
+$$V(x) = \frac{x^4}{4} - \frac{x^2}{2} - h\,x .$$
+ {#eq-doblepozo}
 
-Para $h=0$ es un **doble pozo simétrico**: dos estados estables ($x^*\approx\pm 1$) separados por una barrera (el máximo en $x^*=0$). El parámetro $h$ **inclina** el paisaje. Muévelo y observa cómo un pozo se hace más somero hasta **desaparecer**:
+Para $h=0$ es un **doble pozo simétrico**: dos estados estables
+($x^*\approx\pm 1$) separados por una barrera (el máximo en $x^*=0$). El
+parámetro $h$ **inclina** el paisaje. Muévelo y observa cómo un pozo se
+hace más somero hasta **desaparecer**:
 
 ```{ojs}
 //| echo: false
@@ -361,26 +394,37 @@ Plot.plot({
 })
 ```
 
-Cuando el pozo de la izquierda se vuelve un simple recodo y se borra, la canica que vivía allí **no tiene más remedio que rodar** al otro pozo: eso es un *tipping point*.
+Cuando el pozo de la izquierda se vuelve un simple recodo y se borra, la
+canica que vivía allí **no tiene más remedio que rodar** al otro pozo:
+eso es un *tipping point*.
 
 ## La catástrofe fold y la histéresis {#sec-histeresis}
 
-La desaparición de un pozo es, en el lenguaje del capítulo 2, una **saddle-node**. Como el doble pozo tiene **dos** pliegues (uno a cada lado), al barrer $h$ en una dirección y luego en la contraria, el sistema **no recorre el mismo camino**: salta a destiempo. A ese desfase se le llama **histéresis**, y al salto, **bifurcación catastrófica** (catastrophic / fold bifurcation).
+La desaparición de un pozo es, en el lenguaje del capítulo 2, una
+**saddle-node**. Como el doble pozo tiene **dos** pliegues (uno a cada
+lado), al barrer $h$ en una dirección y luego en la contraria, el
+sistema **no recorre el mismo camino**: salta a destiempo. A ese desfase
+se le llama **histéresis**, y al salto, **bifurcación catastrófica**
+(catastrophic / fold bifurcation).
 
-La consecuencia ecológica es central [@scheffer2001]: el umbral para **colapsar** a un estado degradado difiere del umbral necesario para **recuperar** el estado original. Restaurar no es simplemente "deshacer" la perturbación.
-
-
+La consecuencia ecológica es central [@scheffer2001]: el umbral para
+**colapsar** a un estado degradado difiere del umbral necesario para
+**recuperar** el estado original. Restaurar no es simplemente "deshacer"
+la perturbación.
 
 <!-- Cap. 3 · catástrofe e histéresis -->
-::: {.dato-interesante}
-**Para la memoria.** El ejemplo clásico de histéresis en biología es el **gusano de la yema del abeto** (*spruce budworm*), modelado por **Ludwig, Jones y Holling (1978)**: el bosque salta entre un estado de baja y otro de alta infestación, con umbrales distintos para subir y bajar.
-:::
 
+::: dato-interesante
+**Para la memoria.** El ejemplo clásico de histéresis en biología es el
+**gusano de la yema del abeto** (*spruce budworm*), modelado por
+**Ludwig, Jones y Holling (1978)**: el bosque salta entre un estado de
+baja y otro de alta infestación, con umbrales distintos para subir y
+bajar.
+:::
 
 Barramos $h$ subiendo y bajando, relajando el sistema en cada paso:
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## Python
 
 ```{pyodide}
@@ -431,47 +475,72 @@ lines(hs_dn, rama_dn, col = "#b03a2e", lwd = 2)
 legend("topleft", c("h creciente", "h decreciente"),
        col = c("#1f5673", "#b03a2e"), lwd = 2, bty = "n")
 ```
-
 :::
 
-El lazo abierto entre ambas curvas **es** la histéresis: los saltos ocurren a distinto $h$ según la dirección del barrido.
-
+El lazo abierto entre ambas curvas **es** la histéresis: los saltos
+ocurren a distinto $h$ según la dirección del barrido.
 
 ### Ejercicios {#sec-ej-cusp}
 
-::: {.callout-tip}
+:::: callout-tip
 ## Ejercicio C.1 — Deriva los pliegues
+
 A partir de $f=0$ y $f'=0$, demuestra @eq-cusp-xc y @eq-cusp-alphac.
 
 ::: {.callout-note collapse="true"}
 ## Solución
-$f'(x)=\mu-3x^2=0 \Rightarrow x_c=\pm\sqrt{\mu/3}$ (requiere $\mu\ge 0$). Como en el pliegue $\alpha=x^3-\mu x$, sustituye $x_c^2=\mu/3$: $\alpha_c=x_c(x_c^2-\mu)=x_c(\mu/3-\mu)=-\tfrac{2\mu}{3}x_c=\mp\tfrac{2\mu}{3}\sqrt{\mu/3}$.
-:::
-:::
 
-::: {.callout-tip}
+$f'(x)=\mu-3x^2=0 \Rightarrow x_c=\pm\sqrt{\mu/3}$ (requiere
+$\mu\ge 0$). Como en el pliegue $\alpha=x^3-\mu x$, sustituye
+$x_c^2=\mu/3$:
+$\alpha_c=x_c(x_c^2-\mu)=x_c(\mu/3-\mu)=-\tfrac{2\mu}{3}x_c=\mp\tfrac{2\mu}{3}\sqrt{\mu/3}$.
+:::
+::::
+
+:::: callout-tip
 ## Ejercicio C.2 — Computacional
-En la celda de histéresis cambia `mu` a `0.3` y luego a `1.2`. ¿Cómo varía el ancho del lazo? ¿Qué pasa con `mu = -0.2`?
+
+En la celda de histéresis cambia `mu` a `0.3` y luego a `1.2`. ¿Cómo
+varía el ancho del lazo? ¿Qué pasa con `mu = -0.2`?
 
 ::: {.callout-note collapse="true"}
 ## Solución
-El ancho de la curva es $2\alpha_c\propto\mu^{3/2}$: crece con $\mu$ (más ancho en 1.2, más angosto en 0.3). Con $\mu\le 0$ no hay biestabilidad: $\alpha_c$ no es real, el sistema es monoestable y **no hay lazo** ni salto.
-:::
-:::
 
-::: {.callout-tip}
+El ancho de la curva es $2\alpha_c\propto\mu^{3/2}$: crece con $\mu$
+(más ancho en 1.2, más angosto en 0.3). Con $\mu\le 0$ no hay
+biestabilidad: $\alpha_c$ no es real, el sistema es monoestable y **no
+hay lazo** ni salto.
+:::
+::::
+
+:::: callout-tip
 ## Ejercicio C.3 — Interpretación
-El registro del Sahara es una caída brusca tras milenios de descenso lento. Argumenta si es compatible con un pliegue y qué esperarías ver en la **varianza** justo antes del salto.
+
+El registro del Sahara es una caída brusca tras milenios de descenso
+lento. Argumenta si es compatible con un pliegue y qué esperarías ver en
+la **varianza** justo antes del salto.
 
 ::: {.callout-note collapse="true"}
 ## Solución
-Es compatible con una saddle-node: forzamiento suave, salto abrupto e (idealmente) histéresis. Antes del pliegue, por enlentecimiento crítico, esperaríamos un aumento de varianza y de autocorrelación —las EWS de la [Parte III](p3-cap05-ews-fundamento.qmd)—, sujeto a las limitaciones de muestreo del registro.
+
+Es compatible con una saddle-node: forzamiento suave, salto abrupto e
+(idealmente) histéresis. Antes del pliegue, por enlentecimiento crítico,
+esperaríamos un aumento de varianza y de autocorrelación —las EWS de la
+[Parte III](p3-cap05-ews-fundamento.qmd)—, sujeto a las limitaciones de
+muestreo del registro.
 :::
-:::
+::::
 
 ::: {.callout-note collapse="true"}
 ## Profundización (opcional): el tiempo de relajación diverge [Avanzado]{.avanzado-tag}
-Tomando el modelo simétrico $\dot{x}=\mu x-x^3$, el tiempo característico para volver al equilibrio es $\tau=1/|f'(x^*)|$. En la rama $x^*=\sqrt{\mu}$ se tiene $f'(\sqrt\mu)=\mu-3\mu=-2\mu$, así que $\tau=1/(2\mu)$; en la rama $x^*=0$ (para $\mu<0$), $f'(0)=\mu$ y $\tau=1/|\mu|$. En ambos lados $\tau\to\infty$ cuando $\mu\to 0$: **enlentecimiento crítico**, el puente directo a las señales de alerta temprana.
+
+Tomando el modelo simétrico $\dot{x}=\mu x-x^3$, el tiempo
+característico para volver al equilibrio es $\tau=1/|f'(x^*)|$. En la
+rama $x^*=\sqrt{\mu}$ se tiene $f'(\sqrt\mu)=\mu-3\mu=-2\mu$, así que
+$\tau=1/(2\mu)$; en la rama $x^*=0$ (para $\mu<0$), $f'(0)=\mu$ y
+$\tau=1/|\mu|$. En ambos lados $\tau\to\infty$ cuando $\mu\to 0$:
+**enlentecimiento crítico**, el puente directo a las señales de alerta
+temprana.
 
 ```{pyodide}
 import numpy as np, matplotlib.pyplot as plt
@@ -485,35 +554,55 @@ plt.title("Divergencia de τ en μ → 0"); plt.legend(); plt.tight_layout(); pl
 ```
 :::
 
-
-
 ## Ejercicios {#sec-ej3}
 
-::: {.callout-tip}
+:::: callout-tip
 ## Ejercicio 3.1 — Del flujo al potencial
-Dada $\dot{x} = x - x^3$, obtén $V(x)$ y di cuántos pozos tiene. Relaciónalo con el Ejercicio 1.1.
+
+Dada $\dot{x} = x - x^3$, obtén $V(x)$ y di cuántos pozos tiene.
+Relaciónalo con el Ejercicio 1.1.
 
 ::: {.callout-note collapse="true"}
 ## Solución
-$V(x) = -\int (x - x^3)\,dx = -\tfrac{x^2}{2} + \tfrac{x^4}{4}$. Es un **doble pozo simétrico** con mínimos en $x=\pm 1$ y máximo en $x=0$: coincide con los puntos fijos estables/inestable hallados antes.
-:::
-:::
 
-::: {.callout-tip}
+$V(x) = -\int (x - x^3)\,dx = -\tfrac{x^2}{2} + \tfrac{x^4}{4}$. Es un
+**doble pozo simétrico** con mínimos en $x=\pm 1$ y máximo en $x=0$:
+coincide con los puntos fijos estables/inestable hallados antes.
+:::
+::::
+
+:::: callout-tip
 ## Ejercicio 3.2 — Computacional
-En la celda de Python, aumenta el rango de barrido a `hs_up = np.linspace(-1.5, 1.5, 220)`. ¿Cómo cambia el ancho del lazo de histéresis? ¿Qué pasa si el rango no alcanza los pliegues?
+
+En la celda de Python, aumenta el rango de barrido a
+`hs_up = np.linspace(-1.5, 1.5, 220)`. ¿Cómo cambia el ancho del lazo de
+histéresis? ¿Qué pasa si el rango no alcanza los pliegues?
 
 ::: {.callout-note collapse="true"}
 ## Solución
-Si el barrido **rebasa** ambos pliegues, el lazo se completa y el sistema visita los dos estados. Si el rango es demasiado estrecho para alcanzar un pliegue, **no hay salto**: el sistema permanece en su pozo y el lazo no se cierra (no se observa la catástrofe).
+
+Si el barrido **rebasa** ambos pliegues, el lazo se completa y el
+sistema visita los dos estados. Si el rango es demasiado estrecho para
+alcanzar un pliegue, **no hay salto**: el sistema permanece en su pozo y
+el lazo no se cierra (no se observa la catástrofe).
 :::
-:::
+::::
 
 ::: {.callout-note collapse="true"}
 ## Profundización (opcional): ruido y tiempo de escape [Avanzado]{.avanzado-tag}
-Con ruido, $dx = -V'(x)\,dt + \sigma\,dW$, la canica puede **saltar la barrera** antes del pliegue. El tiempo medio de escape sigue la ley de **Kramers**, $\tau \sim \exp(\Delta V / D)$, con $\Delta V$ la altura de la barrera y $D\propto\sigma^2$. Al acercarse al pliegue, $\Delta V\to 0$ y los saltos se vuelven frecuentes: es el puente microscópico hacia el **enlentecimiento crítico** y las señales de alerta temprana de la Parte III.
+
+Con ruido, $dx = -V'(x)\,dt + \sigma\,dW$, la canica puede **saltar la
+barrera** antes del pliegue. El tiempo medio de escape sigue la ley de
+**Kramers**, $\tau \sim \exp(\Delta V / D)$, con $\Delta V$ la altura de
+la barrera y $D\propto\sigma^2$. Al acercarse al pliegue,
+$\Delta V\to 0$ y los saltos se vuelven frecuentes: es el puente
+microscópico hacia el **enlentecimiento crítico** y las señales de
+alerta temprana de la Parte III.
 :::
 
 ## Para seguir
 
-Cierra la teoría. En la [Parte II](p2-cap04-empiricas.qmd) veremos estos pliegues e histéresis **medidos** en levaduras, cianobacterias y lagos enteros.
+Cierra la teoría. En la [Parte II](p2-cap04-empiricas.qmd) veremos estos
+pliegues e histéresis **medidos** en levaduras, cianobacterias y lagos
+enteros.
+
