@@ -14,7 +14,7 @@ title: "EWS multivariadas y aprendizaje automático"
 
 ## De una variable a muchas {#sec-multi}
 
-En comunidades microbianas o redes tróficas medimos **muchas** variables a la vez. Cerca de una bifurcación, el enlentecimiento crítico se manifiesta como un crecimiento de la **varianza colectiva** alineada con el modo que se desestabiliza. Un resumen natural es el **autovalor dominante** $\lambda_{\max}$ de la matriz de covarianza en ventana móvil: tiende a crecer al acercarse al umbral, igual que la varianza univariada.
+En comunidades microbianas o redes tróficas medimos **muchas** variables a la vez. Cerca de una bifurcación, el fenómeno de la ralentización crítica se manifiesta como un crecimiento de la **varianza colectiva** alineada con el modo que se desestabiliza. Un resumen natural es el **autovalor dominante** $\lambda_{\max}$ de la matriz de covarianza en ventana móvil: tiende a crecer al acercarse al umbral, igual que la varianza univariada.
 
 Simulamos dos variables acopladas cuya tasa de retorno se desvanece y seguimos $\lambda_{\max}$:
 

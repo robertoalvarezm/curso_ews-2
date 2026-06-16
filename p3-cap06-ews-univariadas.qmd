@@ -57,7 +57,7 @@ print("Kendall τ (varianza):", round(kendalltau(tt, var_roll)[0], 3))
 print("Kendall τ (AC de retardo-1):", round(kendalltau(tt, ac_roll)[0], 3))
 ```
 
-Ambos indicadores **tienden a subir** antes del salto, y el $\tau$ de Kendall (cercano a $+1$) lo confirma como una **tendencia monótona creciente**: la huella estadística del enlentecimiento crítico.
+Ambos indicadores **tienden a subir** antes del salto, y el $\tau$ de Kendall (cercano a $+1$) lo confirma como una **tendencia monótona creciente**: la huella estadística de la ralentización crítica.
 
 ## Buenas prácticas y trampas {#sec-practicas}
 

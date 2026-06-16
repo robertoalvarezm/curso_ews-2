@@ -1,5 +1,5 @@
 ---
-title: "Fundamento de las EWS: enlentecimiento crítico"
+title: "Fundamento de las EWS: ralentización crítica"
 ---
 
 {{< include _extensions/r-wasm/live/_knitr.qmd >}}
@@ -7,14 +7,14 @@ title: "Fundamento de las EWS: enlentecimiento crítico"
 ::: {.objetivos}
 **Objetivos de aprendizaje**
 
-- Explicar el **enlentecimiento crítico** (*critical slowing down*) a partir de la tasa de retorno.
+- Explicar el fenómeno de la **ralentización crítica** (*critical slowing down*) a partir de la tasa de retorno.
 - Derivar por qué la **varianza** y la **autocorrelación de retardo-1** crecen al acercarse a una bifurcación.
 - Simular un mismo sistema **lejos** y **cerca** del punto crítico y comparar sus estadísticos.
 :::
 
 ## La idea central {#sec-csd}
 
-Cerca de un punto fijo estable, la dinámica linealiza a $\dot{\eta} \approx -\lambda\,\eta$ con $\lambda = -f'(x^*) = |f'(x^*)| > 0$. La **tasa de retorno** $\lambda$ mide qué tan rápido el sistema reabsorbe una perturbación. Al acercarse a una bifurcación, $f'(x^*)\to 0$, así que $\lambda\to 0$: el sistema se vuelve **lento y "blando"**. Eso es el enlentecimiento crítico, ya medido en cianobacterias [@veraart2012].
+Cerca de un punto fijo estable, la dinámica linealiza a $\dot{\eta} \approx -\lambda\,\eta$ con $\lambda = -f'(x^*) = |f'(x^*)| > 0$. La **tasa de retorno** $\lambda$ mide qué tan rápido el sistema reabsorbe una perturbación. Al acercarse a una bifurcación, $f'(x^*)\to 0$, así que $\lambda\to 0$: el sistema se vuelve **lento y "blando"**. Eso es el ralentización crítica, ya medido en cianobacterias [@veraart2012].
 
 Con ruido, el sistema obedece un proceso de **Ornstein–Uhlenbeck**:
 $$

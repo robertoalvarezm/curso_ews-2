@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Fundamento de las EWS: enlentecimiento crítico – Matemáticas de las transiciones críticas en biología</title>
+<title>Fundamento de las EWS: ralentización crítica – Matemáticas de las transiciones críticas en biología</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -174,7 +174,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Parte III · Señales de Alerta Temprana (EWS)</a></li><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Fundamento de las EWS: enlentecimiento crítico</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Parte III · Señales de Alerta Temprana (EWS)</a></li><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Fundamento de las EWS: ralentización crítica</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -271,7 +271,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./p3-cap05-ews-fundamento.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Fundamento de las EWS: enlentecimiento crítico</span></a>
+ <span class="menu-text">Fundamento de las EWS: ralentización crítica</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -360,9 +360,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Parte III · Señales de Alerta Temprana (EWS)</a></li><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Fundamento de las EWS: enlentecimiento crítico</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Parte III · Señales de Alerta Temprana (EWS)</a></li><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Fundamento de las EWS: ralentización crítica</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Fundamento de las EWS: enlentecimiento crítico</h1>
+<h1 class="title">Fundamento de las EWS: ralentización crítica</h1>
 </div>
 
 
@@ -382,14 +382,14 @@ window.Quarto = {
 <div class="objetivos">
 <p><strong>Objetivos de aprendizaje</strong></p>
 <ul>
-<li>Explicar el <strong>enlentecimiento crítico</strong> (<em>critical slowing down</em>) a partir de la tasa de retorno.</li>
+<li>Explicar el fenómeno de la <strong>ralentización crítica</strong> (<em>critical slowing down</em>) a partir de la tasa de retorno.</li>
 <li>Derivar por qué la <strong>varianza</strong> y la <strong>autocorrelación de retardo-1</strong> crecen al acercarse a una bifurcación.</li>
 <li>Simular un mismo sistema <strong>lejos</strong> y <strong>cerca</strong> del punto crítico y comparar sus estadísticos.</li>
 </ul>
 </div>
 <section id="sec-csd" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="sec-csd"><span class="header-section-number">1</span> La idea central</h2>
-<p>Cerca de un punto fijo estable, la dinámica linealiza a <span class="math inline">\(\dot{\eta} \approx -\lambda\,\eta\)</span> con <span class="math inline">\(\lambda = -f'(x^*) = |f'(x^*)| &gt; 0\)</span>. La <strong>tasa de retorno</strong> <span class="math inline">\(\lambda\)</span> mide qué tan rápido el sistema reabsorbe una perturbación. Al acercarse a una bifurcación, <span class="math inline">\(f'(x^*)\to 0\)</span>, así que <span class="math inline">\(\lambda\to 0\)</span>: el sistema se vuelve <strong>lento y “blando”</strong>. Eso es el enlentecimiento crítico, ya medido en cianobacterias <span class="citation" data-cites="veraart2012">(<a href="#ref-veraart2012" role="doc-biblioref">Veraart et&nbsp;al. 2012</a>)</span>.</p>
+<p>Cerca de un punto fijo estable, la dinámica linealiza a <span class="math inline">\(\dot{\eta} \approx -\lambda\,\eta\)</span> con <span class="math inline">\(\lambda = -f'(x^*) = |f'(x^*)| &gt; 0\)</span>. La <strong>tasa de retorno</strong> <span class="math inline">\(\lambda\)</span> mide qué tan rápido el sistema reabsorbe una perturbación. Al acercarse a una bifurcación, <span class="math inline">\(f'(x^*)\to 0\)</span>, así que <span class="math inline">\(\lambda\to 0\)</span>: el sistema se vuelve <strong>lento y “blando”</strong>. Eso es el ralentización crítica, ya medido en cianobacterias <span class="citation" data-cites="veraart2012">(<a href="#ref-veraart2012" role="doc-biblioref">Veraart et&nbsp;al. 2012</a>)</span>.</p>
 <p>Con ruido, el sistema obedece un proceso de <strong>Ornstein–Uhlenbeck</strong>: <span id="eq-ou"><span class="math display">\[
 dx = -\lambda\,x\,dt + \sigma\,dW .
 \tag{1}\]</span></span> De aquí salen dos predicciones que <strong>no requieren conocer el modelo</strong>, solo la serie de tiempo:</p>

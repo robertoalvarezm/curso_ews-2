@@ -59,7 +59,7 @@
     "href": "p3-cap07-ews-multivariadas-ml.html#sec-multi",
     "title": "EWS multivariadas y aprendizaje automático",
     "section": "1 De una variable a muchas",
-    "text": "1 De una variable a muchas\nEn comunidades microbianas o redes tróficas medimos muchas variables a la vez. Cerca de una bifurcación, el enlentecimiento crítico se manifiesta como un crecimiento de la varianza colectiva alineada con el modo que se desestabiliza. Un resumen natural es el autovalor dominante \\(\\lambda_{\\max}\\) de la matriz de covarianza en ventana móvil: tiende a crecer al acercarse al umbral, igual que la varianza univariada.\nSimulamos dos variables acopladas cuya tasa de retorno se desvanece y seguimos \\(\\lambda_{\\max}\\):\n\n\n\n\n\n\n\n\nOtros indicadores multivariados útiles: la correlación cruzada entre variables, el índice de sincronía, y —en sistemas espacialmente extendidos— la varianza espacial y la longitud de correlación crecientes.",
+    "text": "1 De una variable a muchas\nEn comunidades microbianas o redes tróficas medimos muchas variables a la vez. Cerca de una bifurcación, el fenómeno de la ralentización crítica se manifiesta como un crecimiento de la varianza colectiva alineada con el modo que se desestabiliza. Un resumen natural es el autovalor dominante \\(\\lambda_{\\max}\\) de la matriz de covarianza en ventana móvil: tiende a crecer al acercarse al umbral, igual que la varianza univariada.\nSimulamos dos variables acopladas cuya tasa de retorno se desvanece y seguimos \\(\\lambda_{\\max}\\):\n\n\n\n\n\n\n\n\nOtros indicadores multivariados útiles: la correlación cruzada entre variables, el índice de sincronía, y —en sistemas espacialmente extendidos— la varianza espacial y la longitud de correlación crecientes.",
     "crumbs": [
       "Parte III · Señales de Alerta Temprana (EWS)",
       "EWS multivariadas y aprendizaje automático"
@@ -101,56 +101,56 @@
   {
     "objectID": "p3-cap05-ews-fundamento.html",
     "href": "p3-cap05-ews-fundamento.html",
-    "title": "Fundamento de las EWS: enlentecimiento crítico",
+    "title": "Fundamento de las EWS: ralentización crítica",
     "section": "",
-    "text": "Objetivos de aprendizaje\n\nExplicar el enlentecimiento crítico (critical slowing down) a partir de la tasa de retorno.\nDerivar por qué la varianza y la autocorrelación de retardo-1 crecen al acercarse a una bifurcación.\nSimular un mismo sistema lejos y cerca del punto crítico y comparar sus estadísticos.",
+    "text": "Objetivos de aprendizaje\n\nExplicar el fenómeno de la ralentización crítica (critical slowing down) a partir de la tasa de retorno.\nDerivar por qué la varianza y la autocorrelación de retardo-1 crecen al acercarse a una bifurcación.\nSimular un mismo sistema lejos y cerca del punto crítico y comparar sus estadísticos.",
     "crumbs": [
       "Parte III · Señales de Alerta Temprana (EWS)",
-      "Fundamento de las EWS: enlentecimiento crítico"
+      "Fundamento de las EWS: ralentización crítica"
     ]
   },
   {
     "objectID": "p3-cap05-ews-fundamento.html#sec-csd",
     "href": "p3-cap05-ews-fundamento.html#sec-csd",
-    "title": "Fundamento de las EWS: enlentecimiento crítico",
+    "title": "Fundamento de las EWS: ralentización crítica",
     "section": "1 La idea central",
-    "text": "1 La idea central\nCerca de un punto fijo estable, la dinámica linealiza a \\(\\dot{\\eta} \\approx -\\lambda\\,\\eta\\) con \\(\\lambda = -f'(x^*) = |f'(x^*)| &gt; 0\\). La tasa de retorno \\(\\lambda\\) mide qué tan rápido el sistema reabsorbe una perturbación. Al acercarse a una bifurcación, \\(f'(x^*)\\to 0\\), así que \\(\\lambda\\to 0\\): el sistema se vuelve lento y “blando”. Eso es el enlentecimiento crítico, ya medido en cianobacterias (Veraart et al. 2012).\nCon ruido, el sistema obedece un proceso de Ornstein–Uhlenbeck: \\[\ndx = -\\lambda\\,x\\,dt + \\sigma\\,dW .\n\\tag{1}\\] De aquí salen dos predicciones que no requieren conocer el modelo, solo la serie de tiempo:\n\\[\n\\underbrace{\\operatorname{Var}(x) = \\frac{\\sigma^2}{2\\lambda}}_{\\text{varianza estacionaria}}\n\\qquad\n\\underbrace{\\rho_1 = e^{-\\lambda \\Delta t}}_{\\text{autocorrelación de retardo-1}} .\n\\tag{2}\\]\nCuando \\(\\lambda \\to 0\\): la varianza explota y la autocorrelación tiende a 1. Son las dos señales de alerta temprana canónicas (Scheffer et al. 2009; Dakos et al. 2012).\nMueve \\(\\lambda\\) y observa ambas predicciones:\n\nviewof lam = Inputs.range([0.05, 2], {value: 1, step: 0.01,\n  label: \"λ = |f'(x*)|  (→ 0 al acercarse a la bifurcación)\"})\n\n\n\n\n\n\n\nhtml`&lt;div style=\"font-family:system-ui;font-size:1.05rem;line-height:1.7\"&gt;\n&lt;b&gt;Predicción analítica (proceso OU, σ=0.1, Δt=0.05):&lt;/b&gt;&lt;br&gt;\nVarianza estacionaria&nbsp; σ²/(2λ) = &lt;b style=\"color:#1f5673\"&gt;${(0.01/(2*lam)).toFixed(4)}&lt;/b&gt;&lt;br&gt;\nAutocorrelación&nbsp; ρ₁ = e&lt;sup&gt;−λΔt&lt;/sup&gt; = &lt;b style=\"color:#b03a2e\"&gt;${Math.exp(-lam*0.05).toFixed(3)}&lt;/b&gt;\n&lt;/div&gt;`",
+    "text": "1 La idea central\nCerca de un punto fijo estable, la dinámica linealiza a \\(\\dot{\\eta} \\approx -\\lambda\\,\\eta\\) con \\(\\lambda = -f'(x^*) = |f'(x^*)| &gt; 0\\). La tasa de retorno \\(\\lambda\\) mide qué tan rápido el sistema reabsorbe una perturbación. Al acercarse a una bifurcación, \\(f'(x^*)\\to 0\\), así que \\(\\lambda\\to 0\\): el sistema se vuelve lento y “blando”. Eso es el ralentización crítica, ya medido en cianobacterias (Veraart et al. 2012).\nCon ruido, el sistema obedece un proceso de Ornstein–Uhlenbeck: \\[\ndx = -\\lambda\\,x\\,dt + \\sigma\\,dW .\n\\tag{1}\\] De aquí salen dos predicciones que no requieren conocer el modelo, solo la serie de tiempo:\n\\[\n\\underbrace{\\operatorname{Var}(x) = \\frac{\\sigma^2}{2\\lambda}}_{\\text{varianza estacionaria}}\n\\qquad\n\\underbrace{\\rho_1 = e^{-\\lambda \\Delta t}}_{\\text{autocorrelación de retardo-1}} .\n\\tag{2}\\]\nCuando \\(\\lambda \\to 0\\): la varianza explota y la autocorrelación tiende a 1. Son las dos señales de alerta temprana canónicas (Scheffer et al. 2009; Dakos et al. 2012).\nMueve \\(\\lambda\\) y observa ambas predicciones:\n\nviewof lam = Inputs.range([0.05, 2], {value: 1, step: 0.01,\n  label: \"λ = |f'(x*)|  (→ 0 al acercarse a la bifurcación)\"})\n\n\n\n\n\n\n\nhtml`&lt;div style=\"font-family:system-ui;font-size:1.05rem;line-height:1.7\"&gt;\n&lt;b&gt;Predicción analítica (proceso OU, σ=0.1, Δt=0.05):&lt;/b&gt;&lt;br&gt;\nVarianza estacionaria&nbsp; σ²/(2λ) = &lt;b style=\"color:#1f5673\"&gt;${(0.01/(2*lam)).toFixed(4)}&lt;/b&gt;&lt;br&gt;\nAutocorrelación&nbsp; ρ₁ = e&lt;sup&gt;−λΔt&lt;/sup&gt; = &lt;b style=\"color:#b03a2e\"&gt;${Math.exp(-lam*0.05).toFixed(3)}&lt;/b&gt;\n&lt;/div&gt;`",
     "crumbs": [
       "Parte III · Señales de Alerta Temprana (EWS)",
-      "Fundamento de las EWS: enlentecimiento crítico"
+      "Fundamento de las EWS: ralentización crítica"
     ]
   },
   {
     "objectID": "p3-cap05-ews-fundamento.html#sec-comparacion",
     "href": "p3-cap05-ews-fundamento.html#sec-comparacion",
-    "title": "Fundamento de las EWS: enlentecimiento crítico",
+    "title": "Fundamento de las EWS: ralentización crítica",
     "section": "2 Mismo sistema, lejos vs. cerca",
     "text": "2 Mismo sistema, lejos vs. cerca\nSimulemos el OU con \\(\\lambda\\) grande (lejos) y \\(\\lambda\\) pequeño (cerca) y comparemos sus trayectorias y estadísticos:\n\nPythonR\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLa serie “cerca” es visiblemente más ancha (mayor varianza) y más suave/correlacionada (mayor AC). Eso es lo que un detector de EWS busca a lo largo del tiempo conforme el sistema deriva hacia el umbral.",
     "crumbs": [
       "Parte III · Señales de Alerta Temprana (EWS)",
-      "Fundamento de las EWS: enlentecimiento crítico"
+      "Fundamento de las EWS: ralentización crítica"
     ]
   },
   {
     "objectID": "p3-cap05-ews-fundamento.html#sec-ej5",
     "href": "p3-cap05-ews-fundamento.html#sec-ej5",
-    "title": "Fundamento de las EWS: enlentecimiento crítico",
+    "title": "Fundamento de las EWS: ralentización crítica",
     "section": "3 Ejercicios",
     "text": "3 Ejercicios\n\n\n\n\n\n\nTipEjercicio 5.1 — Predicción vs. simulación\n\n\n\nUsa Ecuación 2 para predecir la varianza y AC(1) con \\(\\lambda=0.2\\), \\(\\sigma=0.1\\), \\(\\Delta t=0.05\\). Compara con los números que imprime la celda.\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\n\\(\\operatorname{Var}=0.1^2/(2\\cdot 0.2)=0.025\\) y \\(\\rho_1=e^{-0.2\\cdot 0.05}=e^{-0.01}\\approx 0.990\\). Los valores muestrales rondan esas cifras (con fluctuación por tamaño de muestra y discretización).\n\n\n\n\n\n\n\n\n\n\n\nTipEjercicio 5.2 — Computacional\n\n\n\nReduce \\(\\lambda\\) a 0.05 en la celda. ¿La varianza sube por un factor cercano a 4 respecto a \\(\\lambda=0.2\\)? ¿Por qué?\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\nSí: \\(\\operatorname{Var}\\propto 1/\\lambda\\), y \\(0.2/0.05=4\\). Al dividir \\(\\lambda\\) entre 4, la varianza estacionaria se cuadruplica (salvo fluctuación muestral).",
     "crumbs": [
       "Parte III · Señales de Alerta Temprana (EWS)",
-      "Fundamento de las EWS: enlentecimiento crítico"
+      "Fundamento de las EWS: ralentización crítica"
     ]
   },
   {
     "objectID": "p3-cap05-ews-fundamento.html#para-seguir",
     "href": "p3-cap05-ews-fundamento.html#para-seguir",
-    "title": "Fundamento de las EWS: enlentecimiento crítico",
+    "title": "Fundamento de las EWS: ralentización crítica",
     "section": "4 Para seguir",
     "text": "4 Para seguir\nEn el capítulo 6 llevamos esto a la práctica: estimar varianza y AC(1) en ventanas móviles sobre una serie que se acerca a un pliegue, con detrending y prueba de tendencia.",
     "crumbs": [
       "Parte III · Señales de Alerta Temprana (EWS)",
-      "Fundamento de las EWS: enlentecimiento crítico"
+      "Fundamento de las EWS: ralentización crítica"
     ]
   },
   {
@@ -595,7 +595,7 @@
     "href": "p3-cap06-ews-univariadas.html#sec-deriva",
     "title": "EWS univariadas en la práctica",
     "section": "1 Un sistema que deriva hacia el pliegue",
-    "text": "1 Un sistema que deriva hacia el pliegue\nA diferencia del capítulo anterior (donde fijábamos \\(\\lambda\\)), ahora el parámetro de control cambia lentamente y empuja al sistema hacia una saddle-node. Simulamos el doble pozo con forzamiento creciente, detenemos en la transición y calculamos las EWS sobre el tramo pre-transición:\n\n\n\n\n\n\n\n\nAmbos indicadores tienden a subir antes del salto, y el \\(\\tau\\) de Kendall (cercano a \\(+1\\)) lo confirma como una tendencia monótona creciente: la huella estadística del enlentecimiento crítico.",
+    "text": "1 Un sistema que deriva hacia el pliegue\nA diferencia del capítulo anterior (donde fijábamos \\(\\lambda\\)), ahora el parámetro de control cambia lentamente y empuja al sistema hacia una saddle-node. Simulamos el doble pozo con forzamiento creciente, detenemos en la transición y calculamos las EWS sobre el tramo pre-transición:\n\n\n\n\n\n\n\n\nAmbos indicadores tienden a subir antes del salto, y el \\(\\tau\\) de Kendall (cercano a \\(+1\\)) lo confirma como una tendencia monótona creciente: la huella estadística de la ralentización crítica.",
     "crumbs": [
       "Parte III · Señales de Alerta Temprana (EWS)",
       "EWS univariadas en la práctica"
