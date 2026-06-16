@@ -1,0 +1,116 @@
+---
+title: "EWS univariadas en la práctica"
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.objetivos}
+**Objetivos de aprendizaje**
+
+- Estimar varianza y autocorrelación en **ventanas móviles** sobre una serie real o simulada.
+- Aplicar *detrending* y cuantificar la tendencia del indicador con el **$\tau$ de Kendall**.
+- Conocer indicadores complementarios (asimetría/*skewness*) y la lógica de los *surrogates*.
+:::
+
+## Un sistema que deriva hacia el pliegue {#sec-deriva}
+
+A diferencia del capítulo anterior (donde fijábamos $\lambda$), ahora el parámetro de control **cambia lentamente** y empuja al sistema hacia una saddle-node. Simulamos el doble pozo con forzamiento creciente, detenemos en la transición y calculamos las EWS sobre el tramo **pre-transición**:
+
+```{pyodide}
+import numpy as np, matplotlib.pyplot as plt
+from scipy.stats import kendalltau
+
+rng = np.random.default_rng(1)
+def f(x, h): return -x**3 + x + h
+
+T, dt, sigma = 400.0, 0.05, 0.04
+n = int(T/dt)
+h = np.linspace(-0.2, 0.6, n)          # rampa lenta hacia el pliegue (h_c ≈ 0.385)
+x = np.empty(n); x[0] = -1.0
+for t in range(1, n):
+    x[t] = x[t-1] + dt*f(x[t-1], h[t-1]) + sigma*np.sqrt(dt)*rng.standard_normal()
+
+trans = int(np.argmax(x > 0))          # primer salto al otro pozo
+pre = x[:trans]
+
+# detrending por media móvil y EWS en ventana deslizante
+def media_movil(a, k):
+    return np.convolve(a, np.ones(k)/k, mode="same")
+def ac1(s):
+    s = s - s.mean(); return np.corrcoef(s[:-1], s[1:])[0, 1]
+
+resid = pre - media_movil(pre, 400)
+w = 800
+idx = range(w, len(resid))
+var_roll = np.array([resid[i-w:i].var()  for i in idx])
+ac_roll  = np.array([ac1(resid[i-w:i])   for i in idx])
+tt = np.arange(w, len(resid)) * dt
+
+fig, ax = plt.subplots(3, 1, figsize=(6.6, 6), sharex=True)
+ax[0].plot(np.arange(trans)*dt, pre, lw=.5, color="#444"); ax[0].set_ylabel("x(t)")
+ax[0].set_title("Serie pre-transición")
+ax[1].plot(tt, var_roll, color="#1f5673"); ax[1].set_ylabel("varianza móvil")
+ax[2].plot(tt, ac_roll,  color="#b03a2e"); ax[2].set_ylabel("AC(1) móvil"); ax[2].set_xlabel("t")
+plt.tight_layout(); plt.show()
+
+print("Kendall τ (varianza):", round(kendalltau(tt, var_roll)[0], 3))
+print("Kendall τ (AC de retardo-1):", round(kendalltau(tt, ac_roll)[0], 3))
+```
+
+Ambos indicadores **tienden a subir** antes del salto, y el $\tau$ de Kendall (cercano a $+1$) lo confirma como una **tendencia monótona creciente**: la huella estadística del enlentecimiento crítico.
+
+## Buenas prácticas y trampas {#sec-practicas}
+
+- **Detrending.** Hay que separar la **deriva lenta** de las fluctuaciones. Media móvil, filtro de Gauss o regresión local (LOESS) son habituales; la elección **afecta** el resultado [@dakos2012ews].
+- **Tamaño de ventana.** Ventanas grandes suavizan pero retrasan la detección; pequeñas son ruidosas. Reporta sensibilidad a la ventana.
+- **Indicadores complementarios.** La **asimetría** (*skewness*) y la **curtosis** suelen crecer al deformarse el pozo; el espectro se desplaza hacia bajas frecuencias.
+- **Significancia con *surrogates*.** Para decidir si una tendencia es real, se compara contra series **subrogadas** (p. ej. con la misma autocorrelación pero permutadas) y se construye una distribución nula del $\tau$.
+
+::: {.callout-note}
+## En tu máquina: `ewstools` y `EWSmethods`
+En el navegador computamos las EWS "a mano" para que se vea la mecánica. En un flujo real conviene usar bibliotecas dedicadas. Este bloque **no se ejecuta aquí**; cópialo a tu entorno local:
+
+```python
+# Python (local)
+import ewstools
+ts = ewstools.TimeSeries(data=serie, transition=t_transicion)
+ts.detrend(method="Gaussian", bandwidth=0.2)
+ts.compute_var(rolling_window=0.5)
+ts.compute_auto(rolling_window=0.5, lag=1)
+ts.compute_ktau()      # tau de Kendall por indicador
+```
+
+```r
+# R (local)
+library(EWSmethods)
+res <- uniEWS(data = cbind(tiempo, serie), metrics = c("SD","ar1","skew"),
+              method = "rolling", winsize = 50)
+plot(res)
+```
+:::
+
+## Ejercicios {#sec-ej6}
+
+::: {.callout-tip}
+## Ejercicio 6.1 — Sensibilidad a la ventana
+Cambia `w` a `400` y luego a `1500`. ¿Cómo afectan el ruido del indicador y el valor del $\tau$ de Kendall?
+
+::: {.callout-note collapse="true"}
+## Solución
+Con `w=400` las curvas de varianza/AC son más ruidosas y el $\tau$ puede bajar; con `w=1500` son más suaves pero la señal aparece más tarde y se pierde resolución cerca de la transición. No hay ventana "correcta": por eso se reporta sensibilidad.
+:::
+:::
+
+::: {.callout-tip}
+## Ejercicio 6.2 — ¿Y si no hay transición?
+Pon `sigma=0.04` y `h = np.linspace(-0.2, 0.2, n)` (la rampa **no** alcanza el pliegue). ¿Siguen subiendo los indicadores? ¿Qué dice esto sobre falsos positivos?
+
+::: {.callout-note collapse="true"}
+## Solución
+Sin acercarse al pliegue, varianza y AC(1) se mantienen aproximadamente planas y el $\tau$ ronda 0. Esto ilustra que una **tendencia creciente** es la señal informativa; observar valores altos pero estables no implica transición inminente (cuidado con los falsos positivos, @boettiger2012).
+:::
+:::
+
+## Para seguir
+
+El [capítulo 7](p3-cap07-ews-multivariadas-ml.qmd) generaliza a sistemas con **muchas variables** y presenta los enfoques de **aprendizaje automático**.

@@ -1,0 +1,87 @@
+/*-- scss:rules --*/
+
+/* ===========================================================
+   Curso: Bifurcaciones y Señales de Alerta Temprana (EWS)
+   Grupo de Biología Cuantitativa — Facultad de Ciencias
+   Naturales, Universidad Autónoma de Querétaro (UAQ)
+   Paleta sobria institucional (vino UAQ + azul cuantitativo)
+   =========================================================== */
+
+:root {
+  --uaq-vino: #6b2233;
+  --uaq-vino-claro: #8a3147;
+  --uaq-azul: #1f5673;
+  --uaq-arena: #f6f2ea;
+  --uaq-tinta: #1f2329;
+}
+
+/* Encabezados */
+h1, h2, h3, h4 { color: var(--uaq-vino); letter-spacing: -0.01em; }
+h1 { border-bottom: 3px solid var(--uaq-vino); padding-bottom: .3rem; }
+h2 { border-bottom: 1px solid #e3d9d0; padding-bottom: .2rem; }
+
+/* Enlaces */
+a { color: var(--uaq-azul); }
+a:hover { color: var(--uaq-vino-claro); }
+
+/* Barra de navegación y lateral */
+.navbar { border-bottom: 3px solid var(--uaq-vino); }
+
+/* Callouts: matiz cálido para "objetivos" */
+div.callout-note.callout { border-left-color: var(--uaq-azul); }
+div.callout-tip.callout  { border-left-color: var(--uaq-vino); }
+
+/* Bloque de objetivos de aprendizaje */
+.objetivos {
+  background: var(--uaq-arena);
+  border-left: 4px solid var(--uaq-vino);
+  border-radius: 4px;
+  padding: .8rem 1rem;
+  margin: 1rem 0 1.5rem 0;
+}
+.objetivos > p:first-child { font-weight: 700; color: var(--uaq-vino); margin-bottom: .3rem; }
+
+/* Etiqueta de sección opcional/avanzada */
+.avanzado-tag {
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: #fff;
+  background: var(--uaq-azul);
+  padding: .1rem .5rem;
+  border-radius: 10px;
+  vertical-align: middle;
+}
+
+/* Editores quarto-live un poco más compactos */
+.exercise-editor, .cell-editor { font-size: .92rem; }
+
+/* Pestañas Python/R */
+.panel-tabset .nav-link.active { color: var(--uaq-vino); font-weight: 600; }
+
+/* Pie de página */
+.page-footer { color: #6b6b6b; }
+
+
+/* === Tarjetas de datos: curioso / histórico / interesante === */
+.dato-curioso, .dato-historico, .dato-interesante {
+  position: relative;
+  border-radius: 6px;
+  padding: .7rem 1rem .7rem 2.6rem;
+  margin: 1.25rem 0;
+  font-size: .95rem;
+  line-height: 1.6;
+}
+.dato-curioso     { background: #eef4f8; border-left: 4px solid #1f5673; }
+.dato-historico   { background: #f6f2ea; border-left: 4px solid #6b2233; }
+.dato-interesante { background: #eef6f0; border-left: 4px solid #2e7d59; }
+
+.dato-curioso::before     { content: "💡"; position: absolute; left: .8rem; top: .7rem; }
+.dato-historico::before   { content: "📜"; position: absolute; left: .8rem; top: .7rem; }
+.dato-interesante::before { content: "✨"; position: absolute; left: .8rem; top: .7rem; }
+
+.dato-curioso > :first-child,
+.dato-historico > :first-child,
+.dato-interesante > :first-child { margin-top: 0; }

@@ -1,0 +1,118 @@
+---
+title: "Del modelo al laboratorio: bifurcaciones empíricas"
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.objetivos}
+**Objetivos de aprendizaje**
+
+- Reconocer bifurcaciones fold, biestabilidad e histéresis en **datos biológicos reales**.
+- Conectar cada caso experimental con la teoría de la Parte I.
+- Distinguir transiciones **abruptas** (con pliegue) de **no abruptas** (suaves), como puente a las EWS.
+:::
+
+## Cuatro experimentos que vieron el pliegue {#sec-casos}
+
+### Levaduras al borde del colapso {#sec-dai}
+
+@dai2012 cultivaron poblaciones de la levadura *Saccharomyces cerevisiae* que crecen de forma **cooperativa** en sacarosa (rompen el azúcar fuera de la célula y comparten el producto). Al aumentar el **factor de dilución** diario, observaron una **bifurcación fold**: el punto fijo estable de población alta y un punto fijo inestable se acercan, **colisionan y se aniquilan** a un valor crítico de dilución, tras el cual la población colapsa. Antes del umbral el sistema es **biestable** (sobrevive o colapsa según la densidad inicial).
+
+
+<!-- Cap. 4 · bifurcaciones empíricas -->
+::: {.dato-curioso}
+**Dato curioso.** El experimento de **Dai et al. (2012)** fue de los primeros en **provocar y medir** una bifurcación fold en un sistema vivo de verdad: levaduras que, al diluirlas demasiado cada día, colapsan de golpe en lugar de menguar suavemente.
+:::
+
+Podemos reproducir el esqueleto del fenómeno con un crecimiento cooperativo tipo Hill, $\dot{x} = \dfrac{b\,x^2}{1+x^2} - d\,x$, donde $d$ hace las veces de dilución. Mueve $d$ y mira cómo la recta de pérdida deja de cortar la curva de crecimiento:
+
+```{ojs}
+//| echo: false
+viewof d = Inputs.range([0.1, 0.6], {value: 0.35, step: 0.005, label: "dilución / pérdida  d"})
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  height: 300, marginLeft: 50,
+  x: {label: "densidad x", domain: [0, 4]},
+  y: {label: "tasa", domain: [0, 1.1]},
+  color: {legend: true, domain: ["crecimiento cooperativo", "pérdida (dilución)"],
+          range: ["#1f5673", "#b03a2e"]},
+  marks: [
+    Plot.line(d3.range(0, 4.01, 0.01).flatMap(x => [
+      {x, y: x*x/(1 + x*x), serie: "crecimiento cooperativo"},
+      {x, y: d*x,           serie: "pérdida (dilución)"}
+    ]), {x: "x", y: "y", stroke: "serie", strokeWidth: 2})
+  ]
+})
+```
+
+Los **cortes** entre ambas curvas son los equilibrios no nulos. Cuando $d$ crece hasta hacer la recta tangente a la curva, esos dos equilibrios se funden (el pliegue) y desaparecen: solo sobrevive $x^*=0$. El diagrama de bifurcación lo deja claro:
+
+```{pyodide}
+import numpy as np, matplotlib.pyplot as plt
+b = 1.0
+ds = np.linspace(0.1, 0.6, 500)
+plt.figure(figsize=(5.8, 3.7))
+for d in ds:
+    disc = b**2 - 4*d**2
+    if disc >= 0:
+        xu = (b + np.sqrt(disc)) / (2*d)   # estable (superior)
+        xl = (b - np.sqrt(disc)) / (2*d)   # inestable (inferior)
+        plt.plot(d, xu, '.', ms=2, color="#1f5673")
+        plt.plot(d, xl, '.', ms=2, color="#b03a2e")
+plt.axhline(0, color="#1f5673", lw=2)         # colapso x*=0 (estable)
+plt.axvline(b/2, ls=":", color="gray")
+plt.text(b/2 - 0.13, 3.3, "pliegue  d = b/2", color="gray", fontsize=8)
+plt.xlabel("dilución  d"); plt.ylabel("densidad de equilibrio  x*")
+plt.title("Fold en crecimiento cooperativo (cf. Dai et al. 2012)")
+plt.tight_layout(); plt.show()
+```
+
+### Cianobacterias y la velocidad de recuperación {#sec-veraart}
+
+@veraart2012 usaron microcosmos de cianobacterias bajo luz creciente. La **fotoinhibición** lleva la población a un punto de inflexión clásico al superar un nivel crítico de luz. Su aporte clave: midieron que, al **acercarse** al umbral, la **recuperación tras pequeñas perturbaciones se vuelve más lenta**. Esa lentitud es exactamente $1/|f'(x^*)|\to\infty$ cuando $f'(x^*)\to 0$: la medición directa del **enlentecimiento crítico**.
+
+### Un lago entero como mesa de laboratorio {#sec-carpenter}
+
+@carpenter2011 manipularon la cadena trófica de un lago completo (Peter Lake) introduciendo un depredador tope e **induciendo el cambio de régimen**, mientras un lago vecino servía de control. Detectaron señales estadísticas de alerta **antes** de la transición. Es la demostración a escala de ecosistema de que las EWS no son solo un artefacto de laboratorio.
+
+### Lagos someros: histéresis claro↔turbio {#sec-lagos}
+
+El caso clásico de **histéresis ecosistémica** [@scheffer2001]. Un lago somero puede estar en estado **claro** (dominado por plantas acuáticas) o **turbio** (dominado por fitoplancton). Los experimentos de biomanipulación y restauración muestran que el umbral de nutrientes para **colapsar** a turbio **difiere** del necesario para **recuperar** el estado claro: justo el lazo de histéresis del [capítulo 3](p1-cap03-potenciales-catastrofe.qmd).
+
+## Abruptas vs. no abruptas {#sec-abruptas}
+
+No toda transición tiene un pliegue. Una bifurcación **transcrítica** o un cambio **suave** mueven el sistema de manera gradual y **reversible**. Las transiciones **abruptas** (saddle-node/fold) traen salto e histéresis. Esta distinción —¿es el cambio brusco e irreversible, o suave?— gobierna **qué** señales de alerta esperar y **cuánta** anticipación es posible [@deb2022]. Es el tema de la Parte III.
+
+::: {.callout-note}
+## Hacia el taller
+Tres de estos fenómenos dejan **series de tiempo** sobre las que podremos calcular EWS. En el [taller](taller.qmd) usaremos datos simulados de un fold y luego datos reales (termoacústicos, geoquímicos y paleoclimáticos).
+:::
+
+## Ejercicios {#sec-ej4}
+
+::: {.callout-tip}
+## Ejercicio 4.1 — Lectura de un experimento
+En @veraart2012 la recuperación se hace más lenta cerca del umbral. ¿Qué cantidad teórica de la Parte I se está midiendo y por qué tiende a un valor extremo en la bifurcación?
+
+::: {.callout-note collapse="true"}
+## Solución
+Se mide la **tasa de retorno** tras una perturbación, $\propto |f'(x^*)|$. En una saddle-node $f'(x^*)\to 0$ al acercarse al pliegue, de modo que el **tiempo** de recuperación $1/|f'(x^*)|\to\infty$: enlentecimiento crítico.
+:::
+:::
+
+::: {.callout-tip}
+## Ejercicio 4.2 — Computacional
+En la celda de Python, cambia el exponente de Hill de 2 a 4 en `x**2/(1+x**2)` → `x**4/(1+x**4)`. ¿La región biestable se hace más ancha o más angosta?
+
+::: {.callout-note collapse="true"}
+## Solución
+Un Hill más empinado (cooperatividad más fuerte) ensancha la región de biestabilidad y desplaza el pliegue: la curva de crecimiento sube más abruptamente, así que la recta de dilución la corta dos veces en un rango mayor de $d$.
+:::
+:::
+
+## Para seguir
+
+Entramos a la [Parte III](p3-cap05-ews-fundamento.qmd): ¿podemos **anticipar** estos pliegues solo mirando la serie de tiempo, antes de que ocurra el salto?

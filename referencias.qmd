@@ -1,0 +1,10 @@
+---
+title: "Referencias"
+nocite: |
+  @*
+---
+
+Bibliografía del curso. Las citas en el texto siguen el estilo autor–año y enlazan a esta lista.
+
+::: {#refs}
+:::

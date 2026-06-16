@@ -1,0 +1,129 @@
+---
+title: "Fundamento de las EWS: enlentecimiento crítico"
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.objetivos}
+**Objetivos de aprendizaje**
+
+- Explicar el **enlentecimiento crítico** (*critical slowing down*) a partir de la tasa de retorno.
+- Derivar por qué la **varianza** y la **autocorrelación de retardo-1** crecen al acercarse a una bifurcación.
+- Simular un mismo sistema **lejos** y **cerca** del punto crítico y comparar sus estadísticos.
+:::
+
+## La idea central {#sec-csd}
+
+Cerca de un punto fijo estable, la dinámica linealiza a $\dot{\eta} \approx -\lambda\,\eta$ con $\lambda = -f'(x^*) = |f'(x^*)| > 0$. La **tasa de retorno** $\lambda$ mide qué tan rápido el sistema reabsorbe una perturbación. Al acercarse a una bifurcación, $f'(x^*)\to 0$, así que $\lambda\to 0$: el sistema se vuelve **lento y "blando"**. Eso es el enlentecimiento crítico, ya medido en cianobacterias [@veraart2012].
+
+Con ruido, el sistema obedece un proceso de **Ornstein–Uhlenbeck**:
+$$
+dx = -\lambda\,x\,dt + \sigma\,dW .
+$$ {#eq-ou}
+De aquí salen dos predicciones que **no requieren conocer el modelo**, solo la serie de tiempo:
+
+$$
+\underbrace{\operatorname{Var}(x) = \frac{\sigma^2}{2\lambda}}_{\text{varianza estacionaria}}
+\qquad
+\underbrace{\rho_1 = e^{-\lambda \Delta t}}_{\text{autocorrelación de retardo-1}} .
+$$ {#eq-ews}
+
+Cuando $\lambda \to 0$: la **varianza explota** y la **autocorrelación tiende a 1**. Son las dos señales de alerta temprana canónicas [@scheffer2009; @dakos2012].
+
+Mueve $\lambda$ y observa ambas predicciones:
+
+```{ojs}
+//| echo: false
+viewof lam = Inputs.range([0.05, 2], {value: 1, step: 0.01,
+  label: "λ = |f'(x*)|  (→ 0 al acercarse a la bifurcación)"})
+```
+
+```{ojs}
+//| echo: false
+html`<div style="font-family:system-ui;font-size:1.05rem;line-height:1.7">
+<b>Predicción analítica (proceso OU, σ=0.1, Δt=0.05):</b><br>
+Varianza estacionaria&nbsp; σ²/(2λ) = <b style="color:#1f5673">${(0.01/(2*lam)).toFixed(4)}</b><br>
+Autocorrelación&nbsp; ρ₁ = e<sup>−λΔt</sup> = <b style="color:#b03a2e">${Math.exp(-lam*0.05).toFixed(3)}</b>
+</div>`
+```
+
+## Mismo sistema, lejos vs. cerca {#sec-comparacion}
+
+Simulemos el OU con $\lambda$ grande (lejos) y $\lambda$ pequeño (cerca) y comparemos sus trayectorias y estadísticos:
+
+::: {.panel-tabset}
+
+## Python
+
+```{pyodide}
+import numpy as np, matplotlib.pyplot as plt
+
+def ou(lmbda, sigma=0.1, dt=0.05, n=4000, seed=0):
+    rng = np.random.default_rng(seed)
+    x = np.zeros(n)
+    for t in range(1, n):
+        x[t] = x[t-1] - lmbda*x[t-1]*dt + sigma*np.sqrt(dt)*rng.standard_normal()
+    return x
+
+def ac1(x):
+    x = x - x.mean()
+    return np.corrcoef(x[:-1], x[1:])[0, 1]
+
+for lmbda, etq in [(2.0, "LEJOS"), (0.2, "CERCA")]:
+    x = ou(lmbda)
+    print(f"{etq} (λ={lmbda}):  varianza={x.var():.4f}   AC(1)={ac1(x):+.3f}")
+
+fig, ax = plt.subplots(1, 2, figsize=(8.5, 3), sharey=True)
+ax[0].plot(ou(2.0), lw=.5, color="#1f5673"); ax[0].set_title("lejos (λ=2): rígido, ruido blanco")
+ax[1].plot(ou(0.2), lw=.5, color="#b03a2e"); ax[1].set_title("cerca (λ=0.2): lento, autocorrelado")
+plt.tight_layout(); plt.show()
+```
+
+## R
+
+```{webr}
+ou <- function(lambda, sigma = 0.1, dt = 0.05, n = 4000, seed = 0) {
+  set.seed(seed); x <- numeric(n)
+  for (t in 2:n) x[t] <- x[t-1] - lambda*x[t-1]*dt + sigma*sqrt(dt)*rnorm(1)
+  x
+}
+ac1 <- function(x) { x <- x - mean(x); cor(x[-length(x)], x[-1]) }
+for (par in list(c(2.0,1), c(0.2,2))) {
+  x <- ou(par[1], seed = par[2])
+  cat(sprintf("lambda=%.1f  varianza=%.4f  AC(1)=%+.3f\n", par[1], var(x), ac1(x)))
+}
+op <- par(mfrow = c(1, 2))
+plot(ou(2.0), type = "l", col = "#1f5673", main = "lejos (λ=2)", ylab = "x")
+plot(ou(0.2, seed = 2), type = "l", col = "#b03a2e", main = "cerca (λ=0.2)", ylab = "x")
+par(op)
+```
+
+:::
+
+La serie "cerca" es visiblemente más **ancha** (mayor varianza) y más **suave/correlacionada** (mayor AC). Eso es lo que un detector de EWS busca **a lo largo del tiempo** conforme el sistema deriva hacia el umbral.
+
+## Ejercicios {#sec-ej5}
+
+::: {.callout-tip}
+## Ejercicio 5.1 — Predicción vs. simulación
+Usa @eq-ews para predecir la varianza y AC(1) con $\lambda=0.2$, $\sigma=0.1$, $\Delta t=0.05$. Compara con los números que imprime la celda.
+
+::: {.callout-note collapse="true"}
+## Solución
+$\operatorname{Var}=0.1^2/(2\cdot 0.2)=0.025$ y $\rho_1=e^{-0.2\cdot 0.05}=e^{-0.01}\approx 0.990$. Los valores muestrales rondan esas cifras (con fluctuación por tamaño de muestra y discretización).
+:::
+:::
+
+::: {.callout-tip}
+## Ejercicio 5.2 — Computacional
+Reduce $\lambda$ a `0.05` en la celda. ¿La varianza sube por un factor cercano a 4 respecto a $\lambda=0.2$? ¿Por qué?
+
+::: {.callout-note collapse="true"}
+## Solución
+Sí: $\operatorname{Var}\propto 1/\lambda$, y $0.2/0.05=4$. Al dividir $\lambda$ entre 4, la varianza estacionaria se **cuadruplica** (salvo fluctuación muestral).
+:::
+:::
+
+## Para seguir
+
+En el [capítulo 6](p3-cap06-ews-univariadas.qmd) llevamos esto a la práctica: estimar varianza y AC(1) en **ventanas móviles** sobre una serie que se acerca a un pliegue, con *detrending* y prueba de tendencia.

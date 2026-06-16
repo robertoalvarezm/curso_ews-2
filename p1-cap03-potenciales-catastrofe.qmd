@@ -1,0 +1,155 @@
+---
+title: "Potenciales, biestabilidad y bifurcación catastrófica"
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.objetivos}
+**Objetivos de aprendizaje**
+
+- Reescribir $\dot{x}=f(x)$ como descenso por un **paisaje de potencial** $V(x)$.
+- Entender la **biestabilidad** como un potencial de doble pozo.
+- Explicar la **bifurcación catastrófica** (fold) y el fenómeno de **histéresis** mediante el paisaje y un ciclo de barrido.
+:::
+
+## El paisaje de potencial {#sec-potencial}
+
+Cuando la dinámica es 1-D siempre podemos escribirla como un **gradiente**:
+$$
+\dot{x} = -\,\frac{dV}{dx}, \qquad V(x) = -\!\int f(x)\,dx .
+$$ {#eq-potencial}
+
+La imagen es intuitiva: una canica que rueda cuesta abajo por el paisaje $V(x)$. Los **mínimos** de $V$ son puntos fijos **estables**; los **máximos**, inestables. La profundidad de un pozo mide la **resiliencia** del estado: cuánta perturbación hace falta para sacar a la canica de él.
+
+## Biestabilidad: el doble pozo {#sec-doblepozo}
+
+Tomemos $\dot{x} = -x^3 + x + h$, cuyo potencial es
+$$
+V(x) = \frac{x^4}{4} - \frac{x^2}{2} - h\,x .
+$$ {#eq-doblepozo}
+
+Para $h=0$ es un **doble pozo simétrico**: dos estados estables ($x^*\approx\pm 1$) separados por una barrera (el máximo en $x^*=0$). El parámetro $h$ **inclina** el paisaje. Muévelo y observa cómo un pozo se hace más somero hasta **desaparecer**:
+
+```{ojs}
+//| echo: false
+viewof h = Inputs.range([-0.5, 0.5], {value: 0, step: 0.01, label: "h (forzamiento / sesgo)"})
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  height: 300, marginLeft: 52,
+  x: {label: "estado x", domain: [-1.8, 1.8]},
+  y: {label: "potencial V(x)", domain: [-1.1, 0.6]},
+  marks: [
+    Plot.line(d3.range(-1.8, 1.81, 0.01).map(x => ({x, V: x**4/4 - x**2/2 - h*x})),
+              {x: "x", y: "V", stroke: "#6b2233", strokeWidth: 2})
+  ]
+})
+```
+
+Cuando el pozo de la izquierda se vuelve un simple recodo y se borra, la canica que vivía allí **no tiene más remedio que rodar** al otro pozo: eso es un *tipping point*.
+
+## La catástrofe fold y la histéresis {#sec-histeresis}
+
+La desaparición de un pozo es, en el lenguaje del capítulo 2, una **saddle-node**. Como el doble pozo tiene **dos** pliegues (uno a cada lado), al barrer $h$ en una dirección y luego en la contraria, el sistema **no recorre el mismo camino**: salta a destiempo. A ese desfase se le llama **histéresis**, y al salto, **bifurcación catastrófica** (catastrophic / fold bifurcation).
+
+La consecuencia ecológica es central [@scheffer2001]: el umbral para **colapsar** a un estado degradado difiere del umbral necesario para **recuperar** el estado original. Restaurar no es simplemente "deshacer" la perturbación.
+
+
+
+<!-- Cap. 3 · catástrofe e histéresis -->
+::: {.dato-interesante}
+**Para la memoria.** El ejemplo clásico de histéresis en biología es el **gusano de la yema del abeto** (*spruce budworm*), modelado por **Ludwig, Jones y Holling (1978)**: el bosque salta entre un estado de baja y otro de alta infestación, con umbrales distintos para subir y bajar.
+:::
+
+
+Barramos $h$ subiendo y bajando, relajando el sistema en cada paso:
+
+::: {.panel-tabset}
+
+## Python
+
+```{pyodide}
+import numpy as np, matplotlib.pyplot as plt
+
+def f(x, h):  return -x**3 + x + h
+def relajar(x, h, dt=0.05, n=500):
+    for _ in range(n):
+        x += dt * f(x, h)
+    return x
+
+hs_up = np.linspace(-0.7, 0.7, 220)
+hs_dn = hs_up[::-1]
+x, rama_up = -1.0, []
+for h in hs_up:
+    x = relajar(x, h); rama_up.append(x)
+rama_dn = []
+for h in hs_dn:
+    x = relajar(x, h); rama_dn.append(x)
+
+plt.figure(figsize=(5.6, 3.6))
+plt.plot(hs_up, rama_up, color="#1f5673", lw=2, label="h creciente")
+plt.plot(hs_dn, rama_dn, color="#b03a2e", lw=2, label="h decreciente")
+plt.xlabel("forzamiento  h"); plt.ylabel("estado de equilibrio  x*")
+plt.title("Ciclo de histéresis (dos pliegues saddle-node)")
+plt.legend(); plt.tight_layout(); plt.show()
+```
+
+## R
+
+```{webr}
+f <- function(x, h) -x^3 + x + h
+relajar <- function(x, h, dt = 0.05, n = 500) {
+  for (i in 1:n) x <- x + dt * f(x, h)
+  x
+}
+hs_up <- seq(-0.7, 0.7, length.out = 200)
+hs_dn <- rev(hs_up)
+x <- -1; rama_up <- numeric(length(hs_up))
+for (i in seq_along(hs_up)) { x <- relajar(x, hs_up[i]); rama_up[i] <- x }
+rama_dn <- numeric(length(hs_dn))
+for (i in seq_along(hs_dn)) { x <- relajar(x, hs_dn[i]); rama_dn[i] <- x }
+
+plot(hs_up, rama_up, type = "l", col = "#1f5673", lwd = 2,
+     xlab = "forzamiento h", ylab = "x* de equilibrio",
+     main = "Ciclo de histéresis")
+lines(hs_dn, rama_dn, col = "#b03a2e", lwd = 2)
+legend("topleft", c("h creciente", "h decreciente"),
+       col = c("#1f5673", "#b03a2e"), lwd = 2, bty = "n")
+```
+
+:::
+
+El lazo abierto entre ambas curvas **es** la histéresis: los saltos ocurren a distinto $h$ según la dirección del barrido.
+
+## Ejercicios {#sec-ej3}
+
+::: {.callout-tip}
+## Ejercicio 3.1 — Del flujo al potencial
+Dada $\dot{x} = x - x^3$, obtén $V(x)$ y di cuántos pozos tiene. Relaciónalo con el Ejercicio 1.1.
+
+::: {.callout-note collapse="true"}
+## Solución
+$V(x) = -\int (x - x^3)\,dx = -\tfrac{x^2}{2} + \tfrac{x^4}{4}$. Es un **doble pozo simétrico** con mínimos en $x=\pm 1$ y máximo en $x=0$: coincide con los puntos fijos estables/inestable hallados antes.
+:::
+:::
+
+::: {.callout-tip}
+## Ejercicio 3.2 — Computacional
+En la celda de Python, aumenta el rango de barrido a `hs_up = np.linspace(-1.5, 1.5, 220)`. ¿Cómo cambia el ancho del lazo de histéresis? ¿Qué pasa si el rango no alcanza los pliegues?
+
+::: {.callout-note collapse="true"}
+## Solución
+Si el barrido **rebasa** ambos pliegues, el lazo se completa y el sistema visita los dos estados. Si el rango es demasiado estrecho para alcanzar un pliegue, **no hay salto**: el sistema permanece en su pozo y el lazo no se cierra (no se observa la catástrofe).
+:::
+:::
+
+::: {.callout-note collapse="true"}
+## Profundización (opcional): ruido y tiempo de escape [Avanzado]{.avanzado-tag}
+Con ruido, $dx = -V'(x)\,dt + \sigma\,dW$, la canica puede **saltar la barrera** antes del pliegue. El tiempo medio de escape sigue la ley de **Kramers**, $\tau \sim \exp(\Delta V / D)$, con $\Delta V$ la altura de la barrera y $D\propto\sigma^2$. Al acercarse al pliegue, $\Delta V\to 0$ y los saltos se vuelven frecuentes: es el puente microscópico hacia el **enlentecimiento crítico** y las señales de alerta temprana de la Parte III.
+:::
+
+## Para seguir
+
+Cierra la teoría. En la [Parte II](p2-cap04-empiricas.qmd) veremos estos pliegues e histéresis **medidos** en levaduras, cianobacterias y lagos enteros.

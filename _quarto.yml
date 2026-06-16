@@ -1,0 +1,101 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - "*.qmd"
+
+website:
+  title: "Matemáticas de las transiciones críticas en biología"
+  description: "Curso interactivo sobre transiciones críticas en sistemas biológicos."
+  site-url: "https://example.org/curso-ews"
+  favicon: /images/logo-lab.png
+  reader-mode: true
+  page-navigation: true
+  back-to-top-navigation: true
+  sidebar:
+    style: docked
+    background: light
+    logo: /images/logo-lab.png
+    logo-alt: "Laboratorio  de Biología Cuantitativa y Sistemas Complejos— UAQ"
+    logo-href: index.qmd
+    search: true
+    collapse-level: 2
+    contents:
+      - href: index.qmd
+        text: "Presentación"
+      - section: "Parte I · Bifurcaciones en sistemas 1-D"
+        contents:
+          - p1-cap01-sistemas-1d.qmd
+          - p1-cap02-formas-normales.qmd
+          - p1-cap03-potenciales-catastrofe.qmd
+      - section: "Parte II · Bifurcaciones empíricas en biología"
+        contents:
+          - p2-cap04-empiricas.qmd
+      - section: "Parte III · Señales de Alerta Temprana (EWS)"
+        contents:
+          - p3-cap05-ews-fundamento.qmd
+          - p3-cap06-ews-univariadas.qmd
+          - p3-cap07-ews-multivariadas-ml.qmd
+      - section: "Taller transversal"
+        contents:
+          - taller.qmd
+      - section: "Apéndices"
+        contents:
+          - apA-instalacion.qmd
+          - apB-recetario.qmd
+          - apC-glosario.qmd
+          - referencias.qmd
+    # tools:                       # íconos opcionales en la barra lateral
+    #   - icon: github
+    #     href: https://github.com/tu-usuario/tu-repo
+  # navbar:                        # descomenta si quieres barra superior
+  #   background: light
+  #   left:
+  #     - href: index.qmd
+  #       text: Inicio
+  #     - href: taller.qmd
+  #       text: Taller
+  #     - href: referencias.qmd
+  #       text: Referencias
+  page-footer:
+    border: false
+    left: "Roberto Álvarez. Laboratorio  de Biología Cuantitativa y Sistemas Complejos · Facultad de Ciencias Naturales, UAQ"
+    right: "Licencia [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)"
+
+format:
+  live-html:
+    theme:
+      - cosmo
+      - styles.css
+    grid:
+      body-width: 820px
+    toc: true
+    toc-title: "En esta página"
+    toc-depth: 3
+    number-sections: true
+    number-depth: 2
+    fontsize: 1.05em
+    linestretch: 1.6
+    code-copy: true
+    code-tools: false
+    code-block-bg: true
+    code-block-border-left: "#1f5673"
+    code-overflow: wrap
+    fig-align: center
+    smooth-scroll: true
+    link-external-newwindow: true
+
+engine: knitr
+lang: es
+
+bibliography: references.bib
+
+pyodide:
+  packages:
+    - numpy
+    - scipy
+    - matplotlib
+    - pandas
+webr:
+  packages:
+    - stats

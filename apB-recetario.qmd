@@ -1,0 +1,97 @@
+---
+title: "Apéndice B — Recetario de código"
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.objetivos}
+**Para qué sirve este apéndice**
+
+Funciones reutilizables de simulación e indicadores EWS, listas para copiar a tu propio análisis. Las celdas son ejecutables aquí.
+:::
+
+## Simulación de una EDE con bifurcación fold
+
+```{pyodide}
+import numpy as np
+
+def simula_fold(h0=-0.2, h1=0.6, T=400, dt=0.05, sigma=0.04, x0=-1.0, seed=0):
+    """Doble pozo  dx = (-x^3 + x + h(t)) dt + sigma dW, con h en rampa lineal.
+       Devuelve (x, indice_transicion, dt)."""
+    r = np.random.default_rng(seed)
+    n = int(T/dt); h = np.linspace(h0, h1, n)
+    x = np.empty(n); x[0] = x0
+    for t in range(1, n):
+        x[t] = x[t-1] + dt*(-x[t-1]**3 + x[t-1] + h[t-1]) + sigma*np.sqrt(dt)*r.standard_normal()
+    trans = int(np.argmax(x > 0)) or n
+    return x, trans, dt
+
+x, trans, dt = simula_fold(seed=1)
+print("longitud:", len(x), " transición en índice:", trans)
+```
+
+## Indicadores EWS univariados (ventana móvil + Kendall τ)
+
+```{pyodide}
+from scipy.stats import kendalltau
+
+def ews_univariado(serie, dt=1.0, k_trend=400, w=800):
+    serie = np.asarray(serie, float)
+    trend = np.convolve(serie, np.ones(k_trend)/k_trend, mode="same")
+    resid = serie - trend
+    def ac1(s):
+        s = s - s.mean(); return np.corrcoef(s[:-1], s[1:])[0, 1]
+    rng = range(w, len(resid))
+    var_roll = np.array([resid[i-w:i].var() for i in rng])
+    ac_roll  = np.array([ac1(resid[i-w:i])  for i in rng])
+    tt = np.arange(w, len(resid)) * dt
+    taus = {"var": kendalltau(tt, var_roll)[0], "ac1": kendalltau(tt, ac_roll)[0]}
+    return tt, var_roll, ac_roll, taus
+
+tt, vr, ar, taus = ews_univariado(x[:trans], dt=dt)
+print("τ varianza:", round(taus["var"], 3), " τ AC(1):", round(taus["ac1"], 3))
+```
+
+## Indicador multivariado (autovalor dominante de la covarianza)
+
+```{pyodide}
+def lambda_max_movil(X, w=600):
+    """X: matriz (tiempo x variables). Devuelve el mayor autovalor de la
+       covarianza en ventana móvil."""
+    n = X.shape[0]
+    return np.array([np.linalg.eigvalsh(np.cov(X[i-w:i].T)).max()
+                     for i in range(w, n)])
+
+# Demo rápida con dos variables ruidosas correlacionadas crecientes
+rng = np.random.default_rng(0)
+n = 3000
+rho = np.linspace(0.1, 0.95, n)
+X = np.zeros((n, 2))
+for t in range(1, n):
+    z = rng.standard_normal()
+    X[t, 0] = 0.9*X[t-1, 0] + z
+    X[t, 1] = 0.9*X[t-1, 1] + rho[t]*z + np.sqrt(1-rho[t]**2)*rng.standard_normal()
+print("λmax final:", round(lambda_max_movil(X)[-1], 3))
+```
+
+## Equivalentes en R (base)
+
+```{webr}
+# Indicador AC(1) y varianza en ventana móvil, base R
+ews_univariado <- function(serie, w = 50, k_trend = 25) {
+  trend <- stats::filter(serie, rep(1/k_trend, k_trend), sides = 2)
+  resid <- serie - trend
+  resid <- resid[!is.na(resid)]
+  idx <- (w + 1):length(resid)
+  varr <- sapply(idx, function(i) var(resid[(i - w):i]))
+  ac1  <- sapply(idx, function(i) {
+    s <- resid[(i - w):i]; s <- s - mean(s); cor(s[-length(s)], s[-1])
+  })
+  list(var = varr, ac1 = ac1,
+       tau_var = cor(seq_along(varr), varr, method = "kendall"),
+       tau_ac1 = cor(seq_along(ac1),  ac1,  method = "kendall"))
+}
+set.seed(1); y <- cumsum(rnorm(500, sd = 0.2)) + rnorm(500, sd = 0.5)
+r <- ews_univariado(y, w = 60)
+cat("tau var:", round(r$tau_var, 3), " tau AC1:", round(r$tau_ac1, 3), "\n")
+```

@@ -1,0 +1,188 @@
+---
+title: "Taller — Detectando una transición crítica"
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.objetivos}
+**Meta del taller**
+
+Construir, paso a paso y de forma reproducible, un **pipeline de señales de alerta temprana** y aplicarlo primero a **datos simulados** (donde conocemos la verdad) y luego a **series reales**. Cierre crítico: cuándo confiar y cuándo no en las EWS.
+:::
+
+Trabajaremos en **dos fases**: A) datos **simulados** (univariado y multivariado), y B) datos **reales** (con guía para correrlo en tu máquina). Python es el lenguaje primario; al final indicamos los equivalentes en R.
+
+## Fase A · Datos simulados {#sec-faseA}
+
+### A.1 Un pipeline EWS reutilizable
+
+Definimos una función única que hace *detrending*, calcula varianza y AC(1) en ventana móvil y devuelve el $\tau$ de Kendall. Ejecuta esta celda primero:
+
+```{pyodide}
+import numpy as np
+from scipy.stats import kendalltau
+
+def ews_univariado(serie, dt=1.0, k_trend=400, w=800):
+    """Devuelve tiempos, varianza móvil, AC(1) móvil y taus de Kendall."""
+    serie = np.asarray(serie, float)
+    trend = np.convolve(serie, np.ones(k_trend)/k_trend, mode="same")
+    resid = serie - trend
+    def ac1(s):
+        s = s - s.mean(); return np.corrcoef(s[:-1], s[1:])[0, 1]
+    rng = range(w, len(resid))
+    var_roll = np.array([resid[i-w:i].var() for i in rng])
+    ac_roll  = np.array([ac1(resid[i-w:i])  for i in rng])
+    tt = np.arange(w, len(resid)) * dt
+    taus = {"var": kendalltau(tt, var_roll)[0], "ac1": kendalltau(tt, ac_roll)[0]}
+    return tt, var_roll, ac_roll, taus
+
+print("Pipeline cargado. ✔")
+```
+
+### A.2 Genera un fold con forzamiento creciente
+
+```{pyodide}
+import matplotlib.pyplot as plt
+rng = np.random.default_rng(7)
+
+def simula_fold(h0=-0.2, h1=0.6, T=400, dt=0.05, sigma=0.04, x0=-1.0, seed=7):
+    r = np.random.default_rng(seed)
+    n = int(T/dt); h = np.linspace(h0, h1, n)
+    x = np.empty(n); x[0] = x0
+    for t in range(1, n):
+        x[t] = x[t-1] + dt*(-x[t-1]**3 + x[t-1] + h[t-1]) + sigma*np.sqrt(dt)*r.standard_normal()
+    trans = int(np.argmax(x > 0)) or n
+    return x, trans, dt
+
+x, trans, dt = simula_fold()
+plt.figure(figsize=(6.6, 2.8))
+plt.plot(np.arange(len(x))*dt, x, lw=.5, color="#444")
+plt.axvline(trans*dt, color="crimson", ls="--", label="transición")
+plt.xlabel("t"); plt.ylabel("x(t)"); plt.legend(); plt.tight_layout(); plt.show()
+print("Índice de transición:", trans)
+```
+
+### A.3 Aplica el pipeline al tramo pre-transición
+
+```{pyodide}
+pre = x[:trans]
+tt, var_roll, ac_roll, taus = ews_univariado(pre, dt=dt, k_trend=400, w=800)
+
+fig, ax = plt.subplots(2, 1, figsize=(6.6, 4.4), sharex=True)
+ax[0].plot(tt, var_roll, color="#1f5673"); ax[0].set_ylabel("varianza")
+ax[1].plot(tt, ac_roll,  color="#b03a2e"); ax[1].set_ylabel("AC(1)"); ax[1].set_xlabel("t")
+fig.suptitle(f"EWS pre-transición   |   τ_var={taus['var']:.2f}   τ_AC={taus['ac1']:.2f}")
+plt.tight_layout(); plt.show()
+```
+
+Deberías ver ambos indicadores creciendo y $\tau$ positivos: **el pipeline detecta el acercamiento al pliegue**.
+
+### A.4 Versión multivariada
+
+```{pyodide}
+rng = np.random.default_rng(11)
+n, dt2, sigma, c = 6000, 0.05, 0.05, 0.3
+lam = np.linspace(1.5, 0.1, n)
+X = np.zeros((n, 2))
+for t in range(1, n):
+    d0 = -lam[t]*X[t-1,0] + c*(X[t-1,1]-X[t-1,0])
+    d1 = -lam[t]*X[t-1,1] + c*(X[t-1,0]-X[t-1,1])
+    X[t,0] = X[t-1,0] + dt2*d0 + sigma*np.sqrt(dt2)*rng.standard_normal()
+    X[t,1] = X[t-1,1] + dt2*d1 + sigma*np.sqrt(dt2)*rng.standard_normal()
+w = 600
+maxeig = np.array([np.linalg.eigvalsh(np.cov(X[i-w:i].T)).max() for i in range(w, n)])
+plt.figure(figsize=(6.6, 3))
+plt.plot(np.arange(w, n)*dt2, maxeig, color="#6b2233")
+plt.xlabel("t"); plt.ylabel("λmax(covarianza)"); plt.title("EWS multivariada")
+plt.tight_layout(); plt.show()
+```
+
+::: {.callout-tip}
+## Ejercicio A — Falso positivo controlado
+Vuelve a A.2 con `simula_fold(h0=-0.2, h1=0.1)` (la rampa **no** llega al pliegue) y repite A.3. ¿Qué valen ahora los $\tau$? Comenta el riesgo de sobreinterpretar varianza alta.
+
+::: {.callout-note collapse="true"}
+## Solución
+Sin acercarse al pliegue, los $\tau$ caen hacia 0 y los indicadores no muestran tendencia clara: ausencia de señal pese a que el sistema fluctúa. Refuerza que la **tendencia**, no el nivel, es lo informativo.
+:::
+:::
+
+## Fase B · Datos reales {#sec-faseB}
+
+Las tres fuentes del curso (con sus enlaces) son:
+
+- **Termoacústicos** + código de entrenamiento (Bury et al.): <https://github.com/ThomasMBury/deep-early-warnings-pnas>
+- **Geoquímicos** (PANGAEA): <https://doi.pangaea.de/10.1594/PANGAEA.923197>
+- **Paleoclimáticos** (World Data Center for Paleoclimatology, NOAA): <http://www.ncdc.noaa.gov/paleo/data.html>
+
+::: {.callout-important}
+## Por qué este tramo se corre en local
+El navegador (Pyodide/WebR) no descarga libremente archivos de otros dominios por restricciones de seguridad (CORS). Descarga los datos a tu equipo y corre el pipeline localmente. Abajo: el código local y un **sustituto sintético** para practicar aquí mismo el mismo flujo.
+:::
+
+### B.1 Flujo local (no se ejecuta aquí)
+
+```python
+# Python (local) con ewstools
+import pandas as pd, ewstools
+serie = pd.read_csv("paleoclima.csv")["valor"]      # ajusta a tu archivo
+ts = ewstools.TimeSeries(data=serie)
+ts.detrend(method="Lowess", span=0.2)
+ts.compute_var(rolling_window=0.5)
+ts.compute_auto(rolling_window=0.5, lag=1)
+ts.compute_ktau()
+ts.make_plotly().show()
+```
+
+```r
+# R (local) con EWSmethods
+library(EWSmethods)
+df <- read.csv("paleoclima.csv")          # columnas: tiempo, valor
+res <- uniEWS(data = df[, c("tiempo","valor")],
+              metrics = c("SD","ar1","skew"),
+              method = "rolling", winsize = 50)
+plot(res)
+```
+
+### B.2 Sustituto sintético tipo "registro paleoclimático"
+
+Para practicar el pipeline sobre algo con aspecto de dato real (deriva lenta + ruido coloreado + transición), genera y analiza esta serie aquí mismo:
+
+```{pyodide}
+import numpy as np, matplotlib.pyplot as plt
+rng = np.random.default_rng(2024)
+n = 6000
+# AR(1) con coeficiente que crece hacia 1 (enlentecimiento) + deriva suave
+phi = np.linspace(0.80, 0.995, n)
+e = rng.standard_normal(n) * 0.5
+y = np.zeros(n)
+for t in range(1, n):
+    y[t] = phi[t]*y[t-1] + e[t]
+y = y + np.linspace(0, 2, n)                 # deriva lenta (tendencia)
+trans = int(0.92*n)
+pre = y[:trans]
+
+tt, var_roll, ac_roll, taus = ews_univariado(pre, dt=1.0, k_trend=400, w=600)
+fig, ax = plt.subplots(3, 1, figsize=(6.6, 6), sharex=True)
+ax[0].plot(np.arange(trans), pre, lw=.5, color="#444"); ax[0].set_ylabel("y")
+ax[1].plot(tt, var_roll, color="#1f5673"); ax[1].set_ylabel("varianza")
+ax[2].plot(tt, ac_roll,  color="#b03a2e"); ax[2].set_ylabel("AC(1)"); ax[2].set_xlabel("índice")
+fig.suptitle(f"Sustituto tipo paleoclima  |  τ_var={taus['var']:.2f}  τ_AC={taus['ac1']:.2f}")
+plt.tight_layout(); plt.show()
+```
+
+El **mismo** pipeline de la Fase A funciona sin cambios: esa es la idea de un flujo reproducible.
+
+## Cierre crítico {#sec-cierre}
+
+Las EWS son una herramienta poderosa pero **no infalible** [@boettiger2012; @dakos2012ews]:
+
+- **Falsos positivos:** varianza/autocorrelación pueden subir por ruido externo o cambios de muestreo sin que haya pérdida de resiliencia.
+- **Falsos negativos:** transiciones inducidas por ruido o por choques abruptos del forzamiento pueden no dejar firma anticipatoria.
+- **Dependencia de elecciones:** *detrending*, tamaño de ventana y frecuencia de muestreo cambian el resultado; siempre reporta sensibilidad y usa *surrogates* para la significancia.
+- **El tipo importa:** la firma clásica corresponde a bifurcaciones tipo fold; otras transiciones requieren métodos distintos (de ahí el atractivo de los enfoques de ML del [capítulo 7](p3-cap07-ews-multivariadas-ml.qmd)).
+
+::: {.callout-tip}
+## Ejercicio B — Tu propio dataset
+Toma una serie real de tu trabajo (p. ej. abundancia de un taxón a lo largo del tiempo), aplícale `ews_univariado` y discute: ¿hay tendencia? ¿pasa una prueba de *surrogates*? ¿qué transición biológica plausible explicaría una EWS positiva?
+:::

@@ -1,0 +1,51 @@
+---
+title: "Apéndice C — Glosario"
+---
+
+::: {.objetivos}
+**Para qué sirve este apéndice**
+
+Definiciones breves de los términos clave del curso, para consulta rápida.
+:::
+
+**Bifurcación.** Cambio cualitativo en el retrato de fases (número o estabilidad de puntos fijos) al variar suavemente un parámetro de control.
+
+**Punto de bifurcación ($\mu_c$).** Valor del parámetro donde ocurre la bifurcación.
+
+**Punto fijo / equilibrio ($x^*$).** Estado en que $f_\mu(x^*)=0$: el sistema no cambia si parte de ahí.
+
+**Estabilidad lineal.** Criterio según el signo de $f'(x^*)$: estable si negativo, inestable si positivo, indeterminado si cero.
+
+**Forma normal.** Polinomio arquetípico que captura la dinámica local cerca de una bifurcación (p. ej. $\dot{x}=\mu-x^2$ para saddle-node).
+
+**Saddle-node (silla-nodo) / fold.** Bifurcación en que un par de equilibrios (estable + inestable) aparece o se aniquila. Responsable de transiciones abruptas.
+
+**Transcrítica.** Dos equilibrios intercambian estabilidad sin desaparecer.
+
+**Pitchfork (tridente).** Un equilibrio se desestabiliza y nacen dos simétricos (supercrítica) o coexisten ramas inestables (subcrítica).
+
+**Potencial $V(x)$.** Paisaje tal que $\dot{x}=-V'(x)$; mínimos = estados estables, máximos = inestables.
+
+**Biestabilidad.** Coexistencia de dos estados estables para el mismo parámetro (doble pozo).
+
+**Histéresis.** Dependencia del camino: el umbral para colapsar difiere del umbral para recuperar; el sistema no recorre la misma curva al ir y volver.
+
+**Bifurcación catastrófica.** Salto abrupto del estado al cruzar un pliegue, típicamente con histéresis.
+
+**Tipping point (punto de inflexión).** Umbral del parámetro tras el cual el sistema transita abruptamente a otro estado.
+
+**Enlentecimiento crítico (*critical slowing down*).** Pérdida de velocidad de recuperación ($1/|f'(x^*)|\to\infty$) al acercarse a una bifurcación.
+
+**Señales de alerta temprana (EWS).** Estadísticos que anticipan una transición: principalmente aumento de **varianza** y de **autocorrelación de retardo-1**.
+
+**Autocorrelación de retardo-1 ($\rho_1$).** Correlación de la serie consigo misma desfasada un paso; crece hacia 1 cerca del umbral.
+
+**Detrending.** Remoción de la tendencia lenta para aislar las fluctuaciones sobre las que se calculan las EWS.
+
+**$\tau$ de Kendall.** Medida no paramétrica de tendencia monótona; se usa para cuantificar si un indicador EWS crece con el tiempo.
+
+**Surrogates (subrogados).** Series sintéticas que preservan ciertas propiedades (p. ej. autocorrelación) usadas para construir una distribución nula y evaluar significancia.
+
+**EWS multivariadas.** Indicadores sobre varias variables: covarianza, autovalor dominante, correlación cruzada, varianza espacial.
+
+**Proceso de Ornstein–Uhlenbeck (OU).** Modelo lineal estocástico $dx=-\lambda x\,dt+\sigma\,dW$ usado para derivar las predicciones de varianza y autocorrelación.

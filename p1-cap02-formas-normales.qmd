@@ -1,0 +1,203 @@
+---
+title: "Bifurcaciones locales y formas normales"
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+::: objetivos
+**Objetivos de aprendizaje**
+
+- Definir qué es una bifurcación y por qué $f'(x^*)=0$ es la condición que la dispara.
+- Reconocer y dibujar los diagramas de las tres bifurcaciones locales de codimensión 1: **saddle-node**, **transcrítica** y **pitchfork**.
+- Escribir la **forma normal** de cada una y conectar su álgebra con su geometría.
+:::
+
+## ¿Qué es una bifurcación? {#sec-bif}
+
+Una **bifurcación** es un cambio **cualitativo** en el retrato de fases —número o estabilidad de los puntos fijos— al variar suavemente el parámetro $\mu$. El valor $\mu_c$ donde ocurre se llama **punto de bifurcación**. Como vimos en el capítulo anterior, el criterio lineal falla justo cuando $f'_\mu(x^*)=0$; por eso las bifurcaciones locales viven en esa frontera.
+
+Una idea poderosa es que, **cerca** del punto crítico, casi cualquier sistema se comporta como uno de unos pocos modelos arquetípicos: sus **formas normales**. Estudiar tres polinomios sencillos nos da el vocabulario para reconocerlas en cualquier sistema biológico.
+
+<!-- Cap. 2 · formas normales -->
+
+::: dato-historico
+**Apunte histórico.** *Bifurcación* es término de **Poincaré** (1885).
+
+Las tres formas normales que ves aquí (saddle-node, transcrítica, pitchfork) son los arquetipos de **codimensión 1**: casi cualquier sistema, cerca del punto crítico, se parece a una de ellas.
+:::
+
+## Las tres bifurcaciones locales {#sec-tres}
+
+Cambia el tipo y mueve $\mu$. Los cruces de la curva con el eje horizontal son los puntos fijos; donde cruza **bajando** (pendiente negativa) el equilibrio es estable.
+
+```{ojs}
+//| echo: false
+viewof tipo = Inputs.select(
+  new Map([
+    ["Saddle-node:  ẋ = μ − x²", "sn"],
+    ["Transcrítica:  ẋ = μx − x²", "tc"],
+    ["Pitchfork (supercrítica):  ẋ = μx − x³", "pf"]
+  ]),
+  {label: "Bifurcación", value: "sn"})
+```
+
+```{ojs}
+//| echo: false
+viewof mu = Inputs.range([-2, 2], {value: -0.5, step: 0.01, label: "μ"})
+```
+
+```{ojs}
+//| echo: false
+ff = (tipo === "sn") ? (x => mu - x*x)
+   : (tipo === "tc") ? (x => mu*x - x*x)
+   : (x => mu*x - x*x*x)
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  height: 300, marginLeft: 50,
+  x: {label: "x", domain: [-2.2, 2.2]},
+  y: {label: "ẋ = f(x)", domain: [-3, 3]},
+  marks: [
+    Plot.ruleY([0], {stroke: "#999"}),
+    Plot.ruleX([0], {stroke: "#eee"}),
+    Plot.line(d3.range(-2.2, 2.21, 0.01).map(x => ({x, f: ff(x)})),
+              {x: "x", y: "f", stroke: "steelblue", strokeWidth: 2})
+  ]
+})
+```
+
+### Saddle-node (silla-nodo) {#sec-sn}
+
+Forma normal: $$\dot{x} = \mu - x^2$$.
+
+Los puntos de equilibrio son:
+
+| Punto de equilibrio | $r < 0$                          | r=0 |$r>0$| 
+|---------------------|-------------------------------|-----|---------|
+                     
+ |$x_1^*=\sqrt{\mu}$     | No existen en \$\\mathcal R\$ |     |. |
+|                     |                               |     |.    |
+|                     |                               |     |      |
+
+: Estabilidades del modelo saddle-node
+
+$x^* = \pm\sqrt{\mu}$ **existen solo para** $\mu \ge 0$: un par (uno estable, $+\sqrt{\mu}$; uno inestable, $-\sqrt{\mu}$) que **colisiona y se aniquila** en $\mu=0$.
+
+Es la bifurcación de **creación/destrucción** de equilibrios: la responsable de los *tipping points* abruptos que veremos en levaduras y cianobacterias [@dai2012; @veraart2012].
+
+### Transcrítica {#sec-tc}
+
+Forma normal: $\dot{x} = \mu x - x^2 = x(\mu - x)$. Hay siempre dos puntos fijos, $x^*=0$ y $x^*=\mu$, que **intercambian estabilidad** al cruzarse en $\mu=0$. Ningún equilibrio desaparece; cambia quién es el atractor. Aparece donde un estado (p. ej. extinción, $x^*=0$) siempre existe pero gana o pierde estabilidad.
+
+### Pitchfork (tridente) {#sec-pf}
+
+Forma normal **supercrítica**: $\dot{x} = \mu x - x^3$. Para $\mu<0$ solo está $x^*=0$ (estable); en $\mu=0$ se vuelve inestable y nacen dos ramas estables simétricas $x^* = \pm\sqrt{\mu}$. Es la firma de la **ruptura de simetría** y de la **biestabilidad**. Su variante **subcrítica**, $\dot{x}=\mu x + x^3$, produce ramas inestables y suele acompañarse de histéresis (capítulo 3).
+
+## Diagramas de bifurcación con código {#sec-diagramas}
+
+Un **diagrama de bifurcación** grafica los puntos fijos $x^*$ frente a $\mu$, coloreando estable vs. inestable. Aquí los calculamos analíticamente y los clasificamos por el signo de $f'(x^*)$:
+
+::: panel-tabset
+## Python
+
+```{pyodide}
+import numpy as np, matplotlib.pyplot as plt
+
+def ramas(tipo, mus):
+    pts = []  # (mu, x*, estable)
+    for mu in mus:
+        if tipo == "sn":
+            roots = [np.sqrt(mu), -np.sqrt(mu)] if mu >= 0 else []
+            fp = lambda x: -2*x
+        elif tipo == "tc":
+            roots = [0.0, mu];                 fp = lambda x: mu - 2*x
+        else:  # pitchfork
+            roots = [0.0] + ([np.sqrt(mu), -np.sqrt(mu)] if mu > 0 else [])
+            fp = lambda x: mu - 3*x*x
+        for x in roots:
+            pts.append((mu, x, fp(x) < 0))
+    return np.array(pts)
+
+mus = np.linspace(-2, 2, 600)
+titulos = {"sn": "Saddle-node", "tc": "Transcrítica", "pf": "Pitchfork"}
+fig, axes = plt.subplots(1, 3, figsize=(9.5, 3.2))
+for ax, tipo in zip(axes, ["sn", "tc", "pf"]):
+    P = ramas(tipo, mus)
+    est, ines = P[P[:, 2] == 1], P[P[:, 2] == 0]
+    ax.plot(est[:, 0],  est[:, 1],  '.', ms=1.6, color="#1f5673", label="estable")
+    ax.plot(ines[:, 0], ines[:, 1], '.', ms=1.6, color="#b03a2e", label="inestable")
+    ax.axhline(0, color="#ddd", lw=.6); ax.axvline(0, color="#ddd", lw=.6)
+    ax.set_title(titulos[tipo], fontsize=10); ax.set_xlabel("μ")
+axes[0].set_ylabel("x*"); axes[0].legend(fontsize=7, loc="upper left")
+plt.tight_layout(); plt.show()
+```
+
+## R
+
+```{webr}
+ramas <- function(tipo, mus) {
+  out <- list()
+  for (mu in mus) {
+    if (tipo == "sn") {
+      roots <- if (mu >= 0) c(sqrt(mu), -sqrt(mu)) else numeric(0)
+      fp <- function(x) -2 * x
+    } else if (tipo == "tc") {
+      roots <- c(0, mu);                       fp <- function(x) mu - 2 * x
+    } else {
+      roots <- c(0, if (mu > 0) c(sqrt(mu), -sqrt(mu)) else numeric(0))
+      fp <- function(x) mu - 3 * x^2
+    }
+    for (x in roots) out[[length(out) + 1]] <- c(mu, x, as.numeric(fp(x) < 0))
+  }
+  do.call(rbind, out)
+}
+mus <- seq(-2, 2, length.out = 500)
+op <- par(mfrow = c(1, 3))
+for (tipo in c("sn", "tc", "pf")) {
+  P <- ramas(tipo, mus)
+  col <- ifelse(P[, 3] == 1, "#1f5673", "#b03a2e")
+  plot(P[, 1], P[, 2], pch = 20, cex = .3, col = col,
+       xlab = "mu", ylab = "x*", main = tipo)
+  abline(h = 0, v = 0, col = "#ddd")
+}
+par(op)
+```
+:::
+
+## Ejercicios {#sec-ej2}
+
+:::: callout-tip
+## Ejercicio 2.1 — Clasifica
+
+¿Qué bifurcación tiene $\dot{x} = \mu - x^2$ y cuál $\dot{x} = \mu x - x^3$? Da el valor crítico $\mu_c$ en cada caso.
+
+::: {.callout-note collapse="true"}
+## Solución
+
+La primera es **saddle-node** ($\mu_c=0$: el par $\pm\sqrt{\mu}$ aparece para $\mu>0$). La segunda es **pitchfork supercrítica** ($\mu_c=0$: $x^*=0$ pierde estabilidad y nacen $\pm\sqrt{\mu}$).
+:::
+::::
+
+:::: callout-tip
+## Ejercicio 2.2 — Computacional
+
+Modifica la función `ramas` para la pitchfork **subcrítica** $\dot{x}=\mu x + x^3$ (puntos fijos $0$ y $\pm\sqrt{-\mu}$ para $\mu<0$) y observa que las ramas nuevas son **inestables**.
+
+::: {.callout-note collapse="true"}
+## Solución
+
+Usa `roots = [0] + ([sqrt(-mu), -sqrt(-mu)] if mu < 0 else [])` y `fp = lambda x: mu + 3*x**2`. Verás que las ramas $\pm\sqrt{-\mu}$ salen en rojo (inestables) y que $x^*=0$ es estable solo para $\mu<0$.
+:::
+::::
+
+::: {.callout-note collapse="true"}
+## Profundización (opcional) [Avanzado]{.avanzado-tag}
+
+**Condiciones de no-degeneración.** Una saddle-node genérica requiere, en $(\mu_c,x^*)$: $f=0$, $\partial_x f=0$, $\partial_{xx} f\neq 0$ y $\partial_\mu f\neq 0$. La transcrítica y la pitchfork añaden la restricción $\partial_\mu f=0$ en el equilibrio persistente más condiciones de simetría. El **teorema de la variedad central** justifica por qué basta estudiar la dinámica reducida a 1-D cerca del punto crítico, aun en sistemas de mayor dimensión.
+:::
+
+## Para seguir
+
+En el [capítulo 3](p1-cap03-potenciales-catastrofe.qmd) reescribimos la dinámica como el descenso por un **paisaje de potencial** y vemos cómo, combinando bifurcaciones, surgen la **catástrofe** y la **histéresis**.

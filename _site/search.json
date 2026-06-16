@@ -1,0 +1,648 @@
+[
+  {
+    "objectID": "taller.html",
+    "href": "taller.html",
+    "title": "Taller — Detectando una transición crítica",
+    "section": "",
+    "text": "Meta del taller\nConstruir, paso a paso y de forma reproducible, un pipeline de señales de alerta temprana y aplicarlo primero a datos simulados (donde conocemos la verdad) y luego a series reales. Cierre crítico: cuándo confiar y cuándo no en las EWS.\nTrabajaremos en dos fases: A) datos simulados (univariado y multivariado), y B) datos reales (con guía para correrlo en tu máquina). Python es el lenguaje primario; al final indicamos los equivalentes en R.",
+    "crumbs": [
+      "Taller transversal",
+      "Taller — Detectando una transición crítica"
+    ]
+  },
+  {
+    "objectID": "taller.html#sec-faseA",
+    "href": "taller.html#sec-faseA",
+    "title": "Taller — Detectando una transición crítica",
+    "section": "1 Fase A · Datos simulados",
+    "text": "1 Fase A · Datos simulados\n\nA.1 Un pipeline EWS reutilizable\nDefinimos una función única que hace detrending, calcula varianza y AC(1) en ventana móvil y devuelve el \\(\\tau\\) de Kendall. Ejecuta esta celda primero:\n\n\n\n\n\n\n\n\n\n\nA.2 Genera un fold con forzamiento creciente\n\n\n\n\n\n\n\n\n\n\nA.3 Aplica el pipeline al tramo pre-transición\n\n\n\n\n\n\n\n\nDeberías ver ambos indicadores creciendo y \\(\\tau\\) positivos: el pipeline detecta el acercamiento al pliegue.\n\n\nA.4 Versión multivariada\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTipEjercicio A — Falso positivo controlado\n\n\n\nVuelve a A.2 con simula_fold(h0=-0.2, h1=0.1) (la rampa no llega al pliegue) y repite A.3. ¿Qué valen ahora los \\(\\tau\\)? Comenta el riesgo de sobreinterpretar varianza alta.\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\nSin acercarse al pliegue, los \\(\\tau\\) caen hacia 0 y los indicadores no muestran tendencia clara: ausencia de señal pese a que el sistema fluctúa. Refuerza que la tendencia, no el nivel, es lo informativo.",
+    "crumbs": [
+      "Taller transversal",
+      "Taller — Detectando una transición crítica"
+    ]
+  },
+  {
+    "objectID": "taller.html#sec-faseB",
+    "href": "taller.html#sec-faseB",
+    "title": "Taller — Detectando una transición crítica",
+    "section": "2 Fase B · Datos reales",
+    "text": "2 Fase B · Datos reales\nLas tres fuentes del curso (con sus enlaces) son:\n\nTermoacústicos + código de entrenamiento (Bury et al.): https://github.com/ThomasMBury/deep-early-warnings-pnas\nGeoquímicos (PANGAEA): https://doi.pangaea.de/10.1594/PANGAEA.923197\nPaleoclimáticos (World Data Center for Paleoclimatology, NOAA): http://www.ncdc.noaa.gov/paleo/data.html\n\n\n\n\n\n\n\nImportantePor qué este tramo se corre en local\n\n\n\nEl navegador (Pyodide/WebR) no descarga libremente archivos de otros dominios por restricciones de seguridad (CORS). Descarga los datos a tu equipo y corre el pipeline localmente. Abajo: el código local y un sustituto sintético para practicar aquí mismo el mismo flujo.\n\n\n\nB.1 Flujo local (no se ejecuta aquí)\n# Python (local) con ewstools\nimport pandas as pd, ewstools\nserie = pd.read_csv(\"paleoclima.csv\")[\"valor\"]      # ajusta a tu archivo\nts = ewstools.TimeSeries(data=serie)\nts.detrend(method=\"Lowess\", span=0.2)\nts.compute_var(rolling_window=0.5)\nts.compute_auto(rolling_window=0.5, lag=1)\nts.compute_ktau()\nts.make_plotly().show()\n# R (local) con EWSmethods\nlibrary(EWSmethods)\ndf &lt;- read.csv(\"paleoclima.csv\")          # columnas: tiempo, valor\nres &lt;- uniEWS(data = df[, c(\"tiempo\",\"valor\")],\n              metrics = c(\"SD\",\"ar1\",\"skew\"),\n              method = \"rolling\", winsize = 50)\nplot(res)\n\n\nB.2 Sustituto sintético tipo “registro paleoclimático”\nPara practicar el pipeline sobre algo con aspecto de dato real (deriva lenta + ruido coloreado + transición), genera y analiza esta serie aquí mismo:\n\n\n\n\n\n\n\n\nEl mismo pipeline de la Fase A funciona sin cambios: esa es la idea de un flujo reproducible.",
+    "crumbs": [
+      "Taller transversal",
+      "Taller — Detectando una transición crítica"
+    ]
+  },
+  {
+    "objectID": "taller.html#sec-cierre",
+    "href": "taller.html#sec-cierre",
+    "title": "Taller — Detectando una transición crítica",
+    "section": "3 Cierre crítico",
+    "text": "3 Cierre crítico\nLas EWS son una herramienta poderosa pero no infalible (Boettiger y Hastings 2012; Dakos et al. 2012):\n\nFalsos positivos: varianza/autocorrelación pueden subir por ruido externo o cambios de muestreo sin que haya pérdida de resiliencia.\nFalsos negativos: transiciones inducidas por ruido o por choques abruptos del forzamiento pueden no dejar firma anticipatoria.\nDependencia de elecciones: detrending, tamaño de ventana y frecuencia de muestreo cambian el resultado; siempre reporta sensibilidad y usa surrogates para la significancia.\nEl tipo importa: la firma clásica corresponde a bifurcaciones tipo fold; otras transiciones requieren métodos distintos (de ahí el atractivo de los enfoques de ML del capítulo 7).\n\n\n\n\n\n\n\nTipEjercicio B — Tu propio dataset\n\n\n\nToma una serie real de tu trabajo (p. ej. abundancia de un taxón a lo largo del tiempo), aplícale ews_univariado y discute: ¿hay tendencia? ¿pasa una prueba de surrogates? ¿qué transición biológica plausible explicaría una EWS positiva?",
+    "crumbs": [
+      "Taller transversal",
+      "Taller — Detectando una transición crítica"
+    ]
+  },
+  {
+    "objectID": "p3-cap07-ews-multivariadas-ml.html",
+    "href": "p3-cap07-ews-multivariadas-ml.html",
+    "title": "EWS multivariadas y aprendizaje automático",
+    "section": "",
+    "text": "Objetivos de aprendizaje\n\nExtender las EWS a sistemas con varias variables mediante la matriz de covarianza.\nInterpretar el autovalor dominante de la covarianza como indicador multivariado.\nSituar los enfoques de aprendizaje automático (Deb et al. 2022; Bury et al. 2021) y sus promesas y límites.",
+    "crumbs": [
+      "Parte III · Señales de Alerta Temprana (EWS)",
+      "EWS multivariadas y aprendizaje automático"
+    ]
+  },
+  {
+    "objectID": "p3-cap07-ews-multivariadas-ml.html#sec-multi",
+    "href": "p3-cap07-ews-multivariadas-ml.html#sec-multi",
+    "title": "EWS multivariadas y aprendizaje automático",
+    "section": "1 De una variable a muchas",
+    "text": "1 De una variable a muchas\nEn comunidades microbianas o redes tróficas medimos muchas variables a la vez. Cerca de una bifurcación, el enlentecimiento crítico se manifiesta como un crecimiento de la varianza colectiva alineada con el modo que se desestabiliza. Un resumen natural es el autovalor dominante \\(\\lambda_{\\max}\\) de la matriz de covarianza en ventana móvil: tiende a crecer al acercarse al umbral, igual que la varianza univariada.\nSimulamos dos variables acopladas cuya tasa de retorno se desvanece y seguimos \\(\\lambda_{\\max}\\):\n\n\n\n\n\n\n\n\nOtros indicadores multivariados útiles: la correlación cruzada entre variables, el índice de sincronía, y —en sistemas espacialmente extendidos— la varianza espacial y la longitud de correlación crecientes.",
+    "crumbs": [
+      "Parte III · Señales de Alerta Temprana (EWS)",
+      "EWS multivariadas y aprendizaje automático"
+    ]
+  },
+  {
+    "objectID": "p3-cap07-ews-multivariadas-ml.html#sec-ml",
+    "href": "p3-cap07-ews-multivariadas-ml.html#sec-ml",
+    "title": "EWS multivariadas y aprendizaje automático",
+    "section": "2 Aprendizaje automático para EWS",
+    "text": "2 Aprendizaje automático para EWS\nLos indicadores clásicos exigen elegir detrending, ventana y umbral, y fallan en transiciones que no son saddle-node. Una línea reciente entrena modelos que aprenden la firma de una transición inminente:\n\nDeb et al. (2022) muestran que modelos entrenados con dinámicas sencillas simuladas generalizan y predicen transiciones críticas en sistemas naturales complejos, sin ajustar a cada caso.\nBury et al. (2021) usan redes profundas (CNN + LSTM) entrenadas sobre una biblioteca de bifurcaciones para clasificar el tipo de transición y anticiparla; sus datos termoacústicos y el código de entrenamiento son públicos (los usaremos en el taller).\n\n\n\n\n\n\n\nNotaProfundización (opcional): por qué entrenar con modelos simples funciona Avanzado\n\n\n\n\n\nLas formas normales (Parte I) son universales cerca del punto crítico: la dinámica local de casi cualquier sistema se parece a uno de unos pocos polinomios. Una red entrenada con muchas realizaciones ruidosas de esas formas normales aprende características (crecimiento de varianza/autocorrelación, desplazamiento espectral, asimetrías) que transfieren a datos reales cuya forma normal subyacente es la misma, aunque el mecanismo biológico difiera. La contraparte: si la transición real no es de tipo bifurcación (p. ej. inducida por ruido puro), estas señales pueden estar ausentes —el límite de detección de Boettiger y Hastings (2012).\n\n\n\n\n\n\n\n\n\nNotaEn tu máquina: EWSNet\n\n\n\nModelo preentrenado de Bury et al. (2021) / línea de Deb. No se ejecuta aquí; úsalo localmente:\n# Python (local) — esquema\nfrom ewsnet import EWSNet            # según la implementación que instales\nmodelo = EWSNet(weights=\"pretrained\")\nprob = modelo.predict(serie)         # P(transición), y tipo si aplica\nprint(prob)",
+    "crumbs": [
+      "Parte III · Señales de Alerta Temprana (EWS)",
+      "EWS multivariadas y aprendizaje automático"
+    ]
+  },
+  {
+    "objectID": "p3-cap07-ews-multivariadas-ml.html#sec-ej7",
+    "href": "p3-cap07-ews-multivariadas-ml.html#sec-ej7",
+    "title": "EWS multivariadas y aprendizaje automático",
+    "section": "3 Ejercicios",
+    "text": "3 Ejercicios\n\n\n\n\n\n\nTipEjercicio 7.1 — Acoplamiento\n\n\n\nCambia c a 0.0 (variables independientes) y a 0.8 (fuerte acoplamiento). ¿Cómo cambia la forma del autovalor dominante hacia el final?\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\nCon acoplamiento fuerte, las variables comparten el modo lento y el autovalor dominante crece de forma más marcada y coherente; sin acoplamiento, cada variable contribuye por separado y la señal colectiva es más débil/ruidosa.\n\n\n\n\n\n\n\n\n\n\n\nTipEjercicio 7.2 — Conceptual\n\n\n\n¿Por qué un detector basado solo en “varianza alta” daría falsos positivos, y cómo lo mitiga un enfoque que mira la tendencia y el tipo de transición?\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\nVarianza alta puede deberse a ruido de medición o forzamiento externo, no a pérdida de resiliencia. Mirar la tendencia (¿crece?) y entrenar para reconocer la firma temporal de una bifurcación reduce confusiones, aunque no elimina el límite fundamental cuando la transición no deja firma dinámica.",
+    "crumbs": [
+      "Parte III · Señales de Alerta Temprana (EWS)",
+      "EWS multivariadas y aprendizaje automático"
+    ]
+  },
+  {
+    "objectID": "p3-cap07-ews-multivariadas-ml.html#para-seguir",
+    "href": "p3-cap07-ews-multivariadas-ml.html#para-seguir",
+    "title": "EWS multivariadas y aprendizaje automático",
+    "section": "4 Para seguir",
+    "text": "4 Para seguir\nAplica todo en el taller transversal: de datos simulados a datos reales.",
+    "crumbs": [
+      "Parte III · Señales de Alerta Temprana (EWS)",
+      "EWS multivariadas y aprendizaje automático"
+    ]
+  },
+  {
+    "objectID": "p3-cap05-ews-fundamento.html",
+    "href": "p3-cap05-ews-fundamento.html",
+    "title": "Fundamento de las EWS: enlentecimiento crítico",
+    "section": "",
+    "text": "Objetivos de aprendizaje\n\nExplicar el enlentecimiento crítico (critical slowing down) a partir de la tasa de retorno.\nDerivar por qué la varianza y la autocorrelación de retardo-1 crecen al acercarse a una bifurcación.\nSimular un mismo sistema lejos y cerca del punto crítico y comparar sus estadísticos.",
+    "crumbs": [
+      "Parte III · Señales de Alerta Temprana (EWS)",
+      "Fundamento de las EWS: enlentecimiento crítico"
+    ]
+  },
+  {
+    "objectID": "p3-cap05-ews-fundamento.html#sec-csd",
+    "href": "p3-cap05-ews-fundamento.html#sec-csd",
+    "title": "Fundamento de las EWS: enlentecimiento crítico",
+    "section": "1 La idea central",
+    "text": "1 La idea central\nCerca de un punto fijo estable, la dinámica linealiza a \\(\\dot{\\eta} \\approx -\\lambda\\,\\eta\\) con \\(\\lambda = -f'(x^*) = |f'(x^*)| &gt; 0\\). La tasa de retorno \\(\\lambda\\) mide qué tan rápido el sistema reabsorbe una perturbación. Al acercarse a una bifurcación, \\(f'(x^*)\\to 0\\), así que \\(\\lambda\\to 0\\): el sistema se vuelve lento y “blando”. Eso es el enlentecimiento crítico, ya medido en cianobacterias (Veraart et al. 2012).\nCon ruido, el sistema obedece un proceso de Ornstein–Uhlenbeck: \\[\ndx = -\\lambda\\,x\\,dt + \\sigma\\,dW .\n\\tag{1}\\] De aquí salen dos predicciones que no requieren conocer el modelo, solo la serie de tiempo:\n\\[\n\\underbrace{\\operatorname{Var}(x) = \\frac{\\sigma^2}{2\\lambda}}_{\\text{varianza estacionaria}}\n\\qquad\n\\underbrace{\\rho_1 = e^{-\\lambda \\Delta t}}_{\\text{autocorrelación de retardo-1}} .\n\\tag{2}\\]\nCuando \\(\\lambda \\to 0\\): la varianza explota y la autocorrelación tiende a 1. Son las dos señales de alerta temprana canónicas (Scheffer et al. 2009; Dakos et al. 2012).\nMueve \\(\\lambda\\) y observa ambas predicciones:\n\nviewof lam = Inputs.range([0.05, 2], {value: 1, step: 0.01,\n  label: \"λ = |f'(x*)|  (→ 0 al acercarse a la bifurcación)\"})\n\n\n\n\n\n\n\nhtml`&lt;div style=\"font-family:system-ui;font-size:1.05rem;line-height:1.7\"&gt;\n&lt;b&gt;Predicción analítica (proceso OU, σ=0.1, Δt=0.05):&lt;/b&gt;&lt;br&gt;\nVarianza estacionaria&nbsp; σ²/(2λ) = &lt;b style=\"color:#1f5673\"&gt;${(0.01/(2*lam)).toFixed(4)}&lt;/b&gt;&lt;br&gt;\nAutocorrelación&nbsp; ρ₁ = e&lt;sup&gt;−λΔt&lt;/sup&gt; = &lt;b style=\"color:#b03a2e\"&gt;${Math.exp(-lam*0.05).toFixed(3)}&lt;/b&gt;\n&lt;/div&gt;`",
+    "crumbs": [
+      "Parte III · Señales de Alerta Temprana (EWS)",
+      "Fundamento de las EWS: enlentecimiento crítico"
+    ]
+  },
+  {
+    "objectID": "p3-cap05-ews-fundamento.html#sec-comparacion",
+    "href": "p3-cap05-ews-fundamento.html#sec-comparacion",
+    "title": "Fundamento de las EWS: enlentecimiento crítico",
+    "section": "2 Mismo sistema, lejos vs. cerca",
+    "text": "2 Mismo sistema, lejos vs. cerca\nSimulemos el OU con \\(\\lambda\\) grande (lejos) y \\(\\lambda\\) pequeño (cerca) y comparemos sus trayectorias y estadísticos:\n\nPythonR\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLa serie “cerca” es visiblemente más ancha (mayor varianza) y más suave/correlacionada (mayor AC). Eso es lo que un detector de EWS busca a lo largo del tiempo conforme el sistema deriva hacia el umbral.",
+    "crumbs": [
+      "Parte III · Señales de Alerta Temprana (EWS)",
+      "Fundamento de las EWS: enlentecimiento crítico"
+    ]
+  },
+  {
+    "objectID": "p3-cap05-ews-fundamento.html#sec-ej5",
+    "href": "p3-cap05-ews-fundamento.html#sec-ej5",
+    "title": "Fundamento de las EWS: enlentecimiento crítico",
+    "section": "3 Ejercicios",
+    "text": "3 Ejercicios\n\n\n\n\n\n\nTipEjercicio 5.1 — Predicción vs. simulación\n\n\n\nUsa Ecuación 2 para predecir la varianza y AC(1) con \\(\\lambda=0.2\\), \\(\\sigma=0.1\\), \\(\\Delta t=0.05\\). Compara con los números que imprime la celda.\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\n\\(\\operatorname{Var}=0.1^2/(2\\cdot 0.2)=0.025\\) y \\(\\rho_1=e^{-0.2\\cdot 0.05}=e^{-0.01}\\approx 0.990\\). Los valores muestrales rondan esas cifras (con fluctuación por tamaño de muestra y discretización).\n\n\n\n\n\n\n\n\n\n\n\nTipEjercicio 5.2 — Computacional\n\n\n\nReduce \\(\\lambda\\) a 0.05 en la celda. ¿La varianza sube por un factor cercano a 4 respecto a \\(\\lambda=0.2\\)? ¿Por qué?\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\nSí: \\(\\operatorname{Var}\\propto 1/\\lambda\\), y \\(0.2/0.05=4\\). Al dividir \\(\\lambda\\) entre 4, la varianza estacionaria se cuadruplica (salvo fluctuación muestral).",
+    "crumbs": [
+      "Parte III · Señales de Alerta Temprana (EWS)",
+      "Fundamento de las EWS: enlentecimiento crítico"
+    ]
+  },
+  {
+    "objectID": "p3-cap05-ews-fundamento.html#para-seguir",
+    "href": "p3-cap05-ews-fundamento.html#para-seguir",
+    "title": "Fundamento de las EWS: enlentecimiento crítico",
+    "section": "4 Para seguir",
+    "text": "4 Para seguir\nEn el capítulo 6 llevamos esto a la práctica: estimar varianza y AC(1) en ventanas móviles sobre una serie que se acerca a un pliegue, con detrending y prueba de tendencia.",
+    "crumbs": [
+      "Parte III · Señales de Alerta Temprana (EWS)",
+      "Fundamento de las EWS: enlentecimiento crítico"
+    ]
+  },
+  {
+    "objectID": "p1-cap03-potenciales-catastrofe.html",
+    "href": "p1-cap03-potenciales-catastrofe.html",
+    "title": "Potenciales, biestabilidad y bifurcación catastrófica",
+    "section": "",
+    "text": "Objetivos de aprendizaje\n\nReescribir \\(\\dot{x}=f(x)\\) como descenso por un paisaje de potencial \\(V(x)\\).\nEntender la biestabilidad como un potencial de doble pozo.\nExplicar la bifurcación catastrófica (fold) y el fenómeno de histéresis mediante el paisaje y un ciclo de barrido.",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Potenciales, biestabilidad y bifurcación catastrófica"
+    ]
+  },
+  {
+    "objectID": "p1-cap03-potenciales-catastrofe.html#sec-potencial",
+    "href": "p1-cap03-potenciales-catastrofe.html#sec-potencial",
+    "title": "Potenciales, biestabilidad y bifurcación catastrófica",
+    "section": "1 El paisaje de potencial",
+    "text": "1 El paisaje de potencial\nCuando la dinámica es 1-D siempre podemos escribirla como un gradiente: \\[\n\\dot{x} = -\\,\\frac{dV}{dx}, \\qquad V(x) = -\\!\\int f(x)\\,dx .\n\\tag{1}\\]\nLa imagen es intuitiva: una canica que rueda cuesta abajo por el paisaje \\(V(x)\\). Los mínimos de \\(V\\) son puntos fijos estables; los máximos, inestables. La profundidad de un pozo mide la resiliencia del estado: cuánta perturbación hace falta para sacar a la canica de él.",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Potenciales, biestabilidad y bifurcación catastrófica"
+    ]
+  },
+  {
+    "objectID": "p1-cap03-potenciales-catastrofe.html#sec-doblepozo",
+    "href": "p1-cap03-potenciales-catastrofe.html#sec-doblepozo",
+    "title": "Potenciales, biestabilidad y bifurcación catastrófica",
+    "section": "2 Biestabilidad: el doble pozo",
+    "text": "2 Biestabilidad: el doble pozo\nTomemos \\(\\dot{x} = -x^3 + x + h\\), cuyo potencial es \\[\nV(x) = \\frac{x^4}{4} - \\frac{x^2}{2} - h\\,x .\n\\tag{2}\\]\nPara \\(h=0\\) es un doble pozo simétrico: dos estados estables (\\(x^*\\approx\\pm 1\\)) separados por una barrera (el máximo en \\(x^*=0\\)). El parámetro \\(h\\) inclina el paisaje. Muévelo y observa cómo un pozo se hace más somero hasta desaparecer:\n\nviewof h = Inputs.range([-0.5, 0.5], {value: 0, step: 0.01, label: \"h (forzamiento / sesgo)\"})\n\n\n\n\n\n\n\nPlot.plot({\n  height: 300, marginLeft: 52,\n  x: {label: \"estado x\", domain: [-1.8, 1.8]},\n  y: {label: \"potencial V(x)\", domain: [-1.1, 0.6]},\n  marks: [\n    Plot.line(d3.range(-1.8, 1.81, 0.01).map(x =&gt; ({x, V: x**4/4 - x**2/2 - h*x})),\n              {x: \"x\", y: \"V\", stroke: \"#6b2233\", strokeWidth: 2})\n  ]\n})\n\n\n\n\n\n\nCuando el pozo de la izquierda se vuelve un simple recodo y se borra, la canica que vivía allí no tiene más remedio que rodar al otro pozo: eso es un tipping point.",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Potenciales, biestabilidad y bifurcación catastrófica"
+    ]
+  },
+  {
+    "objectID": "p1-cap03-potenciales-catastrofe.html#sec-histeresis",
+    "href": "p1-cap03-potenciales-catastrofe.html#sec-histeresis",
+    "title": "Potenciales, biestabilidad y bifurcación catastrófica",
+    "section": "3 La catástrofe fold y la histéresis",
+    "text": "3 La catástrofe fold y la histéresis\nLa desaparición de un pozo es, en el lenguaje del capítulo 2, una saddle-node. Como el doble pozo tiene dos pliegues (uno a cada lado), al barrer \\(h\\) en una dirección y luego en la contraria, el sistema no recorre el mismo camino: salta a destiempo. A ese desfase se le llama histéresis, y al salto, bifurcación catastrófica (catastrophic / fold bifurcation).\nLa consecuencia ecológica es central (Scheffer et al. 2001): el umbral para colapsar a un estado degradado difiere del umbral necesario para recuperar el estado original. Restaurar no es simplemente “deshacer” la perturbación.\n\n\nPara la memoria. El ejemplo clásico de histéresis en biología es el gusano de la yema del abeto (spruce budworm), modelado por Ludwig, Jones y Holling (1978): el bosque salta entre un estado de baja y otro de alta infestación, con umbrales distintos para subir y bajar.\n\nBarramos \\(h\\) subiendo y bajando, relajando el sistema en cada paso:\n\nPythonR\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEl lazo abierto entre ambas curvas es la histéresis: los saltos ocurren a distinto \\(h\\) según la dirección del barrido.",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Potenciales, biestabilidad y bifurcación catastrófica"
+    ]
+  },
+  {
+    "objectID": "p1-cap03-potenciales-catastrofe.html#sec-ej3",
+    "href": "p1-cap03-potenciales-catastrofe.html#sec-ej3",
+    "title": "Potenciales, biestabilidad y bifurcación catastrófica",
+    "section": "4 Ejercicios",
+    "text": "4 Ejercicios\n\n\n\n\n\n\nTipEjercicio 3.1 — Del flujo al potencial\n\n\n\nDada \\(\\dot{x} = x - x^3\\), obtén \\(V(x)\\) y di cuántos pozos tiene. Relaciónalo con el Ejercicio 1.1.\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\n\\(V(x) = -\\int (x - x^3)\\,dx = -\\tfrac{x^2}{2} + \\tfrac{x^4}{4}\\). Es un doble pozo simétrico con mínimos en \\(x=\\pm 1\\) y máximo en \\(x=0\\): coincide con los puntos fijos estables/inestable hallados antes.\n\n\n\n\n\n\n\n\n\n\n\nTipEjercicio 3.2 — Computacional\n\n\n\nEn la celda de Python, aumenta el rango de barrido a hs_up = np.linspace(-1.5, 1.5, 220). ¿Cómo cambia el ancho del lazo de histéresis? ¿Qué pasa si el rango no alcanza los pliegues?\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\nSi el barrido rebasa ambos pliegues, el lazo se completa y el sistema visita los dos estados. Si el rango es demasiado estrecho para alcanzar un pliegue, no hay salto: el sistema permanece en su pozo y el lazo no se cierra (no se observa la catástrofe).\n\n\n\n\n\n\n\n\n\n\n\nNotaProfundización (opcional): ruido y tiempo de escape Avanzado\n\n\n\n\n\nCon ruido, \\(dx = -V'(x)\\,dt + \\sigma\\,dW\\), la canica puede saltar la barrera antes del pliegue. El tiempo medio de escape sigue la ley de Kramers, \\(\\tau \\sim \\exp(\\Delta V / D)\\), con \\(\\Delta V\\) la altura de la barrera y \\(D\\propto\\sigma^2\\). Al acercarse al pliegue, \\(\\Delta V\\to 0\\) y los saltos se vuelven frecuentes: es el puente microscópico hacia el enlentecimiento crítico y las señales de alerta temprana de la Parte III.",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Potenciales, biestabilidad y bifurcación catastrófica"
+    ]
+  },
+  {
+    "objectID": "p1-cap03-potenciales-catastrofe.html#para-seguir",
+    "href": "p1-cap03-potenciales-catastrofe.html#para-seguir",
+    "title": "Potenciales, biestabilidad y bifurcación catastrófica",
+    "section": "5 Para seguir",
+    "text": "5 Para seguir\nCierra la teoría. En la Parte II veremos estos pliegues e histéresis medidos en levaduras, cianobacterias y lagos enteros.",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Potenciales, biestabilidad y bifurcación catastrófica"
+    ]
+  },
+  {
+    "objectID": "p1-cap01-sistemas-1d.html",
+    "href": "p1-cap01-sistemas-1d.html",
+    "title": "Sistemas dinámicos 1-D y estabilidad",
+    "section": "",
+    "text": "Objetivos de aprendizaje\n\nInterpretar una EDO autónoma \\(\\dot{x}=f_\\mu(x)\\) como un flujo sobre la recta.\nLocalizar puntos fijos y decidir su estabilidad de forma intuitiva (signo del flujo) y formal (linealización).\nReconocer el papel del parámetro de control \\(\\mu\\) como antesala de las bifurcaciones.",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Sistemas dinámicos 1-D y estabilidad"
+    ]
+  },
+  {
+    "objectID": "p1-cap01-sistemas-1d.html#sec-recta",
+    "href": "p1-cap01-sistemas-1d.html#sec-recta",
+    "title": "Sistemas dinámicos 1-D y estabilidad",
+    "section": "1 La recta como espacio de fases",
+    "text": "1 La recta como espacio de fases\nMuchos sistemas biológicos cuya variable de interés es función del tiempo numérica, por ejemplo el tamaño de una población, la densidad de un nutriente, la fracción de individuos infectados, la concetración química, pueden describirse con una ecuación diferencial ordinaria autónoma:\n\\[\n\\dot{x} \\;=\\; \\frac{dx}{dt} \\;=\\; f_\\mu(x).\n\\tag{1}\\]\nAquí\n\n\\(x(t)\\) es el función del tiempo que describe el estado del sistema,\n\\(f\\) es una función suave que dicta su tasa de cambio ( el mdoelo del sistema), y\n\\(\\mu\\) es un parámetro de control (o, en general, un vector de parámetros) que el ambiente o un experimento detrminan: una tasa de dilución, un nivel de luz, una carga de nutrientes.\n\nQue sea autónoma significa que \\(f\\) no depende explícitamente del tiempo: la regla de evolución es la misma hoy que mañana. Eso nos permite pensar geométricamente. Imagina una partícula sobre la recta cuya velocidad en cada punto \\(x\\) es \\(f_\\mu(x)\\): donde \\(f&gt;0\\) se mueve a la derecha, donde \\(f&lt;0\\) a la izquierda.",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Sistemas dinámicos 1-D y estabilidad"
+    ]
+  },
+  {
+    "objectID": "p1-cap01-sistemas-1d.html#sec-estabilidad",
+    "href": "p1-cap01-sistemas-1d.html#sec-estabilidad",
+    "title": "Sistemas dinámicos 1-D y estabilidad",
+    "section": "2 Puntos fijos y estabilidad",
+    "text": "2 Puntos fijos y estabilidad\nUn punto fijo (o equilibrio) \\(x^*\\) cumple \\[\nf_\\mu(x^*) = 0,\n\\tag{2}\\] es decir, el sistema no cambia si parte exactamente de ahí. La pregunta biológica relevante es: si lo perturbamos un poco, ¿regresa o se aleja?\n\n\n\n\n\n\nNotaDefinición formal (estabilidad lineal)\n\n\n\nSea \\(x^*\\) un punto fijo de Ecuación 1. Linealizando con \\(x = x^* + \\eta\\) y \\(\\eta\\) pequeño, \\(\\dot{\\eta} \\approx f'_\\mu(x^*)\\,\\eta\\), cuya solución es \\(\\eta(t)=\\eta_0\\,e^{f'(x^*)\\,t}\\). Por tanto:\n\nSi \\(f'_\\mu(x^*) &lt; 0\\), las perturbaciones decaen ⇒ \\(x^*\\) es estable (atractor).\nSi \\(f'_\\mu(x^*) &gt; 0\\), las perturbaciones crecen ⇒ \\(x^*\\) es inestable (repulsor).\nSi \\(f'_\\mu(x^*) = 0\\), el criterio lineal no decide: hay que mirar los términos de orden superior (esto es justo lo que ocurre en una bifurcación).\n\n\n\nEl inverso de \\(|f'(x^*)|\\) es, además, una escala de tiempo de recuperación: cuanto más cerca de cero esté la pendiente, más lento regresa el sistema tras una perturbación. Guarda esta idea: es la semilla del enlentecimiento crítico de la Parte III.",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Sistemas dinámicos 1-D y estabilidad"
+    ]
+  },
+  {
+    "objectID": "p1-cap01-sistemas-1d.html#sec-logistico",
+    "href": "p1-cap01-sistemas-1d.html#sec-logistico",
+    "title": "Sistemas dinámicos 1-D y estabilidad",
+    "section": "3 Ejemplo guía: crecimiento logístico",
+    "text": "3 Ejemplo guía: crecimiento logístico\nTomemos el clásico modelo logístico de una población, \\[\n\\dot{x} = r\\,x\\left(1 - \\frac{x}{K}\\right),\n\\tag{3}\\] con tasa intrínseca \\(r&gt;0\\) y capacidad de carga \\(K\\). Tiene dos puntos fijos: \\(x^*=0\\) y \\(x^*=K\\).\nMueve la condición inicial y observa hacia dónde converge la trayectoria:\n\nviewof x0 = Inputs.range([0.01, 2], {value: 0.1, step: 0.01, label: \"x₀ (condición inicial)\"})\n\n\n\n\n\n\n\ntraj = {\n  const r = 1, K = 1, dt = 0.05, T = 240;\n  let x = x0; const pts = [];\n  for (let i = 0; i &lt;= T; i++) { pts.push({t: i*dt, x}); x = x + dt*(r*x*(1 - x/K)); }\n  return pts;\n}\n\n\n\n\n\n\n\nPlot.plot({\n  height: 280, marginLeft: 48,\n  x: {label: \"tiempo t\"},\n  y: {label: \"x(t)\", domain: [0, 2]},\n  marks: [\n    Plot.ruleY([1], {stroke: \"crimson\", strokeDasharray: \"4 4\"}),\n    Plot.ruleY([0], {stroke: \"gray\", strokeDasharray: \"2 4\"}),\n    Plot.line(traj, {x: \"t\", y: \"x\", stroke: \"steelblue\", strokeWidth: 2})\n  ]\n})\n\n\n\n\n\n\nToda condición inicial positiva converge a \\(x^*=K\\) (línea roja): es el equilibrio estable. El \\(x^*=0\\) es inestable.\n\nClasifiquémoslo con código\nCalcula la derivada en cada punto fijo y dibuja varias trayectorias. Edita y ejecuta:\n\nPythonR",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Sistemas dinámicos 1-D y estabilidad"
+    ]
+  },
+  {
+    "objectID": "p1-cap01-sistemas-1d.html#sec-ej1",
+    "href": "p1-cap01-sistemas-1d.html#sec-ej1",
+    "title": "Sistemas dinámicos 1-D y estabilidad",
+    "section": "4 Ejercicios",
+    "text": "4 Ejercicios\n\n\n\n\n\n\nTipEjercicio 1.1 — Analítico\n\n\n\nPara \\(\\dot{x} = x - x^3\\), encuentra todos los puntos fijos y clasifícalos usando \\(f'(x^*)\\).\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\n\\(f(x)=x-x^3 = x(1-x^2)=0 \\Rightarrow x^*=0,\\,\\pm 1\\). Con \\(f'(x)=1-3x^2\\): \\(f'(0)=1&gt;0\\) (inestable); \\(f'(\\pm 1)=-2&lt;0\\) (estables). Es un sistema biestable: dos atractores separados por un repulsor.\n\n\n\n\n\n\n\n\n\n\n\nTipEjercicio 1.2 — Computacional\n\n\n\nEn la celda de Python, cambia r a un valor negativo. ¿Qué punto fijo se vuelve estable ahora? Justifica con el signo de \\(f'(x^*)\\).\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\nCon \\(r&lt;0\\), \\(f'(0)=r&lt;0\\) (estable) y \\(f'(K)=-r&gt;0\\) (inestable): se intercambian los papeles. Toda población decae a \\(0\\). Esto anticipa la bifurcación transcrítica del capítulo siguiente.\n\n\n\n\n\n\n\n\n\n\n\nTipReto — Flujo sobre la recta\n\n\n\nEsboza el retrato de fases de \\(\\dot{x}=\\sin x\\). ¿Cuántos puntos fijos hay y cómo se alternan en estabilidad?\n\n\n\n\n\n\nNotaPista / solución\n\n\n\n\n\nPuntos fijos en \\(x^*=n\\pi\\). Como \\(f'(x)=\\cos x\\), los \\(\\cos(n\\pi)=(-1)^n\\) alternan signo: los \\(n\\) pares son inestables y los impares estables (o viceversa según el signo). El flujo empuja cada trayectoria hacia el equilibrio estable más cercano.",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Sistemas dinámicos 1-D y estabilidad"
+    ]
+  },
+  {
+    "objectID": "p1-cap01-sistemas-1d.html#para-seguir",
+    "href": "p1-cap01-sistemas-1d.html#para-seguir",
+    "title": "Sistemas dinámicos 1-D y estabilidad",
+    "section": "5 Para seguir",
+    "text": "5 Para seguir\nEn el capítulo 2 veremos qué ocurre cuando, al mover \\(\\mu\\), un punto fijo alcanza \\(f'(x^*)=0\\): ahí nacen, mueren o intercambian estabilidad los equilibrios. Tratamiento clásico en Strogatz (2015).",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Sistemas dinámicos 1-D y estabilidad"
+    ]
+  },
+  {
+    "objectID": "apC-glosario.html",
+    "href": "apC-glosario.html",
+    "title": "Apéndice C — Glosario",
+    "section": "",
+    "text": "Para qué sirve este apéndice\nDefiniciones breves de los términos clave del curso, para consulta rápida.\n\nBifurcación. Cambio cualitativo en el retrato de fases (número o estabilidad de puntos fijos) al variar suavemente un parámetro de control.\nPunto de bifurcación (\\(\\mu_c\\)). Valor del parámetro donde ocurre la bifurcación.\nPunto fijo / equilibrio (\\(x^*\\)). Estado en que \\(f_\\mu(x^*)=0\\): el sistema no cambia si parte de ahí.\nEstabilidad lineal. Criterio según el signo de \\(f'(x^*)\\): estable si negativo, inestable si positivo, indeterminado si cero.\nForma normal. Polinomio arquetípico que captura la dinámica local cerca de una bifurcación (p. ej. \\(\\dot{x}=\\mu-x^2\\) para saddle-node).\nSaddle-node (silla-nodo) / fold. Bifurcación en que un par de equilibrios (estable + inestable) aparece o se aniquila. Responsable de transiciones abruptas.\nTranscrítica. Dos equilibrios intercambian estabilidad sin desaparecer.\nPitchfork (tridente). Un equilibrio se desestabiliza y nacen dos simétricos (supercrítica) o coexisten ramas inestables (subcrítica).\nPotencial \\(V(x)\\). Paisaje tal que \\(\\dot{x}=-V'(x)\\); mínimos = estados estables, máximos = inestables.\nBiestabilidad. Coexistencia de dos estados estables para el mismo parámetro (doble pozo).\nHistéresis. Dependencia del camino: el umbral para colapsar difiere del umbral para recuperar; el sistema no recorre la misma curva al ir y volver.\nBifurcación catastrófica. Salto abrupto del estado al cruzar un pliegue, típicamente con histéresis.\nTipping point (punto de inflexión). Umbral del parámetro tras el cual el sistema transita abruptamente a otro estado.\nEnlentecimiento crítico (critical slowing down). Pérdida de velocidad de recuperación (\\(1/|f'(x^*)|\\to\\infty\\)) al acercarse a una bifurcación.\nSeñales de alerta temprana (EWS). Estadísticos que anticipan una transición: principalmente aumento de varianza y de autocorrelación de retardo-1.\nAutocorrelación de retardo-1 (\\(\\rho_1\\)). Correlación de la serie consigo misma desfasada un paso; crece hacia 1 cerca del umbral.\nDetrending. Remoción de la tendencia lenta para aislar las fluctuaciones sobre las que se calculan las EWS.\n\\(\\tau\\) de Kendall. Medida no paramétrica de tendencia monótona; se usa para cuantificar si un indicador EWS crece con el tiempo.\nSurrogates (subrogados). Series sintéticas que preservan ciertas propiedades (p. ej. autocorrelación) usadas para construir una distribución nula y evaluar significancia.\nEWS multivariadas. Indicadores sobre varias variables: covarianza, autovalor dominante, correlación cruzada, varianza espacial.\nProceso de Ornstein–Uhlenbeck (OU). Modelo lineal estocástico \\(dx=-\\lambda x\\,dt+\\sigma\\,dW\\) usado para derivar las predicciones de varianza y autocorrelación.\n\n\n\n\n\n\n\n\n\n\n\n\n\n Volver arriba",
+    "crumbs": [
+      "Apéndices",
+      "Apéndice C — Glosario"
+    ]
+  },
+  {
+    "objectID": "apA-instalacion.html",
+    "href": "apA-instalacion.html",
+    "title": "Apéndice A — Instalación y reproducibilidad",
+    "section": "",
+    "text": "Para qué sirve este apéndice\nCómo renderizar el curso, qué necesitas instalado y cómo funciona la ejecución de código en el navegador.",
+    "crumbs": [
+      "Apéndices",
+      "Apéndice A — Instalación y reproducibilidad"
+    ]
+  },
+  {
+    "objectID": "apA-instalacion.html#requisitos",
+    "href": "apA-instalacion.html#requisitos",
+    "title": "Apéndice A — Instalación y reproducibilidad",
+    "section": "1 Requisitos",
+    "text": "1 Requisitos\n\nQuarto ≥ 1.4 (la extensión quarto-live lo exige). Verifica con quarto --version.\nR con los paquetes knitr y rmarkdown (el motor de render es knitr).\nNavegador moderno para la lectura interactiva (la ejecución de celdas ocurre en el navegador, no al renderizar).\n\n\n\n\n\n\n\nNotaImportante: no necesitas Python instalado para renderizar\n\n\n\nLas celdas {pyodide} (Python) y {webr} (R) no se ejecutan al renderizar: se envían al navegador y corren ahí mediante WebAssembly (Pyodide y WebR). Por eso el sitio se publica en cualquier hosting estático. Sí necesitas R porque el motor knitr procesa el documento.",
+    "crumbs": [
+      "Apéndices",
+      "Apéndice A — Instalación y reproducibilidad"
+    ]
+  },
+  {
+    "objectID": "apA-instalacion.html#renderizar-el-curso",
+    "href": "apA-instalacion.html#renderizar-el-curso",
+    "title": "Apéndice A — Instalación y reproducibilidad",
+    "section": "2 Renderizar el curso",
+    "text": "2 Renderizar el curso\nDesde la carpeta del proyecto:\nquarto render          # genera el sitio en _site/\nquarto preview         # vista previa con recarga en vivo",
+    "crumbs": [
+      "Apéndices",
+      "Apéndice A — Instalación y reproducibilidad"
+    ]
+  },
+  {
+    "objectID": "apA-instalacion.html#la-extensión-quarto-live",
+    "href": "apA-instalacion.html#la-extensión-quarto-live",
+    "title": "Apéndice A — Instalación y reproducibilidad",
+    "section": "3 La extensión quarto-live",
+    "text": "3 La extensión quarto-live\nEste proyecto ya incluye la extensión en _extensions/r-wasm/live/, así que no necesitas instalarla. Si alguna vez la quieres actualizar:\nquarto add r-wasm/quarto-live\nLa configuración clave (ya puesta en _quarto.yml) es el formato live-html y el motor knitr; además, cada capítulo incluye, tras el encabezado YAML, la línea:\n\n::: {.cell}\n\n:::\n\nque registra el manejo de las celdas {webr} y {pyodide} bajo el motor knitr.",
+    "crumbs": [
+      "Apéndices",
+      "Apéndice A — Instalación y reproducibilidad"
+    ]
+  },
+  {
+    "objectID": "apA-instalacion.html#paquetes-en-el-navegador",
+    "href": "apA-instalacion.html#paquetes-en-el-navegador",
+    "title": "Apéndice A — Instalación y reproducibilidad",
+    "section": "4 Paquetes en el navegador",
+    "text": "4 Paquetes en el navegador\nEn _quarto.yml se declaran los paquetes que cada motor carga al ejecutarse:\npyodide:\n  packages: [numpy, scipy, matplotlib, pandas]\nwebr:\n  packages: [stats]\nPyodide trae numpy/scipy/matplotlib/pandas listos. Bibliotecas como ewstools (Python) o EWSmethods (R) no se usan en el navegador en este curso: aparecen como código para correr localmente (ver Taller y capítulo 6).",
+    "crumbs": [
+      "Apéndices",
+      "Apéndice A — Instalación y reproducibilidad"
+    ]
+  },
+  {
+    "objectID": "apA-instalacion.html#reproducibilidad-local-del-taller",
+    "href": "apA-instalacion.html#reproducibilidad-local-del-taller",
+    "title": "Apéndice A — Instalación y reproducibilidad",
+    "section": "5 Reproducibilidad local del taller",
+    "text": "5 Reproducibilidad local del taller\nPara la Fase B del taller (datos reales) trabaja en un entorno local:\n# Python\npip install ewstools pandas numpy scipy matplotlib\n# R\ninstall.packages(\"EWSmethods\")",
+    "crumbs": [
+      "Apéndices",
+      "Apéndice A — Instalación y reproducibilidad"
+    ]
+  },
+  {
+    "objectID": "apA-instalacion.html#estructura-del-proyecto",
+    "href": "apA-instalacion.html#estructura-del-proyecto",
+    "title": "Apéndice A — Instalación y reproducibilidad",
+    "section": "6 Estructura del proyecto",
+    "text": "6 Estructura del proyecto\ncurso_ews/\n├── _quarto.yml            # configuración del sitio-libro\n├── styles.css             # identidad visual UAQ\n├── references.bib         # bibliografía\n├── index.qmd              # presentación\n├── p1-cap01..03.qmd       # Parte I\n├── p2-cap04.qmd           # Parte II\n├── p3-cap05..07.qmd       # Parte III\n├── taller.qmd             # taller transversal\n├── apA/apB/apC + referencias.qmd\n└── _extensions/r-wasm/live/   # extensión quarto-live (incluida)",
+    "crumbs": [
+      "Apéndices",
+      "Apéndice A — Instalación y reproducibilidad"
+    ]
+  },
+  {
+    "objectID": "apB-recetario.html",
+    "href": "apB-recetario.html",
+    "title": "Apéndice B — Recetario de código",
+    "section": "",
+    "text": "Para qué sirve este apéndice\nFunciones reutilizables de simulación e indicadores EWS, listas para copiar a tu propio análisis. Las celdas son ejecutables aquí.",
+    "crumbs": [
+      "Apéndices",
+      "Apéndice B — Recetario de código"
+    ]
+  },
+  {
+    "objectID": "apB-recetario.html#simulación-de-una-ede-con-bifurcación-fold",
+    "href": "apB-recetario.html#simulación-de-una-ede-con-bifurcación-fold",
+    "title": "Apéndice B — Recetario de código",
+    "section": "1 Simulación de una EDE con bifurcación fold",
+    "text": "1 Simulación de una EDE con bifurcación fold",
+    "crumbs": [
+      "Apéndices",
+      "Apéndice B — Recetario de código"
+    ]
+  },
+  {
+    "objectID": "apB-recetario.html#indicadores-ews-univariados-ventana-móvil-kendall-τ",
+    "href": "apB-recetario.html#indicadores-ews-univariados-ventana-móvil-kendall-τ",
+    "title": "Apéndice B — Recetario de código",
+    "section": "2 Indicadores EWS univariados (ventana móvil + Kendall τ)",
+    "text": "2 Indicadores EWS univariados (ventana móvil + Kendall τ)",
+    "crumbs": [
+      "Apéndices",
+      "Apéndice B — Recetario de código"
+    ]
+  },
+  {
+    "objectID": "apB-recetario.html#indicador-multivariado-autovalor-dominante-de-la-covarianza",
+    "href": "apB-recetario.html#indicador-multivariado-autovalor-dominante-de-la-covarianza",
+    "title": "Apéndice B — Recetario de código",
+    "section": "3 Indicador multivariado (autovalor dominante de la covarianza)",
+    "text": "3 Indicador multivariado (autovalor dominante de la covarianza)",
+    "crumbs": [
+      "Apéndices",
+      "Apéndice B — Recetario de código"
+    ]
+  },
+  {
+    "objectID": "apB-recetario.html#equivalentes-en-r-base",
+    "href": "apB-recetario.html#equivalentes-en-r-base",
+    "title": "Apéndice B — Recetario de código",
+    "section": "4 Equivalentes en R (base)",
+    "text": "4 Equivalentes en R (base)",
+    "crumbs": [
+      "Apéndices",
+      "Apéndice B — Recetario de código"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Bifurcaciones y Señales de Alerta Temprana",
+    "section": "",
+    "text": "¿De qué trata este curso?\nMuchos sistemas biológicos, poblaciones, comunidades microbianas, ecosistemas enteros, pueden pasar de manera abrupta de un estado a otro cuando un parámetro de control cruza un umbral. Aquí estudiamos el lenguaje matemático de esos cambios (las bifurcaciones), cómo se ven en datos reales de biología, y cómo intentar anticiparlos con las llamadas señales de alerta temprana (EWS, por early warning signals).",
+    "crumbs": [
+      "Presentación"
+    ]
+  },
+  {
+    "objectID": "index.html#cómo-está-organizado",
+    "href": "index.html#cómo-está-organizado",
+    "title": "Bifurcaciones y Señales de Alerta Temprana",
+    "section": "1 Cómo está organizado",
+    "text": "1 Cómo está organizado\nEl curso se vive en tres partes por tema, más un taller práctico transversal:\n\nParte I · Bifurcaciones en sistemas 1-D. La teoría mínima: estabilidad, las tres bifurcaciones locales (saddle-node, transcrítica, pitchfork), formas normales, potenciales e histéresis.\nParte II · Bifurcaciones empíricas en biología. Cómo se manifiestan en el laboratorio y el campo: levaduras (Dai et al. 2012), cianobacterias (Veraart et al. 2012), lagos enteros (Carpenter et al. 2011) y la histéresis claro↔︎turbio.\nParte III · Señales de Alerta Temprana. Ralentización crítico, varianza y autocorrelación, indicadores univariados y multivariados, y enfoques de aprendizaje automático (Deb et al. 2022; Bury et al. 2021).\nTaller transversal. De datos simulados a datos reales: detectar una transición con tu propio pipeline.",
+    "crumbs": [
+      "Presentación"
+    ]
+  },
+  {
+    "objectID": "index.html#cómo-usar-el-material-interactivo",
+    "href": "index.html#cómo-usar-el-material-interactivo",
+    "title": "Bifurcaciones y Señales de Alerta Temprana",
+    "section": "2 Cómo usar el material interactivo",
+    "text": "2 Cómo usar el material interactivo\nEste libro se ejecuta en tu navegador. No necesitas instalar nada para experimentar:\n\nLas celdas con fondo de editor son ejecutables: edita el código y pulsa Run. La mayoría usan Python (vía Pyodide); algunas ofrecen su equivalente en R (vía WebR) en una pestaña.\nLos deslizadores (sliders) mueven parámetros y actualizan las figuras en tiempo real.\nLos ejercicios traen su solución: inténtalo primero, luego despliega.\n\n\n\n\n\n\n\nNotaLenguajes\n\n\n\nPython es el lenguaje primario del curso; R aparece como apoyo donde resulta natural. En el taller usarás numpy/scipy/pandas en el navegador y verás cómo replicarlo localmente con ewstools (Python) y EWSmethods (R).\n\n\n\n\n\n\n\n\nTipRequisitos\n\n\n\n\n\nCálculo diferencial, nociones de ecuaciones diferenciales ordinarias y de programación. No se requiere (tanta) experiencia previa con sistemas dinámicos.\n\n\n\n\nCita sugerida. Laboratorio de Biología Cuantitativa y Sistemas Complejos, UAQ. Bifurcaciones y Señales de Alerta Temprana en sistemas biológicos (curso interactivo). Disponible en línea bajo licencia CC BY-NC-SA 4.0.",
+    "crumbs": [
+      "Presentación"
+    ]
+  },
+  {
+    "objectID": "p1-cap02-formas-normales.html",
+    "href": "p1-cap02-formas-normales.html",
+    "title": "Bifurcaciones locales y formas normales",
+    "section": "",
+    "text": "Objetivos de aprendizaje\n\nDefinir qué es una bifurcación y por qué \\(f'(x^*)=0\\) es la condición que la dispara.\nReconocer y dibujar los diagramas de las tres bifurcaciones locales de codimensión 1: saddle-node, transcrítica y pitchfork.\nEscribir la forma normal de cada una y conectar su álgebra con su geometría.",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Bifurcaciones locales y formas normales"
+    ]
+  },
+  {
+    "objectID": "p1-cap02-formas-normales.html#sec-bif",
+    "href": "p1-cap02-formas-normales.html#sec-bif",
+    "title": "Bifurcaciones locales y formas normales",
+    "section": "1 ¿Qué es una bifurcación?",
+    "text": "1 ¿Qué es una bifurcación?\nUna bifurcación es un cambio cualitativo en el retrato de fases —número o estabilidad de los puntos fijos— al variar suavemente el parámetro \\(\\mu\\). El valor \\(\\mu_c\\) donde ocurre se llama punto de bifurcación. Como vimos en el capítulo anterior, el criterio lineal falla justo cuando \\(f'_\\mu(x^*)=0\\); por eso las bifurcaciones locales viven en esa frontera.\nUna idea poderosa es que, cerca del punto crítico, casi cualquier sistema se comporta como uno de unos pocos modelos arquetípicos: sus formas normales. Estudiar tres polinomios sencillos nos da el vocabulario para reconocerlas en cualquier sistema biológico.\n\n\nApunte histórico. Bifurcación es término de Poincaré (1885).\nLas tres formas normales que ves aquí (saddle-node, transcrítica, pitchfork) son los arquetipos de codimensión 1: casi cualquier sistema, cerca del punto crítico, se parece a una de ellas.",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Bifurcaciones locales y formas normales"
+    ]
+  },
+  {
+    "objectID": "p1-cap02-formas-normales.html#sec-tres",
+    "href": "p1-cap02-formas-normales.html#sec-tres",
+    "title": "Bifurcaciones locales y formas normales",
+    "section": "2 Las tres bifurcaciones locales",
+    "text": "2 Las tres bifurcaciones locales\nCambia el tipo y mueve \\(\\mu\\). Los cruces de la curva con el eje horizontal son los puntos fijos; donde cruza bajando (pendiente negativa) el equilibrio es estable.\n\nviewof tipo = Inputs.select(\n  new Map([\n    [\"Saddle-node:  ẋ = μ − x²\", \"sn\"],\n    [\"Transcrítica:  ẋ = μx − x²\", \"tc\"],\n    [\"Pitchfork (supercrítica):  ẋ = μx − x³\", \"pf\"]\n  ]),\n  {label: \"Bifurcación\", value: \"sn\"})\n\n\n\n\n\n\n\nviewof mu = Inputs.range([-2, 2], {value: -0.5, step: 0.01, label: \"μ\"})\n\n\n\n\n\n\n\nff = (tipo === \"sn\") ? (x =&gt; mu - x*x)\n   : (tipo === \"tc\") ? (x =&gt; mu*x - x*x)\n   : (x =&gt; mu*x - x*x*x)\n\n\n\n\n\n\n\nPlot.plot({\n  height: 300, marginLeft: 50,\n  x: {label: \"x\", domain: [-2.2, 2.2]},\n  y: {label: \"ẋ = f(x)\", domain: [-3, 3]},\n  marks: [\n    Plot.ruleY([0], {stroke: \"#999\"}),\n    Plot.ruleX([0], {stroke: \"#eee\"}),\n    Plot.line(d3.range(-2.2, 2.21, 0.01).map(x =&gt; ({x, f: ff(x)})),\n              {x: \"x\", y: \"f\", stroke: \"steelblue\", strokeWidth: 2})\n  ]\n})\n\n\n\n\n\n\n\nSaddle-node (silla-nodo)\nForma normal: \\[\\dot{x} = \\mu - x^2\\].\nLos puntos de equilibrio son:\n\n\n\nPunto de equilibrio\n\\(r &lt; 0\\)\nr=0\n\\(r&gt;0\\)\n\n\n\n\n\n|\\(x_1^*=\\sqrt{\\mu}\\) | No existen en $\\mathcal R$ | |. | | | | |. | | | | | |\n: Estabilidades del modelo saddle-node\n\\(x^* = \\pm\\sqrt{\\mu}\\) existen solo para \\(\\mu \\ge 0\\): un par (uno estable, \\(+\\sqrt{\\mu}\\); uno inestable, \\(-\\sqrt{\\mu}\\)) que colisiona y se aniquila en \\(\\mu=0\\).\nEs la bifurcación de creación/destrucción de equilibrios: la responsable de los tipping points abruptos que veremos en levaduras y cianobacterias (Dai et al. 2012; Veraart et al. 2012).\n\n\nTranscrítica\nForma normal: \\(\\dot{x} = \\mu x - x^2 = x(\\mu - x)\\). Hay siempre dos puntos fijos, \\(x^*=0\\) y \\(x^*=\\mu\\), que intercambian estabilidad al cruzarse en \\(\\mu=0\\). Ningún equilibrio desaparece; cambia quién es el atractor. Aparece donde un estado (p. ej. extinción, \\(x^*=0\\)) siempre existe pero gana o pierde estabilidad.\n\n\nPitchfork (tridente)\nForma normal supercrítica: \\(\\dot{x} = \\mu x - x^3\\). Para \\(\\mu&lt;0\\) solo está \\(x^*=0\\) (estable); en \\(\\mu=0\\) se vuelve inestable y nacen dos ramas estables simétricas \\(x^* = \\pm\\sqrt{\\mu}\\). Es la firma de la ruptura de simetría y de la biestabilidad. Su variante subcrítica, \\(\\dot{x}=\\mu x + x^3\\), produce ramas inestables y suele acompañarse de histéresis (capítulo 3).",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Bifurcaciones locales y formas normales"
+    ]
+  },
+  {
+    "objectID": "p1-cap02-formas-normales.html#sec-diagramas",
+    "href": "p1-cap02-formas-normales.html#sec-diagramas",
+    "title": "Bifurcaciones locales y formas normales",
+    "section": "3 Diagramas de bifurcación con código",
+    "text": "3 Diagramas de bifurcación con código\nUn diagrama de bifurcación grafica los puntos fijos \\(x^*\\) frente a \\(\\mu\\), coloreando estable vs. inestable. Aquí los calculamos analíticamente y los clasificamos por el signo de \\(f'(x^*)\\):\n\nPythonR",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Bifurcaciones locales y formas normales"
+    ]
+  },
+  {
+    "objectID": "p1-cap02-formas-normales.html#sec-ej2",
+    "href": "p1-cap02-formas-normales.html#sec-ej2",
+    "title": "Bifurcaciones locales y formas normales",
+    "section": "4 Ejercicios",
+    "text": "4 Ejercicios\n\n\n\n\n\n\nTipEjercicio 2.1 — Clasifica\n\n\n\n¿Qué bifurcación tiene \\(\\dot{x} = \\mu - x^2\\) y cuál \\(\\dot{x} = \\mu x - x^3\\)? Da el valor crítico \\(\\mu_c\\) en cada caso.\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\nLa primera es saddle-node (\\(\\mu_c=0\\): el par \\(\\pm\\sqrt{\\mu}\\) aparece para \\(\\mu&gt;0\\)). La segunda es pitchfork supercrítica (\\(\\mu_c=0\\): \\(x^*=0\\) pierde estabilidad y nacen \\(\\pm\\sqrt{\\mu}\\)).\n\n\n\n\n\n\n\n\n\n\n\nTipEjercicio 2.2 — Computacional\n\n\n\nModifica la función ramas para la pitchfork subcrítica \\(\\dot{x}=\\mu x + x^3\\) (puntos fijos \\(0\\) y \\(\\pm\\sqrt{-\\mu}\\) para \\(\\mu&lt;0\\)) y observa que las ramas nuevas son inestables.\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\nUsa roots = [0] + ([sqrt(-mu), -sqrt(-mu)] if mu &lt; 0 else []) y fp = lambda x: mu + 3*x**2. Verás que las ramas \\(\\pm\\sqrt{-\\mu}\\) salen en rojo (inestables) y que \\(x^*=0\\) es estable solo para \\(\\mu&lt;0\\).\n\n\n\n\n\n\n\n\n\n\n\nNotaProfundización (opcional) Avanzado\n\n\n\n\n\nCondiciones de no-degeneración. Una saddle-node genérica requiere, en \\((\\mu_c,x^*)\\): \\(f=0\\), \\(\\partial_x f=0\\), \\(\\partial_{xx} f\\neq 0\\) y \\(\\partial_\\mu f\\neq 0\\). La transcrítica y la pitchfork añaden la restricción \\(\\partial_\\mu f=0\\) en el equilibrio persistente más condiciones de simetría. El teorema de la variedad central justifica por qué basta estudiar la dinámica reducida a 1-D cerca del punto crítico, aun en sistemas de mayor dimensión.",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Bifurcaciones locales y formas normales"
+    ]
+  },
+  {
+    "objectID": "p1-cap02-formas-normales.html#para-seguir",
+    "href": "p1-cap02-formas-normales.html#para-seguir",
+    "title": "Bifurcaciones locales y formas normales",
+    "section": "5 Para seguir",
+    "text": "5 Para seguir\nEn el capítulo 3 reescribimos la dinámica como el descenso por un paisaje de potencial y vemos cómo, combinando bifurcaciones, surgen la catástrofe y la histéresis.",
+    "crumbs": [
+      "Parte I · Bifurcaciones en sistemas 1-D",
+      "Bifurcaciones locales y formas normales"
+    ]
+  },
+  {
+    "objectID": "p2-cap04-empiricas.html",
+    "href": "p2-cap04-empiricas.html",
+    "title": "Del modelo al laboratorio: bifurcaciones empíricas",
+    "section": "",
+    "text": "Objetivos de aprendizaje\n\nReconocer bifurcaciones fold, biestabilidad e histéresis en datos biológicos reales.\nConectar cada caso experimental con la teoría de la Parte I.\nDistinguir transiciones abruptas (con pliegue) de no abruptas (suaves), como puente a las EWS.",
+    "crumbs": [
+      "Parte II · Bifurcaciones empíricas en biología",
+      "Del modelo al laboratorio: bifurcaciones empíricas"
+    ]
+  },
+  {
+    "objectID": "p2-cap04-empiricas.html#sec-casos",
+    "href": "p2-cap04-empiricas.html#sec-casos",
+    "title": "Del modelo al laboratorio: bifurcaciones empíricas",
+    "section": "1 Cuatro experimentos que vieron el pliegue",
+    "text": "1 Cuatro experimentos que vieron el pliegue\n\nLevaduras al borde del colapso\nDai et al. (2012) cultivaron poblaciones de la levadura Saccharomyces cerevisiae que crecen de forma cooperativa en sacarosa (rompen el azúcar fuera de la célula y comparten el producto). Al aumentar el factor de dilución diario, observaron una bifurcación fold: el punto fijo estable de población alta y un punto fijo inestable se acercan, colisionan y se aniquilan a un valor crítico de dilución, tras el cual la población colapsa. Antes del umbral el sistema es biestable (sobrevive o colapsa según la densidad inicial).\n\n\nDato curioso. El experimento de Dai et al. (2012) fue de los primeros en provocar y medir una bifurcación fold en un sistema vivo de verdad: levaduras que, al diluirlas demasiado cada día, colapsan de golpe en lugar de menguar suavemente.\n\nPodemos reproducir el esqueleto del fenómeno con un crecimiento cooperativo tipo Hill, \\(\\dot{x} = \\dfrac{b\\,x^2}{1+x^2} - d\\,x\\), donde \\(d\\) hace las veces de dilución. Mueve \\(d\\) y mira cómo la recta de pérdida deja de cortar la curva de crecimiento:\n\nviewof d = Inputs.range([0.1, 0.6], {value: 0.35, step: 0.005, label: \"dilución / pérdida  d\"})\n\n\n\n\n\n\n\nPlot.plot({\n  height: 300, marginLeft: 50,\n  x: {label: \"densidad x\", domain: [0, 4]},\n  y: {label: \"tasa\", domain: [0, 1.1]},\n  color: {legend: true, domain: [\"crecimiento cooperativo\", \"pérdida (dilución)\"],\n          range: [\"#1f5673\", \"#b03a2e\"]},\n  marks: [\n    Plot.line(d3.range(0, 4.01, 0.01).flatMap(x =&gt; [\n      {x, y: x*x/(1 + x*x), serie: \"crecimiento cooperativo\"},\n      {x, y: d*x,           serie: \"pérdida (dilución)\"}\n    ]), {x: \"x\", y: \"y\", stroke: \"serie\", strokeWidth: 2})\n  ]\n})\n\n\n\n\n\n\nLos cortes entre ambas curvas son los equilibrios no nulos. Cuando \\(d\\) crece hasta hacer la recta tangente a la curva, esos dos equilibrios se funden (el pliegue) y desaparecen: solo sobrevive \\(x^*=0\\). El diagrama de bifurcación lo deja claro:\n\n\n\n\n\n\n\n\n\n\nCianobacterias y la velocidad de recuperación\nVeraart et al. (2012) usaron microcosmos de cianobacterias bajo luz creciente. La fotoinhibición lleva la población a un punto de inflexión clásico al superar un nivel crítico de luz. Su aporte clave: midieron que, al acercarse al umbral, la recuperación tras pequeñas perturbaciones se vuelve más lenta. Esa lentitud es exactamente \\(1/|f'(x^*)|\\to\\infty\\) cuando \\(f'(x^*)\\to 0\\): la medición directa del enlentecimiento crítico.\n\n\nUn lago entero como mesa de laboratorio\nCarpenter et al. (2011) manipularon la cadena trófica de un lago completo (Peter Lake) introduciendo un depredador tope e induciendo el cambio de régimen, mientras un lago vecino servía de control. Detectaron señales estadísticas de alerta antes de la transición. Es la demostración a escala de ecosistema de que las EWS no son solo un artefacto de laboratorio.\n\n\nLagos someros: histéresis claro↔︎turbio\nEl caso clásico de histéresis ecosistémica (Scheffer et al. 2001). Un lago somero puede estar en estado claro (dominado por plantas acuáticas) o turbio (dominado por fitoplancton). Los experimentos de biomanipulación y restauración muestran que el umbral de nutrientes para colapsar a turbio difiere del necesario para recuperar el estado claro: justo el lazo de histéresis del capítulo 3.",
+    "crumbs": [
+      "Parte II · Bifurcaciones empíricas en biología",
+      "Del modelo al laboratorio: bifurcaciones empíricas"
+    ]
+  },
+  {
+    "objectID": "p2-cap04-empiricas.html#sec-abruptas",
+    "href": "p2-cap04-empiricas.html#sec-abruptas",
+    "title": "Del modelo al laboratorio: bifurcaciones empíricas",
+    "section": "2 Abruptas vs. no abruptas",
+    "text": "2 Abruptas vs. no abruptas\nNo toda transición tiene un pliegue. Una bifurcación transcrítica o un cambio suave mueven el sistema de manera gradual y reversible. Las transiciones abruptas (saddle-node/fold) traen salto e histéresis. Esta distinción —¿es el cambio brusco e irreversible, o suave?— gobierna qué señales de alerta esperar y cuánta anticipación es posible (Deb et al. 2022). Es el tema de la Parte III.\n\n\n\n\n\n\nNotaHacia el taller\n\n\n\nTres de estos fenómenos dejan series de tiempo sobre las que podremos calcular EWS. En el taller usaremos datos simulados de un fold y luego datos reales (termoacústicos, geoquímicos y paleoclimáticos).",
+    "crumbs": [
+      "Parte II · Bifurcaciones empíricas en biología",
+      "Del modelo al laboratorio: bifurcaciones empíricas"
+    ]
+  },
+  {
+    "objectID": "p2-cap04-empiricas.html#sec-ej4",
+    "href": "p2-cap04-empiricas.html#sec-ej4",
+    "title": "Del modelo al laboratorio: bifurcaciones empíricas",
+    "section": "3 Ejercicios",
+    "text": "3 Ejercicios\n\n\n\n\n\n\nTipEjercicio 4.1 — Lectura de un experimento\n\n\n\nEn Veraart et al. (2012) la recuperación se hace más lenta cerca del umbral. ¿Qué cantidad teórica de la Parte I se está midiendo y por qué tiende a un valor extremo en la bifurcación?\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\nSe mide la tasa de retorno tras una perturbación, \\(\\propto |f'(x^*)|\\). En una saddle-node \\(f'(x^*)\\to 0\\) al acercarse al pliegue, de modo que el tiempo de recuperación \\(1/|f'(x^*)|\\to\\infty\\): enlentecimiento crítico.\n\n\n\n\n\n\n\n\n\n\n\nTipEjercicio 4.2 — Computacional\n\n\n\nEn la celda de Python, cambia el exponente de Hill de 2 a 4 en x**2/(1+x**2) → x**4/(1+x**4). ¿La región biestable se hace más ancha o más angosta?\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\nUn Hill más empinado (cooperatividad más fuerte) ensancha la región de biestabilidad y desplaza el pliegue: la curva de crecimiento sube más abruptamente, así que la recta de dilución la corta dos veces en un rango mayor de \\(d\\).",
+    "crumbs": [
+      "Parte II · Bifurcaciones empíricas en biología",
+      "Del modelo al laboratorio: bifurcaciones empíricas"
+    ]
+  },
+  {
+    "objectID": "p2-cap04-empiricas.html#para-seguir",
+    "href": "p2-cap04-empiricas.html#para-seguir",
+    "title": "Del modelo al laboratorio: bifurcaciones empíricas",
+    "section": "4 Para seguir",
+    "text": "4 Para seguir\nEntramos a la Parte III: ¿podemos anticipar estos pliegues solo mirando la serie de tiempo, antes de que ocurra el salto?",
+    "crumbs": [
+      "Parte II · Bifurcaciones empíricas en biología",
+      "Del modelo al laboratorio: bifurcaciones empíricas"
+    ]
+  },
+  {
+    "objectID": "p3-cap06-ews-univariadas.html",
+    "href": "p3-cap06-ews-univariadas.html",
+    "title": "EWS univariadas en la práctica",
+    "section": "",
+    "text": "Objetivos de aprendizaje\n\nEstimar varianza y autocorrelación en ventanas móviles sobre una serie real o simulada.\nAplicar detrending y cuantificar la tendencia del indicador con el \\(\\tau\\) de Kendall.\nConocer indicadores complementarios (asimetría/skewness) y la lógica de los surrogates.",
+    "crumbs": [
+      "Parte III · Señales de Alerta Temprana (EWS)",
+      "EWS univariadas en la práctica"
+    ]
+  },
+  {
+    "objectID": "p3-cap06-ews-univariadas.html#sec-deriva",
+    "href": "p3-cap06-ews-univariadas.html#sec-deriva",
+    "title": "EWS univariadas en la práctica",
+    "section": "1 Un sistema que deriva hacia el pliegue",
+    "text": "1 Un sistema que deriva hacia el pliegue\nA diferencia del capítulo anterior (donde fijábamos \\(\\lambda\\)), ahora el parámetro de control cambia lentamente y empuja al sistema hacia una saddle-node. Simulamos el doble pozo con forzamiento creciente, detenemos en la transición y calculamos las EWS sobre el tramo pre-transición:\n\n\n\n\n\n\n\n\nAmbos indicadores tienden a subir antes del salto, y el \\(\\tau\\) de Kendall (cercano a \\(+1\\)) lo confirma como una tendencia monótona creciente: la huella estadística del enlentecimiento crítico.",
+    "crumbs": [
+      "Parte III · Señales de Alerta Temprana (EWS)",
+      "EWS univariadas en la práctica"
+    ]
+  },
+  {
+    "objectID": "p3-cap06-ews-univariadas.html#sec-practicas",
+    "href": "p3-cap06-ews-univariadas.html#sec-practicas",
+    "title": "EWS univariadas en la práctica",
+    "section": "2 Buenas prácticas y trampas",
+    "text": "2 Buenas prácticas y trampas\n\nDetrending. Hay que separar la deriva lenta de las fluctuaciones. Media móvil, filtro de Gauss o regresión local (LOESS) son habituales; la elección afecta el resultado (Dakos et al. 2012).\nTamaño de ventana. Ventanas grandes suavizan pero retrasan la detección; pequeñas son ruidosas. Reporta sensibilidad a la ventana.\nIndicadores complementarios. La asimetría (skewness) y la curtosis suelen crecer al deformarse el pozo; el espectro se desplaza hacia bajas frecuencias.\nSignificancia con surrogates. Para decidir si una tendencia es real, se compara contra series subrogadas (p. ej. con la misma autocorrelación pero permutadas) y se construye una distribución nula del \\(\\tau\\).\n\n\n\n\n\n\n\nNotaEn tu máquina: ewstools y EWSmethods\n\n\n\nEn el navegador computamos las EWS “a mano” para que se vea la mecánica. En un flujo real conviene usar bibliotecas dedicadas. Este bloque no se ejecuta aquí; cópialo a tu entorno local:\n# Python (local)\nimport ewstools\nts = ewstools.TimeSeries(data=serie, transition=t_transicion)\nts.detrend(method=\"Gaussian\", bandwidth=0.2)\nts.compute_var(rolling_window=0.5)\nts.compute_auto(rolling_window=0.5, lag=1)\nts.compute_ktau()      # tau de Kendall por indicador\n# R (local)\nlibrary(EWSmethods)\nres &lt;- uniEWS(data = cbind(tiempo, serie), metrics = c(\"SD\",\"ar1\",\"skew\"),\n              method = \"rolling\", winsize = 50)\nplot(res)",
+    "crumbs": [
+      "Parte III · Señales de Alerta Temprana (EWS)",
+      "EWS univariadas en la práctica"
+    ]
+  },
+  {
+    "objectID": "p3-cap06-ews-univariadas.html#sec-ej6",
+    "href": "p3-cap06-ews-univariadas.html#sec-ej6",
+    "title": "EWS univariadas en la práctica",
+    "section": "3 Ejercicios",
+    "text": "3 Ejercicios\n\n\n\n\n\n\nTipEjercicio 6.1 — Sensibilidad a la ventana\n\n\n\nCambia w a 400 y luego a 1500. ¿Cómo afectan el ruido del indicador y el valor del \\(\\tau\\) de Kendall?\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\nCon w=400 las curvas de varianza/AC son más ruidosas y el \\(\\tau\\) puede bajar; con w=1500 son más suaves pero la señal aparece más tarde y se pierde resolución cerca de la transición. No hay ventana “correcta”: por eso se reporta sensibilidad.\n\n\n\n\n\n\n\n\n\n\n\nTipEjercicio 6.2 — ¿Y si no hay transición?\n\n\n\nPon sigma=0.04 y h = np.linspace(-0.2, 0.2, n) (la rampa no alcanza el pliegue). ¿Siguen subiendo los indicadores? ¿Qué dice esto sobre falsos positivos?\n\n\n\n\n\n\nNotaSolución\n\n\n\n\n\nSin acercarse al pliegue, varianza y AC(1) se mantienen aproximadamente planas y el \\(\\tau\\) ronda 0. Esto ilustra que una tendencia creciente es la señal informativa; observar valores altos pero estables no implica transición inminente (cuidado con los falsos positivos, Boettiger y Hastings (2012)).",
+    "crumbs": [
+      "Parte III · Señales de Alerta Temprana (EWS)",
+      "EWS univariadas en la práctica"
+    ]
+  },
+  {
+    "objectID": "p3-cap06-ews-univariadas.html#para-seguir",
+    "href": "p3-cap06-ews-univariadas.html#para-seguir",
+    "title": "EWS univariadas en la práctica",
+    "section": "4 Para seguir",
+    "text": "4 Para seguir\nEl capítulo 7 generaliza a sistemas con muchas variables y presenta los enfoques de aprendizaje automático.",
+    "crumbs": [
+      "Parte III · Señales de Alerta Temprana (EWS)",
+      "EWS univariadas en la práctica"
+    ]
+  },
+  {
+    "objectID": "referencias.html",
+    "href": "referencias.html",
+    "title": "Referencias",
+    "section": "",
+    "text": "Bibliografía del curso. Las citas en el texto siguen el estilo autor–año y enlazan a esta lista.\n\n\nBoettiger, Carl, y Alan Hastings. 2012. «Quantifying Limits to Detection of Early Warning for Critical Transitions». Journal of the Royal Society Interface 9 (75): 2527-39. https://doi.org/10.1098/rsif.2012.0125.\n\n\nBury, Thomas M., R. I. Sujith, Induja Pavithran, et al. 2021. «Deep Learning for Early Warning Signals of Tipping Points». Proceedings of the National Academy of Sciences 118 (39): e2106140118. https://doi.org/10.1073/pnas.2106140118.\n\n\nCarpenter, Stephen R., Jonathan J. Cole, Michael L. Pace, et al. 2011. «Early Warnings of Regime Shifts: A Whole-Ecosystem Experiment». Science 332 (6033): 1079-82. https://doi.org/10.1126/science.1203672.\n\n\nDai, Lei, Daan Vorselen, Kirill S. Korolev, y Jeff Gore. 2012. «Generic Indicators for Loss of Resilience Before a Tipping Point Leading to Population Collapse». Science 336 (6085): 1175-77. https://doi.org/10.1126/science.1219805.\n\n\nDakos, Vasilis, Stephen R. Carpenter, William A. Brock, et al. 2012. «Methods for Detecting Early Warnings of Critical Transitions in Time Series Illustrated Using Simulated Ecological Data». PLoS ONE 7 (7): e41010. https://doi.org/10.1371/journal.pone.0041010.\n\n\nDakos, Vasilis, Egbert H. van Nes, Paolo D’Odorico, y Marten Scheffer. 2012. «Robustness of Variance and Autocorrelation as Indicators of Critical Slowing Down». Ecology 93 (2): 264-71. https://doi.org/10.1890/11-0889.1.\n\n\nDeb, Smita, Sahil Sidheekh, Christopher F. Clements, Narayanan C. Krishnan, y Partha S. Dutta. 2022. «Machine Learning Methods Trained on Simple Models Can Predict Critical Transitions in Complex Natural Systems». Royal Society Open Science 9 (2): 211475. https://doi.org/10.1098/rsos.211475.\n\n\nMay, Robert M. 1977. «Thresholds and Breakpoints in Ecosystems with a Multiplicity of Stable States». Nature 269 (5628): 471-77. https://doi.org/10.1038/269471a0.\n\n\nScheffer, Marten, Jordi Bascompte, William A. Brock, et al. 2009. «Early-Warning Signals for Critical Transitions». Nature 461 (7260): 53-59. https://doi.org/10.1038/nature08227.\n\n\nScheffer, Marten, Steve Carpenter, Jonathan A. Foley, Carl Folke, y Brian Walker. 2001. «Catastrophic Shifts in Ecosystems». Nature 413 (6856): 591-96. https://doi.org/10.1038/35098000.\n\n\nStrogatz, Steven H. 2015. Nonlinear Dynamics and Chaos: With Applications to Physics, Biology, Chemistry, and Engineering. 2nd ed. Westview Press.\n\n\nVeraart, Annelies J., Elisabeth J. Faassen, Vasilis Dakos, Egbert H. van Nes, Miquel Lürling, y Marten Scheffer. 2012. «Recovery Rates Reflect Distance to a Tipping Point in a Living System». Nature 481 (7381): 357-59. https://doi.org/10.1038/nature10723.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n Volver arriba",
+    "crumbs": [
+      "Apéndices",
+      "Referencias"
+    ]
+  }
+]

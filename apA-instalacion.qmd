@@ -1,0 +1,88 @@
+---
+title: "Apéndice A — Instalación y reproducibilidad"
+---
+
+::: {.objetivos}
+**Para qué sirve este apéndice**
+
+Cómo renderizar el curso, qué necesitas instalado y cómo funciona la ejecución de código en el navegador.
+:::
+
+## Requisitos
+
+- **Quarto ≥ 1.4** (la extensión `quarto-live` lo exige). Verifica con `quarto --version`.
+- **R** con los paquetes `knitr` y `rmarkdown` (el motor de render es `knitr`).
+- **Navegador moderno** para la lectura interactiva (la ejecución de celdas ocurre en el navegador, no al renderizar).
+
+::: {.callout-note}
+## Importante: no necesitas Python instalado para *renderizar*
+Las celdas `{pyodide}` (Python) y `{webr}` (R) **no se ejecutan al renderizar**: se envían al navegador y corren ahí mediante WebAssembly (Pyodide y WebR). Por eso el sitio se publica en cualquier hosting estático. Sí necesitas **R** porque el motor `knitr` procesa el documento.
+:::
+
+## Renderizar el curso
+
+Desde la carpeta del proyecto:
+
+```bash
+quarto render          # genera el sitio en _site/
+quarto preview         # vista previa con recarga en vivo
+```
+
+## La extensión `quarto-live`
+
+Este proyecto **ya incluye** la extensión en `_extensions/r-wasm/live/`, así que no necesitas instalarla. Si alguna vez la quieres actualizar:
+
+```bash
+quarto add r-wasm/quarto-live
+```
+
+La configuración clave (ya puesta en `_quarto.yml`) es el formato `live-html` y el motor `knitr`; además, cada capítulo incluye, tras el encabezado YAML, la línea:
+
+```markdown
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+```
+
+que registra el manejo de las celdas `{webr}` y `{pyodide}` bajo el motor `knitr`.
+
+## Paquetes en el navegador
+
+En `_quarto.yml` se declaran los paquetes que cada motor carga al ejecutarse:
+
+```yaml
+pyodide:
+  packages: [numpy, scipy, matplotlib, pandas]
+webr:
+  packages: [stats]
+```
+
+Pyodide trae `numpy`/`scipy`/`matplotlib`/`pandas` listos. Bibliotecas como `ewstools` (Python) o `EWSmethods` (R) **no** se usan en el navegador en este curso: aparecen como código para correr **localmente** (ver Taller y capítulo 6).
+
+## Reproducibilidad local del taller
+
+Para la Fase B del taller (datos reales) trabaja en un entorno local:
+
+```bash
+# Python
+pip install ewstools pandas numpy scipy matplotlib
+```
+
+```r
+# R
+install.packages("EWSmethods")
+```
+
+## Estructura del proyecto
+
+```
+curso_ews/
+├── _quarto.yml            # configuración del sitio-libro
+├── styles.css             # identidad visual UAQ
+├── references.bib         # bibliografía
+├── index.qmd              # presentación
+├── p1-cap01..03.qmd       # Parte I
+├── p2-cap04.qmd           # Parte II
+├── p3-cap05..07.qmd       # Parte III
+├── taller.qmd             # taller transversal
+├── apA/apB/apC + referencias.qmd
+└── _extensions/r-wasm/live/   # extensión quarto-live (incluida)
+```

@@ -1,0 +1,97 @@
+---
+title: "EWS multivariadas y aprendizaje automático"
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.objetivos}
+**Objetivos de aprendizaje**
+
+- Extender las EWS a sistemas con **varias variables** mediante la matriz de covarianza.
+- Interpretar el **autovalor dominante** de la covarianza como indicador multivariado.
+- Situar los enfoques de **aprendizaje automático** (Deb et al. 2022; Bury et al. 2021) y sus promesas y límites.
+:::
+
+## De una variable a muchas {#sec-multi}
+
+En comunidades microbianas o redes tróficas medimos **muchas** variables a la vez. Cerca de una bifurcación, el enlentecimiento crítico se manifiesta como un crecimiento de la **varianza colectiva** alineada con el modo que se desestabiliza. Un resumen natural es el **autovalor dominante** $\lambda_{\max}$ de la matriz de covarianza en ventana móvil: tiende a crecer al acercarse al umbral, igual que la varianza univariada.
+
+Simulamos dos variables acopladas cuya tasa de retorno se desvanece y seguimos $\lambda_{\max}$:
+
+```{pyodide}
+import numpy as np, matplotlib.pyplot as plt
+
+rng = np.random.default_rng(3)
+n, dt, sigma, c = 6000, 0.05, 0.05, 0.30
+lam = np.linspace(1.5, 0.1, n)        # tasa de retorno que se desvanece
+X = np.zeros((n, 2))
+for t in range(1, n):
+    d0 = -lam[t]*X[t-1, 0] + c*(X[t-1, 1] - X[t-1, 0])
+    d1 = -lam[t]*X[t-1, 1] + c*(X[t-1, 0] - X[t-1, 1])
+    X[t, 0] = X[t-1, 0] + dt*d0 + sigma*np.sqrt(dt)*rng.standard_normal()
+    X[t, 1] = X[t-1, 1] + dt*d1 + sigma*np.sqrt(dt)*rng.standard_normal()
+
+w = 600
+maxeig = np.array([np.linalg.eigvalsh(np.cov(X[i-w:i].T)).max()
+                   for i in range(w, n)])
+tt = np.arange(w, n) * dt
+
+plt.figure(figsize=(6.6, 3.6))
+plt.plot(tt, maxeig, color="#6b2233", lw=1.5)
+plt.xlabel("t"); plt.ylabel("máx. autovalor de la covarianza")
+plt.title("EWS multivariada: el autovalor dominante crece hacia la transición")
+plt.tight_layout(); plt.show()
+```
+
+Otros indicadores multivariados útiles: la **correlación cruzada** entre variables, el índice de **sincronía**, y —en sistemas espacialmente extendidos— la **varianza espacial** y la longitud de correlación crecientes.
+
+## Aprendizaje automático para EWS {#sec-ml}
+
+Los indicadores clásicos exigen elegir *detrending*, ventana y umbral, y fallan en transiciones que **no** son saddle-node. Una línea reciente entrena modelos que **aprenden la firma** de una transición inminente:
+
+- @deb2022 muestran que modelos entrenados con **dinámicas sencillas simuladas** generalizan y **predicen transiciones críticas en sistemas naturales complejos**, sin ajustar a cada caso.
+- @bury2021 usan **redes profundas** (CNN + LSTM) entrenadas sobre una biblioteca de bifurcaciones para clasificar el **tipo** de transición y anticiparla; sus datos termoacústicos y el código de entrenamiento son públicos (los usaremos en el [taller](taller.qmd)).
+
+::: {.callout-note collapse="true"}
+## Profundización (opcional): por qué entrenar con modelos simples funciona [Avanzado]{.avanzado-tag}
+Las formas normales (Parte I) son **universales** cerca del punto crítico: la dinámica local de casi cualquier sistema se parece a uno de unos pocos polinomios. Una red entrenada con muchas realizaciones ruidosas de esas formas normales aprende características (crecimiento de varianza/autocorrelación, desplazamiento espectral, asimetrías) que **transfieren** a datos reales cuya forma normal subyacente es la misma, aunque el mecanismo biológico difiera. La contraparte: si la transición real **no** es de tipo bifurcación (p. ej. inducida por ruido puro), estas señales pueden estar ausentes —el límite de detección de @boettiger2012.
+:::
+
+::: {.callout-note}
+## En tu máquina: `EWSNet`
+Modelo preentrenado de @bury2021 / línea de Deb. No se ejecuta aquí; úsalo localmente:
+
+```python
+# Python (local) — esquema
+from ewsnet import EWSNet            # según la implementación que instales
+modelo = EWSNet(weights="pretrained")
+prob = modelo.predict(serie)         # P(transición), y tipo si aplica
+print(prob)
+```
+:::
+
+## Ejercicios {#sec-ej7}
+
+::: {.callout-tip}
+## Ejercicio 7.1 — Acoplamiento
+Cambia `c` a `0.0` (variables independientes) y a `0.8` (fuerte acoplamiento). ¿Cómo cambia la forma del autovalor dominante hacia el final?
+
+::: {.callout-note collapse="true"}
+## Solución
+Con acoplamiento fuerte, las variables comparten el modo lento y el autovalor dominante crece de forma más marcada y coherente; sin acoplamiento, cada variable contribuye por separado y la señal colectiva es más débil/ruidosa.
+:::
+:::
+
+::: {.callout-tip}
+## Ejercicio 7.2 — Conceptual
+¿Por qué un detector basado solo en "varianza alta" daría falsos positivos, y cómo lo mitiga un enfoque que mira la **tendencia** y el **tipo** de transición?
+
+::: {.callout-note collapse="true"}
+## Solución
+Varianza alta puede deberse a ruido de medición o forzamiento externo, no a pérdida de resiliencia. Mirar la **tendencia** (¿crece?) y entrenar para reconocer la **firma temporal** de una bifurcación reduce confusiones, aunque no elimina el límite fundamental cuando la transición no deja firma dinámica.
+:::
+:::
+
+## Para seguir
+
+Aplica todo en el [taller transversal](taller.qmd): de datos simulados a datos reales.

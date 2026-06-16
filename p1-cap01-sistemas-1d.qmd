@@ -1,0 +1,185 @@
+---
+title: "Sistemas dinámicos 1-D y estabilidad"
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+::: {.objetivos}
+**Objetivos de aprendizaje**
+
+- Interpretar una EDO autónoma $\dot{x}=f_\mu(x)$ como un flujo sobre la recta.
+- Localizar puntos fijos y decidir su estabilidad de forma intuitiva (signo del flujo) y formal (linealización).
+- Reconocer el papel del parámetro de control $\mu$ como antesala de las bifurcaciones.
+:::
+
+## La recta como espacio de fases {#sec-recta}
+
+Muchos sistemas biológicos cuya variable de interés es **función del tiempo numérica**, por ejemplo el tamaño de una población, la densidad de un nutriente, la fracción de individuos infectados, la concetración química, pueden describirse con una **ecuación diferencial ordinaria autónoma**:
+
+$$
+\dot{x} \;=\; \frac{dx}{dt} \;=\; f_\mu(x).
+$$ {#eq-edo}
+
+Aquí 
+
+
+-  $x(t)$ es el función del tiempo que describe el **estado** del sistema, 
+- $f$ es una función suave que dicta su tasa de cambio ( el mdoelo del sistema), y 
+- $\mu$ es un **parámetro de control** (o, en general, un vector de parámetros) que el  ambiente o un experimento detrminan: una tasa de dilución, un nivel de luz, una carga de nutrientes.
+
+
+Que sea **autónoma** significa que $f$ no depende explícitamente del tiempo: la regla de evolución es la misma hoy que mañana. Eso nos permite pensar geométricamente. Imagina una partícula sobre la recta cuya velocidad en cada punto $x$ es $f_\mu(x)$: donde $f>0$ se mueve a la derecha, donde $f<0$ a la izquierda.
+
+## Puntos fijos y estabilidad {#sec-estabilidad}
+
+Un **punto fijo** (o equilibrio) $x^*$ cumple
+$$
+f_\mu(x^*) = 0,
+$$ {#eq-fijo}
+es decir, el sistema no cambia si parte exactamente de ahí. La pregunta biológica relevante es: si lo perturbamos un poco, ¿regresa o se aleja?
+
+::: {.callout-note}
+## Definición formal (estabilidad lineal)
+Sea $x^*$ un punto fijo de @eq-edo. Linealizando con $x = x^* + \eta$ y $\eta$ pequeño, $\dot{\eta} \approx f'_\mu(x^*)\,\eta$, cuya solución es $\eta(t)=\eta_0\,e^{f'(x^*)\,t}$. Por tanto:
+
+- Si $f'_\mu(x^*) < 0$, las perturbaciones decaen ⇒ $x^*$ es **estable** (atractor).
+- Si $f'_\mu(x^*) > 0$, las perturbaciones crecen ⇒ $x^*$ es **inestable** (repulsor).
+- Si $f'_\mu(x^*) = 0$, el criterio lineal **no decide**: hay que mirar los términos de orden superior (esto es justo lo que ocurre en una bifurcación).
+:::
+
+El inverso de $|f'(x^*)|$ es, además, una **escala de tiempo de recuperación**: cuanto más cerca de cero esté la pendiente, más lento regresa el sistema tras una perturbación. Guarda esta idea: es la semilla del *enlentecimiento crítico* de la [Parte III](p3-cap05-ews-fundamento.qmd).
+
+## Ejemplo guía: crecimiento logístico {#sec-logistico}
+
+Tomemos el clásico modelo logístico de una población,
+$$
+\dot{x} = r\,x\left(1 - \frac{x}{K}\right),
+$$ {#eq-logistico}
+con tasa intrínseca $r>0$ y capacidad de carga $K$. Tiene dos puntos fijos: $x^*=0$ y $x^*=K$.
+
+Mueve la condición inicial y observa hacia dónde converge la trayectoria:
+
+```{ojs}
+//| echo: false
+viewof x0 = Inputs.range([0.01, 2], {value: 0.1, step: 0.01, label: "x₀ (condición inicial)"})
+```
+
+```{ojs}
+//| echo: false
+traj = {
+  const r = 1, K = 1, dt = 0.05, T = 240;
+  let x = x0; const pts = [];
+  for (let i = 0; i <= T; i++) { pts.push({t: i*dt, x}); x = x + dt*(r*x*(1 - x/K)); }
+  return pts;
+}
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  height: 280, marginLeft: 48,
+  x: {label: "tiempo t"},
+  y: {label: "x(t)", domain: [0, 2]},
+  marks: [
+    Plot.ruleY([1], {stroke: "crimson", strokeDasharray: "4 4"}),
+    Plot.ruleY([0], {stroke: "gray", strokeDasharray: "2 4"}),
+    Plot.line(traj, {x: "t", y: "x", stroke: "steelblue", strokeWidth: 2})
+  ]
+})
+```
+
+Toda condición inicial positiva converge a $x^*=K$ (línea roja): es el equilibrio **estable**. El $x^*=0$ es **inestable**.
+
+### Clasifiquémoslo con código
+
+Calcula la derivada en cada punto fijo y dibuja varias trayectorias. Edita y ejecuta:
+
+::: {.panel-tabset}
+
+## Python
+
+```{pyodide}
+import numpy as np
+from scipy.integrate import odeint
+import matplotlib.pyplot as plt
+
+r, K = 1.0, 1.0
+def f(x, t=0):     return r * x * (1 - x / K)
+def fprime(x):     return r * (1 - 2 * x / K)
+
+for xf in [0.0, K]:
+    s = fprime(xf)
+    estado = "estable" if s < 0 else ("inestable" if s > 0 else "marginal")
+    print(f"x* = {xf:.2f}  ->  f'(x*) = {s:+.2f}  =>  {estado}")
+
+t = np.linspace(0, 12, 300)
+plt.figure(figsize=(6, 3.4))
+for x0 in [0.05, 0.4, 0.9, 1.6]:
+    plt.plot(t, odeint(f, x0, t), label=f"x0={x0}")
+plt.axhline(K, ls="--", c="crimson", lw=1)
+plt.xlabel("t"); plt.ylabel("x(t)"); plt.legend(fontsize=8); plt.tight_layout()
+plt.show()
+```
+
+## R
+
+```{webr}
+r <- 1; K <- 1
+f      <- function(x) r * x * (1 - x / K)
+fprime <- function(x) r * (1 - 2 * x / K)
+
+for (xf in c(0, K)) {
+  s <- fprime(xf)
+  estado <- if (s < 0) "estable" else if (s > 0) "inestable" else "marginal"
+  cat(sprintf("x* = %.2f  f'(x*) = %+.2f  => %s\n", xf, s, estado))
+}
+
+# Integración por Euler (base R, sin paquetes externos)
+euler <- function(x0, dt = 0.02, T = 12) {
+  n <- T / dt; x <- numeric(n + 1); x[1] <- x0
+  for (i in 1:n) x[i + 1] <- x[i] + dt * f(x[i])
+  data.frame(t = seq(0, T, by = dt), x = x)
+}
+plot(euler(0.05), type = "l", ylim = c(0, 1.8), col = "steelblue",
+     xlab = "t", ylab = "x(t)")
+for (x0 in c(0.4, 0.9, 1.6)) lines(euler(x0), col = "steelblue")
+abline(h = K, lty = 2, col = "red")
+```
+
+:::
+
+## Ejercicios {#sec-ej1}
+
+::: {.callout-tip}
+## Ejercicio 1.1 — Analítico
+Para $\dot{x} = x - x^3$, encuentra todos los puntos fijos y clasifícalos usando $f'(x^*)$.
+
+::: {.callout-note collapse="true"}
+## Solución
+$f(x)=x-x^3 = x(1-x^2)=0 \Rightarrow x^*=0,\,\pm 1$. Con $f'(x)=1-3x^2$: $f'(0)=1>0$ (**inestable**); $f'(\pm 1)=-2<0$ (**estables**). Es un sistema **biestable**: dos atractores separados por un repulsor.
+:::
+:::
+
+::: {.callout-tip}
+## Ejercicio 1.2 — Computacional
+En la celda de Python, cambia `r` a un valor **negativo**. ¿Qué punto fijo se vuelve estable ahora? Justifica con el signo de $f'(x^*)$.
+
+::: {.callout-note collapse="true"}
+## Solución
+Con $r<0$, $f'(0)=r<0$ (estable) y $f'(K)=-r>0$ (inestable): se **intercambian** los papeles. Toda población decae a $0$. Esto anticipa la bifurcación **transcrítica** del capítulo siguiente.
+:::
+:::
+
+::: {.callout-tip}
+## Reto — Flujo sobre la recta
+Esboza el retrato de fases de $\dot{x}=\sin x$. ¿Cuántos puntos fijos hay y cómo se alternan en estabilidad?
+
+::: {.callout-note collapse="true"}
+## Pista / solución
+Puntos fijos en $x^*=n\pi$. Como $f'(x)=\cos x$, los $\cos(n\pi)=(-1)^n$ alternan signo: los $n$ pares son inestables y los impares estables (o viceversa según el signo). El flujo empuja cada trayectoria hacia el equilibrio estable más cercano.
+:::
+:::
+
+## Para seguir
+
+En el [capítulo 2](p1-cap02-formas-normales.qmd) veremos qué ocurre cuando, al mover $\mu$, un punto fijo alcanza $f'(x^*)=0$: ahí nacen, mueren o intercambian estabilidad los equilibrios. Tratamiento clásico en @strogatz2015.
