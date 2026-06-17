@@ -388,32 +388,44 @@ window.Quarto = {
 <div class="objetivos">
 <p><strong>Objetivos de aprendizaje</strong></p>
 <ul>
-<li>Definir qué es una bifurcación y por qué <span class="math inline">\(f'(x^*)=0\)</span> es la condición que la dispara.</li>
+<li>Definir qué es una bifurcación y por qué <span class="math inline">\(f'_\mu(x^*)=0\)</span> es la condición que la dispara.</li>
 <li>Reconocer y dibujar los diagramas de las tres bifurcaciones locales de codimensión 1: <strong>saddle-node</strong>, <strong>transcrítica</strong> y <strong>pitchfork</strong>.</li>
 <li>Escribir la <strong>forma normal</strong> de cada una y conectar su álgebra con su geometría.</li>
 </ul>
 </div>
 <section id="sec-bif" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="sec-bif"><span class="header-section-number">1</span> ¿Qué es una bifurcación?</h2>
-<p>Una <strong>bifurcación</strong> es un cambio <strong>cualitativo</strong> en el retrato de fases —número o estabilidad de los puntos fijos— al variar suavemente el parámetro <span class="math inline">\(\mu\)</span>. El valor <span class="math inline">\(\mu_c\)</span> donde ocurre se llama <strong>punto de bifurcación</strong>. Como vimos en el capítulo anterior, el criterio lineal falla justo cuando <span class="math inline">\(f'_\mu(x^*)=0\)</span>; por eso las bifurcaciones locales viven en esa frontera.</p>
-<p>Una idea poderosa es que, <strong>cerca</strong> del punto crítico, casi cualquier sistema se comporta como uno de unos pocos modelos arquetípicos: sus <strong>formas normales</strong>. Estudiar tres polinomios sencillos nos da el vocabulario para reconocerlas en cualquier sistema biológico.</p>
+<p>Una <strong>bifurcación</strong> es un cambio <strong>cualitativo</strong> en el retrato de fases, número o estabilidad de los puntos de equilibrio, al variar suavemente el parámetro <span class="math inline">\(\mu\)</span>. El valor <span class="math inline">\(\mu_c\)</span> donde ocurre este cambio se llama <strong>punto de bifurcación</strong>. Como vimos en el capítulo anterior, el criterio lineal falla justo cuando <span class="math inline">\(f'_\mu(x^*)=0\)</span>;las bifurcaciones locales viven en esa frontera.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span>Idea importante
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Una idea poderosa es que, <strong>cerca</strong> del punto crítico, casi cualquier sistema se comporta como uno de unos pocos modelos arquetípicos: sus <strong>formas normales</strong>. Estudiar tres polinomios sencillos nos da el vocabulario para reconocerlas en cualquier sistema.</p>
+</div>
+</div>
 <!-- Cap. 2 · formas normales -->
 <div class="dato-historico">
-<p><strong>Apunte histórico.</strong> <em>Bifurcación</em> es término de <strong>Poincaré</strong> (1885).</p>
-<p>Las tres formas normales que ves aquí (saddle-node, transcrítica, pitchfork) son los arquetipos de <strong>codimensión 1</strong>: casi cualquier sistema, cerca del punto crítico, se parece a una de ellas.</p>
+<p><strong>Apunte histórico.</strong> <em>Bifurcación</em> es término acuñado por <strong>Poincaré</strong> (1885).</p>
+<p>Las tres formas normales que ves aquí (saddle-node, transcrítica, pitchfork) son los arquetipos de <strong>codimensión 1</strong>: lo que significa es que casi cualquier sistema, cerca del punto crítico, se parece a una de ellas.</p>
 </div>
 </section>
 <section id="sec-tres" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="sec-tres"><span class="header-section-number">2</span> Las tres bifurcaciones locales</h2>
 <p>Cambia el tipo y mueve <span class="math inline">\(\mu\)</span>. Los cruces de la curva con el eje horizontal son los puntos fijos; donde cruza <strong>bajando</strong> (pendiente negativa) el equilibrio es estable.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb1" data-startfrom="34" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 33;"><span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>viewof tipo <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">select</span>(</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="kw">new</span> <span class="bu">Map</span>([</span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Saddle-node:  ẋ = μ − x²"</span><span class="op">,</span> <span class="st">"sn"</span>]<span class="op">,</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Transcrítica:  ẋ = μx − x²"</span><span class="op">,</span> <span class="st">"tc"</span>]<span class="op">,</span></span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Pitchfork (supercrítica):  ẋ = μx − x³"</span><span class="op">,</span> <span class="st">"pf"</span>]</span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  ])<span class="op">,</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">label</span><span class="op">:</span> <span class="st">"Bifurcación"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="st">"sn"</span>})</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb1" data-startfrom="38" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 37;"><span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>viewof tipo <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">select</span>(</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  <span class="kw">new</span> <span class="bu">Map</span>([</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Saddle-node:  ẋ = μ − x²"</span><span class="op">,</span> <span class="st">"sn"</span>]<span class="op">,</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Transcrítica:  ẋ = μx − x²"</span><span class="op">,</span> <span class="st">"tc"</span>]<span class="op">,</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Pitchfork (supercrítica):  ẋ = μx − x³"</span><span class="op">,</span> <span class="st">"pf"</span>]</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  ])<span class="op">,</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>  {<span class="dt">label</span><span class="op">:</span> <span class="st">"Bifurcación"</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="st">"sn"</span>})</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-1" data-nodetype="declaration">
 
@@ -421,7 +433,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb2" data-startfrom="45" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 44;"><span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>viewof mu <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="op">-</span><span class="fl">0.5</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"μ"</span>})</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb2" data-startfrom="49" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 48;"><span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>viewof mu <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="op">-</span><span class="dv">2</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="op">-</span><span class="fl">0.5</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"μ"</span>})</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-2" data-nodetype="declaration">
 
@@ -429,9 +441,9 @@ window.Quarto = {
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb3" data-startfrom="50" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 49;"><span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>ff <span class="op">=</span> (tipo <span class="op">===</span> <span class="st">"sn"</span>) <span class="op">?</span> (x <span class="kw">=&gt;</span> mu <span class="op">-</span> x<span class="op">*</span>x)</span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>   <span class="op">:</span> (tipo <span class="op">===</span> <span class="st">"tc"</span>) <span class="op">?</span> (x <span class="kw">=&gt;</span> mu<span class="op">*</span>x <span class="op">-</span> x<span class="op">*</span>x)</span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>   <span class="op">:</span> (x <span class="kw">=&gt;</span> mu<span class="op">*</span>x <span class="op">-</span> x<span class="op">*</span>x<span class="op">*</span>x)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb3" data-startfrom="54" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 53;"><span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>ff <span class="op">=</span> (tipo <span class="op">===</span> <span class="st">"sn"</span>) <span class="op">?</span> (x <span class="kw">=&gt;</span> mu <span class="op">-</span> x<span class="op">*</span>x)</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>   <span class="op">:</span> (tipo <span class="op">===</span> <span class="st">"tc"</span>) <span class="op">?</span> (x <span class="kw">=&gt;</span> mu<span class="op">*</span>x <span class="op">-</span> x<span class="op">*</span>x)</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>   <span class="op">:</span> (x <span class="kw">=&gt;</span> mu<span class="op">*</span>x <span class="op">-</span> x<span class="op">*</span>x<span class="op">*</span>x)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-3" data-nodetype="declaration">
 
@@ -439,17 +451,17 @@ window.Quarto = {
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb4" data-startfrom="57" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 56;"><span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">300</span><span class="op">,</span> <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span></span>
-<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="fl">2.2</span><span class="op">,</span> <span class="fl">2.2</span>]}<span class="op">,</span></span>
-<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"ẋ = f(x)"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="dv">3</span><span class="op">,</span> <span class="dv">3</span>]}<span class="op">,</span></span>
-<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#999"</span>})<span class="op">,</span></span>
-<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleX</span>([<span class="dv">0</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#eee"</span>})<span class="op">,</span></span>
-<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(d3<span class="op">.</span><span class="fu">range</span>(<span class="op">-</span><span class="fl">2.2</span><span class="op">,</span> <span class="fl">2.21</span><span class="op">,</span> <span class="fl">0.01</span>)<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> ({x<span class="op">,</span> <span class="dt">f</span><span class="op">:</span> <span class="fu">ff</span>(x)}))<span class="op">,</span></span>
-<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>              {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"f"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"steelblue"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})</span>
-<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb4" data-startfrom="61" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 60;"><span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">300</span><span class="op">,</span> <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="fl">2.2</span><span class="op">,</span> <span class="fl">2.2</span>]}<span class="op">,</span></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"ẋ = f(x)"</span><span class="op">,</span> <span class="dt">domain</span><span class="op">:</span> [<span class="op">-</span><span class="dv">3</span><span class="op">,</span> <span class="dv">3</span>]}<span class="op">,</span></span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#999"</span>})<span class="op">,</span></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleX</span>([<span class="dv">0</span>]<span class="op">,</span> {<span class="dt">stroke</span><span class="op">:</span> <span class="st">"#eee"</span>})<span class="op">,</span></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(d3<span class="op">.</span><span class="fu">range</span>(<span class="op">-</span><span class="fl">2.2</span><span class="op">,</span> <span class="fl">2.21</span><span class="op">,</span> <span class="fl">0.01</span>)<span class="op">.</span><span class="fu">map</span>(x <span class="kw">=&gt;</span> ({x<span class="op">,</span> <span class="dt">f</span><span class="op">:</span> <span class="fu">ff</span>(x)}))<span class="op">,</span></span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>              {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"f"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"steelblue"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-4" data-nodetype="expression">
 
@@ -460,17 +472,18 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="sec-sn">Saddle-node (silla-nodo)</h3>
 <p>Forma normal: <span class="math display">\[\dot{x} = \mu - x^2\]</span>.</p>
 <p>Los puntos de equilibrio son:</p>
-<p><span class="math display">\[x^* = \pm\sqrt{\mu}\]</span> <strong>existen solo para</strong> <span class="math inline">\(\mu \ge 0\)</span>: un par, uno estable, <span class="math display">\[x_1^*=+\sqrt{\mu}\]</span>; uno inestable, <span class="math display">\[x_2^*=-\sqrt{\mu}\]</span> que <strong>colisiona y se aniquila</strong> en <span class="math inline">\(\mu=0\)</span>.</p>
+<p><span class="math display">\[x^* = \pm\sqrt{\mu}\]</span> <strong>existen solo para</strong> <span class="math inline">\(\mu \ge 0\)</span>: un par, uno estable, <span class="math display">\[x_1^*=+\sqrt{\mu}\]</span> uno inestable, <span class="math display">\[x_2^*=-\sqrt{\mu}\]</span> que <strong>colisiona y se aniquila</strong> en <span class="math inline">\(\mu=0\)</span>.</p>
 <p>Es la bifurcación de <strong>creación/destrucción</strong> de equilibrios: la responsable de los <em>tipping points</em> abruptos que veremos en levaduras y cianobacterias <span class="citation" data-cites="dai2012 veraart2012">(<a href="#ref-dai2012" role="doc-biblioref">Dai et&nbsp;al. 2012</a>; <a href="#ref-veraart2012" role="doc-biblioref">Veraart et&nbsp;al. 2012</a>)</span>.</p>
 </section>
 <section id="sec-tc" class="level3">
 <h3 class="anchored" data-anchor-id="sec-tc">Transcrítica</h3>
 <p>Forma normal: <span class="math display">\[\dot{x} = \mu x - x^2 = x(\mu - x)\]</span>.</p>
-<p>Hay siempre dos puntos fijos, <span class="math display">\[x_1^*=0\]</span> y <span class="math display">\[x_2^*=\mu\]</span>, que <strong>intercambian estabilidad</strong> al cruzarse en <span class="math inline">\(\mu=0\)</span>. Ningún equilibrio desaparece; cambia quién es el atractor. Aparece donde un estado (p.&nbsp;ej. extinción, <span class="math inline">\(x^*=0\)</span>) siempre existe pero gana o pierde estabilidad.</p>
+<p>Hay siempre dos puntos fijos, <span class="math display">\[x_1^*=0\]</span> y <span class="math display">\[x_2^*=\mu\]</span> que <strong>intercambian su estabilidad</strong> al cruzarse en <span class="math inline">\(\mu=0\)</span>.</p>
+<p>Ningún equilibrio desaparece; lo que cambia es <strong>quién</strong> es el atractor.</p>
 </section>
 <section id="sec-pf" class="level3">
 <h3 class="anchored" data-anchor-id="sec-pf">Pitchfork (tridente)</h3>
-<p>Forma normal <strong>supercrítica</strong>: <span class="math display">\[\dot{x} = \mu x - x^3\]</span>. Para <span class="math inline">\(\mu&lt;0\)</span> solo está <span class="math display">\[x_1^*=0\]</span> (estable); en <span class="math inline">\(\mu=0\)</span> se vuelve inestable y nacen dos ramas estables simétricas <span class="math display">\[x_{2,3}^* = \pm\sqrt{\mu}\]</span>. Es la firma de la <strong>ruptura de simetría</strong> y de la <strong>biestabilidad</strong>. Su variante <strong>subcrítica</strong>, <span class="math display">\[\dot{x}=\mu x + x^3\]</span>, produce ramas inestables y suele acompañarse de histéresis (capítulo 3).</p>
+<p>Forma normal <strong>supercrítica</strong>: <span class="math display">\[\dot{x} = \mu x - x^3\]</span>. Para <span class="math inline">\(\mu&lt;0\)</span> solo existe <span class="math display">\[x_1^*=0\]</span> (estable); en <span class="math inline">\(\mu=0\)</span> se vuelve inestable y nacen dos ramas estables simétricas <span class="math display">\[x_{2,3}^* = \pm\sqrt{\mu}\]</span>. Ests es la firma de la <strong>ruptura de simetría</strong> y de la <strong>biestabilidad</strong>. Su variante <strong>subcrítica</strong>, <span class="math display">\[\dot{x}=\mu x + x^3\]</span>, produce ramas inestables y suele acompañarse de histéresis (capítulo 3).</p>
 </section>
 </section>
 <section id="sec-diagramas" class="level2" data-number="3">
@@ -520,7 +533,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicmFtYXMgPC0gZnVuY3Rpb24o
 <div class="callout-body-container callout-body">
 <p>¿Qué bifurcación tiene <span class="math inline">\(\dot{x} = \mu - x^2\)</span> y cuál <span class="math inline">\(\dot{x} = \mu x - x^3\)</span>? Da el valor crítico <span class="math inline">\(\mu_c\)</span> en cada caso.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -529,7 +542,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicmFtYXMgPC0gZnVuY3Rpb24o
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>La primera es <strong>saddle-node</strong> (<span class="math inline">\(\mu_c=0\)</span>: el par <span class="math inline">\(\pm\sqrt{\mu}\)</span> aparece para <span class="math inline">\(\mu&gt;0\)</span>). La segunda es <strong>pitchfork supercrítica</strong> (<span class="math inline">\(\mu_c=0\)</span>: <span class="math inline">\(x^*=0\)</span> pierde estabilidad y nacen <span class="math inline">\(\pm\sqrt{\mu}\)</span>).</p>
 </div>
@@ -549,7 +562,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicmFtYXMgPC0gZnVuY3Rpb24o
 <div class="callout-body-container callout-body">
 <p>Modifica la función <code>ramas</code> para la pitchfork <strong>subcrítica</strong> <span class="math inline">\(\dot{x}=\mu x + x^3\)</span> (puntos fijos <span class="math inline">\(0\)</span> y <span class="math inline">\(\pm\sqrt{-\mu}\)</span> para <span class="math inline">\(\mu&lt;0\)</span>) y observa que las ramas nuevas son <strong>inestables</strong>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -558,7 +571,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicmFtYXMgPC0gZnVuY3Rpb24o
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Usa <code>roots = [0] + ([sqrt(-mu), -sqrt(-mu)] if mu &lt; 0 else [])</code> y <code>fp = lambda x: mu + 3*x**2</code>. Verás que las ramas <span class="math inline">\(\pm\sqrt{-\mu}\)</span> salen en rojo (inestables) y que <span class="math inline">\(x^*=0\)</span> es estable solo para <span class="math inline">\(\mu&lt;0\)</span>.</p>
 </div>
@@ -567,7 +580,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicmFtYXMgPC0gZnVuY3Rpb24o
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -576,7 +589,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicmFtYXMgPC0gZnVuY3Rpb24o
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Condiciones de no-degeneración.</strong> Una saddle-node genérica requiere, en <span class="math inline">\((\mu_c,x^*)\)</span>: <span class="math inline">\(f=0\)</span>, <span class="math inline">\(\partial_x f=0\)</span>, <span class="math inline">\(\partial_{xx} f\neq 0\)</span> y <span class="math inline">\(\partial_\mu f\neq 0\)</span>. La transcrítica y la pitchfork añaden la restricción <span class="math inline">\(\partial_\mu f=0\)</span> en el equilibrio persistente más condiciones de simetría. El <strong>teorema de la variedad central</strong> justifica por qué basta estudiar la dinámica reducida a 1-D cerca del punto crítico, aun en sistemas de mayor dimensión.</p>
 </div>

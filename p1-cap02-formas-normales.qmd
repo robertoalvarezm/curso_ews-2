@@ -7,23 +7,27 @@ title: "Bifurcaciones locales y formas normales"
 ::: objetivos
 **Objetivos de aprendizaje**
 
-- Definir qué es una bifurcación y por qué $f'(x^*)=0$ es la condición que la dispara.
+- Definir qué es una bifurcación y por qué $f'_\mu(x^*)=0$ es la condición que la dispara.
 - Reconocer y dibujar los diagramas de las tres bifurcaciones locales de codimensión 1: **saddle-node**, **transcrítica** y **pitchfork**.
 - Escribir la **forma normal** de cada una y conectar su álgebra con su geometría.
 :::
 
 ## ¿Qué es una bifurcación? {#sec-bif}
 
-Una **bifurcación** es un cambio **cualitativo** en el retrato de fases —número o estabilidad de los puntos fijos— al variar suavemente el parámetro $\mu$. El valor $\mu_c$ donde ocurre se llama **punto de bifurcación**. Como vimos en el capítulo anterior, el criterio lineal falla justo cuando $f'_\mu(x^*)=0$; por eso las bifurcaciones locales viven en esa frontera.
+Una **bifurcación** es un cambio **cualitativo** en el retrato de fases, número o estabilidad de los puntos de equilibrio, al variar suavemente el parámetro $\mu$. El valor $\mu_c$ donde ocurre este cambio se llama **punto de bifurcación**. Como vimos en el capítulo anterior, el criterio lineal falla justo cuando $f'_\mu(x^*)=0$;las bifurcaciones locales viven en esa frontera.
 
-Una idea poderosa es que, **cerca** del punto crítico, casi cualquier sistema se comporta como uno de unos pocos modelos arquetípicos: sus **formas normales**. Estudiar tres polinomios sencillos nos da el vocabulario para reconocerlas en cualquier sistema biológico.
+:::{.callout-important}
+## Idea importante
+Una idea poderosa es que, **cerca** del punto crítico, casi cualquier sistema se comporta como uno de unos pocos modelos arquetípicos: sus **formas normales**. Estudiar tres polinomios sencillos nos da el vocabulario para reconocerlas en cualquier sistema.
+
+:::
 
 <!-- Cap. 2 · formas normales -->
 
 ::: dato-historico
-**Apunte histórico.** *Bifurcación* es término de **Poincaré** (1885).
+**Apunte histórico.** *Bifurcación* es término acuñado por **Poincaré** (1885).
 
-Las tres formas normales que ves aquí (saddle-node, transcrítica, pitchfork) son los arquetipos de **codimensión 1**: casi cualquier sistema, cerca del punto crítico, se parece a una de ellas.
+Las tres formas normales que ves aquí (saddle-node, transcrítica, pitchfork) son los arquetipos de **codimensión 1**: lo que significa es que casi cualquier sistema, cerca del punto crítico, se parece a una de ellas.
 :::
 
 ## Las tres bifurcaciones locales {#sec-tres}
@@ -74,7 +78,7 @@ Forma normal: $$\dot{x} = \mu - x^2$$.
 
 Los puntos de equilibrio son:
 
-$$x^* = \pm\sqrt{\mu}$$ **existen solo para** $\mu \ge 0$: un par, uno estable, $$x_1^*=+\sqrt{\mu}$$; uno inestable, $$x_2^*=-\sqrt{\mu}$$ que **colisiona y se aniquila** en $\mu=0$.
+$$x^* = \pm\sqrt{\mu}$$ **existen solo para** $\mu \ge 0$: un par, uno estable, $$x_1^*=+\sqrt{\mu}$$ uno inestable, $$x_2^*=-\sqrt{\mu}$$ que **colisiona y se aniquila** en $\mu=0$.
 
 Es la bifurcación de **creación/destrucción** de equilibrios: la responsable de los *tipping points* abruptos que veremos en levaduras y cianobacterias [@dai2012; @veraart2012].
 
@@ -82,12 +86,13 @@ Es la bifurcación de **creación/destrucción** de equilibrios: la responsable 
 
 Forma normal: $$\dot{x} = \mu x - x^2 = x(\mu - x)$$. 
 
-Hay siempre dos puntos fijos, $$x_1^*=0$$ y $$x_2^*=\mu$$, que **intercambian estabilidad** al cruzarse en $\mu=0$. Ningún equilibrio desaparece; cambia quién es el atractor. Aparece donde un estado (p. ej. extinción, $x^*=0$) siempre existe pero gana o pierde estabilidad.
+Hay siempre dos puntos fijos, $$x_1^*=0$$ y $$x_2^*=\mu$$ que **intercambian su estabilidad** al cruzarse en $\mu=0$. 
 
+Ningún equilibrio desaparece; lo que cambia es **quién** es el atractor. 
 
 ### Pitchfork (tridente) {#sec-pf}
 
-Forma normal **supercrítica**: $$\dot{x} = \mu x - x^3$$. Para $\mu<0$ solo está $$x_1^*=0$$ (estable); en $\mu=0$ se vuelve inestable y nacen dos ramas estables simétricas $$x_{2,3}^* = \pm\sqrt{\mu}$$. Es la firma de la **ruptura de simetría** y de la **biestabilidad**. Su variante **subcrítica**, $$\dot{x}=\mu x + x^3$$, produce ramas inestables y suele acompañarse de histéresis (capítulo 3).
+Forma normal **supercrítica**: $$\dot{x} = \mu x - x^3$$. Para $\mu<0$ solo existe $$x_1^*=0$$ (estable); en $\mu=0$ se vuelve inestable y nacen dos ramas estables simétricas $$x_{2,3}^* = \pm\sqrt{\mu}$$. Ests es la firma de la **ruptura de simetría** y de la **biestabilidad**. Su variante **subcrítica**, $$\dot{x}=\mu x + x^3$$, produce ramas inestables y suele acompañarse de histéresis (capítulo 3).
 
 ## Diagramas de bifurcación con código {#sec-diagramas}
 
