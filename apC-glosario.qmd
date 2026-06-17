@@ -10,7 +10,7 @@ Definiciones breves de los términos clave del curso, para consulta rápida.
 
 **Bifurcación.** Cambio cualitativo en el retrato de fases (número o estabilidad de puntos fijos) al variar suavemente un parámetro de control.
 
-**Punto de bifurcación ($\mu_c$).** Valor del parámetro donde ocurre la bifurcación.
+**Punto de bifurcación (*Tipping point*) ($\mu_c$).** Valor del parámetro donde ocurre la bifurcación.
 
 **Punto fijo / equilibrio ($x^*$).** Estado en que $f_\mu(x^*)=0$: el sistema no cambia si parte de ahí.
 
@@ -34,7 +34,7 @@ Definiciones breves de los términos clave del curso, para consulta rápida.
 
 **Tipping point (punto de inflexión).** Umbral del parámetro tras el cual el sistema transita abruptamente a otro estado.
 
-**Enlentecimiento crítico (*critical slowing down*).** Pérdida de velocidad de recuperación ($1/|f'(x^*)|\to\infty$) al acercarse a una bifurcación.
+**Ralentización crítica (*critical slowing down*).** Pérdida de velocidad de recuperación ($1/|f'(x^*)|\to\infty$) al acercarse a una bifurcación.
 
 **Señales de alerta temprana (EWS).** Estadísticos que anticipan una transición: principalmente aumento de **varianza** y de **autocorrelación de retardo-1**.
 
