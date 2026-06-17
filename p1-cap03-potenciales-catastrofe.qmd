@@ -10,11 +10,11 @@ editor:
 ::: objetivos
 **Objetivos de aprendizaje**
 
-- Reescribir $\dot{x}=f(x)$ como descenso por un **paisaje de
+- Obtener a partir de un sistema $\dot{x}=f(x)$ el  **paisaje de
   potencial** $V(x)$.
 - Entender la **biestabilidad** como un potencial de doble pozo.
 - Explicar la **bifurcación catastrófica** (fold) y el fenómeno de
-  **histéresis** mediante el paisaje y un ciclo de barrido.
+  **histéresis** su potencial y su diagrama de bifurcaciones.
 :::
 
 ## El paisaje de potencial {#sec-potencial}
@@ -24,28 +24,55 @@ Cuando la dinámica es 1-D siempre podemos escribirla como un
 $$\dot{x} = -\,\frac{dV}{dx}, \qquad V(x) = -\!\int f(x)\,dx .$$
  {#eq-potencial}
 
+
+Con esto podemos visualizar de forma muy intuitiva los puntos de equilibrio y su estabilidad. 
+
+- Los **puntos de equilibrio** corresponden a los **puntos extremos** del potencial $V(x)$
+- La **estabilidad**: un **punto de equilibrio estable** corresponde a un **mínimo** y los **inestables**, a un **máximo**.
+
 La imagen es intuitiva: una canica que rueda cuesta abajo por el paisaje
 $V(x)$. Los **mínimos** de $V$ son puntos fijos **estables**; los
-**máximos**, inestables. La profundidad de un pozo mide la
-**resiliencia** del estado: cuánta perturbación hace falta para sacar a
-la canica de él.
+**máximos**, inestables. 
+
+
+La **profundidad de un pozo** mide la **resiliencia** del estado: cuánta perturbación hace falta para sacar a la canica de él.
+
+
+### Ejercicios {#sec-potencial}
+
+:::: callout-tip
+## Ejercicio Potencial de las formas normales de  las bifurcaciones
+
+Considera las formas normales de las bifurcaciones de la sección anterior.
+Relaciónalo con los puntos de equilibrio conocidos y sus estabilidades.
+
+::: {.callout-note collapse="true"}
+## Solución
+Hazlo tú, está fácil!!!
+:::
+::::
+
+
 
 ## La catástrofe en la cúspide: biestabilidad, pliegues e histéresis {#sec-cusp}
 
 Hasta ahora variábamos un solo parámetro. Pero un sistema real suele
-tener un parámetro que **cambia la inclinación** el paisaje ($\alpha$,
-un forzamiento) y otro que controla su **forma** ($\mu$, qué tan
+tener **más** de un parámetro por ejemplo uno que **cambie la inclinación** el paisaje ($\alpha$,
+un forzamiento) y otro que controle su **forma** ($\mu$, qué tan
 profundo es el doble pozo). La forma normal que reúne ambos efectos es
 el modelo de la **catástrofe (en cúspide)**:
 
 $$\dot{x} = f(x) = \alpha + \mu x - x^3 .$$
  {#eq-cusp}
 
+Nota: este modelo es una generalización de la forma normal de la bifurcación *pitchfork*
+
+
+
 ::: dato-historico
 **Apunte histórico.** La *teoría de catástrofes* fue formulada por el
 matemático **René Thom** (1972) y popularizada por **Christopher
-Zeeman** (1977). Clasifica las formas en que un sistema suave puede dar
-saltos cualitativos; la **cúspide** es la más célebre de las siete
+Zeeman** (1977) quienes clasificaron las formas en que un sistema suave puede dar saltos cualitativos; la **cúspide** es la más célebre de las siete
 catástrofes elementales y aparece una y otra vez en ecología, clima y
 dinámica social.
 :::
@@ -53,11 +80,10 @@ dinámica social.
 ### Puntos fijos: un atajo gráfico {#sec-cusp-fijos}
 
 Los puntos fijos cumplen $\alpha+\mu x^*-(x^*)^3=0$, una **cúbica** que
-puede tener **una o tres** raíces reales. En vez de resolverla, conviene
-reescribirla como una intersección:
+puede tener **una o tres** raíces reales. En lugar de resolverla, conviene
+reescribirla como una intersección de dos curvas $y_1(x)$ e $y_2(x)$:
 
-$$\underbrace{\mu x - x^3}_{y_1(x)} \;=\; \underbrace{-\alpha}_{y_2}.$$
- {#eq-cusp-graf}
+$$\underbrace{\mu x - x^3}_{y_1(x)} \;=\; \underbrace{-\alpha}_{y_2}.$${#eq-cusp-graf}
 
 Los equilibrios son los cruces de la curva cúbica $y_1$ con la recta
 horizontal $y_2=-\alpha$. Mueve $\mu$ (forma) y $\alpha$ (inclinación) y
@@ -124,10 +150,11 @@ $$f'(x) = \mu - 3x^2 .$$
  {#eq-cusp-fprime}
 
 Un equilibrio es **estable** si $f'(x^*)<0$, es decir $x^{*2}>\mu/3$.
+
 Cuando hay tres raíces, las **dos exteriores** cumplen esto (estables) y
 la **central** tiene $x^{*2}<\mu/3$ (inestable): es la **barrera** que
 separa los dos pozos. Reaparece el patrón estable–inestable–estable de
-la biestabilidad, ahora controlado por dos perillas.
+la biestabilidad.
 
 ### Los pliegues y la cúspide {#sec-cusp-pliegues}
 
@@ -602,7 +629,7 @@ alerta temprana de la Parte III.
 
 ## Para seguir
 
-Cierra la teoría. En la [Parte II](p2-cap04-empiricas.qmd) veremos estos
+En la [Parte II](p2-cap04-empiricas.qmd) veremos estos
 pliegues e histéresis **medidos** en levaduras, cianobacterias y lagos
-enteros.
+enteros, sueño e hibernación.
 
