@@ -1,16 +1,16 @@
 ---
-title: "Bifurcaciones y Señales de Alerta Temprana"
-subtitle: "Transiciones críticas en sistemas biológicos — curso interactivo"
+title: "Bifurcaciones y señales de alerta temprana"
+subtitle: "Transiciones críticas en sistemas biológicos"
 author:
   - name: "Roberto Álvarez"
-    affiliation: "Laboratorio de Biología Cuantitativa y Sistemas Complejos Facultad de Ciencias Naturales, Universidad Autónoma de Querétaro"
+    affiliation: "Laboratorio de Biología Cuantitativa y Sistemas Complejos, Facultad de Ciencias Naturales, Universidad Autónoma de Querétaro"
 date: today
 ---
 
 ::: {.objetivos}
 **¿De qué trata este curso?**
 
-Muchos sistemas biológicos, poblaciones, comunidades microbianas, ecosistemas enteros, pueden pasar de manera **abrupta** de un estado a otro cuando un parámetro de control cruza un umbral. Aquí estudiamos el lenguaje matemático de esos cambios (las **bifurcaciones**), cómo se ven en **datos reales de biología**, y cómo intentar **anticiparlos** con las llamadas **señales de alerta temprana** (EWS, por *early warning signals*).
+Muchos sistemas biológicos, poblaciones, comunidades microbianas, ecosistemas enteros, pueden pasar de manera **abrupta** de un estado a otro cuando un parámetro de control cruza un umbral. En este curso estudiaremos el lenguaje matemático de esos cambios (las **bifurcaciones**), cómo se ven en **datos reales de biología**, y cómo intentar **anticiparlos** con las llamadas **señales de alerta temprana** (EWS, por *early warning signals*).
 :::
 
 ## Cómo está organizado
@@ -19,16 +19,16 @@ El curso se vive en **tres partes por tema**, más un taller práctico transvers
 
 - **Parte I · Bifurcaciones en sistemas 1-D.** La teoría mínima: estabilidad, las tres bifurcaciones locales (saddle-node, transcrítica, pitchfork), formas normales, potenciales e histéresis.
 - **Parte II · Bifurcaciones empíricas en biología.** Cómo se manifiestan en el laboratorio y el campo: levaduras [@dai2012], cianobacterias [@veraart2012], lagos enteros [@carpenter2011] y la histéresis claro↔turbio.
-- **Parte III · Señales de Alerta Temprana.** Ralentización crítico, varianza y autocorrelación, indicadores univariados y multivariados, y enfoques de aprendizaje automático [@deb2022; @bury2021].
+- **Parte III · Señales de Alerta Temprana.** Ralentización crítica, varianza y autocorrelación, indicadores univariados y multivariados, y enfoques de aprendizaje automático [@deb2022; @bury2021; @alvarez2026early].
 - **Taller transversal.** De datos **simulados** a datos **reales**: detectar una transición con tu propio pipeline.
 
 ## Cómo usar el material interactivo
 
-Este libro **se ejecuta en tu navegador**. No necesitas instalar nada para experimentar:
+Este curso **se ejecuta en tu navegador**. No necesitas instalar nada para experimentar:
 
 - Las celdas con fondo de editor son **ejecutables**: edita el código y pulsa *Run*. La mayoría usan **Python** (vía Pyodide); algunas ofrecen su equivalente en **R** (vía WebR) en una pestaña.
 - Los **deslizadores** (sliders) mueven parámetros y actualizan las figuras en tiempo real.
-- Los **ejercicios** traen su solución: inténtalo primero, luego despliega.
+- Los **ejercicios** traen su solución: **inténtalo primero**, luego despliega.
 
 ::: {.callout-note}
 ## Lenguajes
@@ -40,4 +40,4 @@ Este libro **se ejecuta en tu navegador**. No necesitas instalar nada para exper
 Cálculo diferencial, nociones de ecuaciones diferenciales ordinarias y de programación. No se requiere (**tanta**) experiencia previa con sistemas dinámicos.
 :::
 
-> **Cita sugerida.** Laboratorio de Biología Cuantitativa y Sistemas Complejos, UAQ. *Bifurcaciones y Señales de Alerta Temprana en sistemas biológicos* (curso interactivo). Disponible en línea bajo licencia CC BY-NC-SA 4.0.
+> **Cita sugerida de este material.** Laboratorio de Biología Cuantitativa y Sistemas Complejos, UAQ. *Bifurcaciones y señales de alerta temprana en sistemas biológicos* (curso interactivo). Disponible en línea bajo licencia CC BY-NC-SA 4.0.

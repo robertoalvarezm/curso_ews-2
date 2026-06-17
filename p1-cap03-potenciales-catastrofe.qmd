@@ -596,7 +596,7 @@ barrera** antes del pliegue. El tiempo medio de escape sigue la ley de
 **Kramers**, $\tau \sim \exp(\Delta V / D)$, con $\Delta V$ la altura de
 la barrera y $D\propto\sigma^2$. Al acercarse al pliegue,
 $\Delta V\to 0$ y los saltos se vuelven frecuentes: es el puente
-microscópico hacia el **enlentecimiento crítico** y las señales de
+microscópico hacia la **ralentización crítica** y las señales de
 alerta temprana de la Parte III.
 :::
 
