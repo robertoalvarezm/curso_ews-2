@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -96,7 +96,7 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-aafd05f385ac8229ba2214b6c0c13563.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -174,7 +174,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Parte III · Señales de Alerta Temprana (EWS)</a></li><li class="breadcrumb-item"><a href="./p3-cap06-ews-univariadas.html">EWS univariadas en la práctica</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./p3-tipos-de-tipping.html">Parte III · Señales de Alerta Temprana (EWS)</a></li><li class="breadcrumb-item"><a href="./p3-cap06-ews-univariadas.html">EWS univariadas en la práctica</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -270,6 +270,12 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./p3-tipos-de-tipping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tipos de transición: bifurcación, ruido, tasa y choque</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./p3-cap05-ews-fundamento.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Fundamento de las EWS: ralentización crítica</span></a>
   </div>
@@ -351,16 +357,18 @@ window.Quarto = {
    
   <ul>
   <li><a href="#sec-deriva" id="toc-sec-deriva" class="nav-link active" data-scroll-target="#sec-deriva"><span class="header-section-number">1</span> Un sistema que deriva hacia el pliegue</a></li>
-  <li><a href="#sec-practicas" id="toc-sec-practicas" class="nav-link" data-scroll-target="#sec-practicas"><span class="header-section-number">2</span> Buenas prácticas y trampas</a></li>
-  <li><a href="#sec-ej6" id="toc-sec-ej6" class="nav-link" data-scroll-target="#sec-ej6"><span class="header-section-number">3</span> Ejercicios</a></li>
-  <li><a href="#para-seguir" id="toc-para-seguir" class="nav-link" data-scroll-target="#para-seguir"><span class="header-section-number">4</span> Para seguir</a></li>
+  <li><a href="#sec-ventanas" id="toc-sec-ventanas" class="nav-link" data-scroll-target="#sec-ventanas"><span class="header-section-number">2</span> Ventana móvil y ventana expandible</a></li>
+  <li><a href="#sec-sensibilidad" id="toc-sec-sensibilidad" class="nav-link" data-scroll-target="#sec-sensibilidad"><span class="header-section-number">3</span> Cuánta ventana es suficiente: análisis de sensibilidad</a></li>
+  <li><a href="#sec-practicas" id="toc-sec-practicas" class="nav-link" data-scroll-target="#sec-practicas"><span class="header-section-number">4</span> Buenas prácticas y trampas</a></li>
+  <li><a href="#sec-ej6" id="toc-sec-ej6" class="nav-link" data-scroll-target="#sec-ej6"><span class="header-section-number">5</span> Ejercicios</a></li>
+  <li><a href="#para-seguir" id="toc-para-seguir" class="nav-link" data-scroll-target="#para-seguir"><span class="header-section-number">6</span> Para seguir</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Parte III · Señales de Alerta Temprana (EWS)</a></li><li class="breadcrumb-item"><a href="./p3-cap06-ews-univariadas.html">EWS univariadas en la práctica</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./p3-tipos-de-tipping.html">Parte III · Señales de Alerta Temprana (EWS)</a></li><li class="breadcrumb-item"><a href="./p3-cap06-ews-univariadas.html">EWS univariadas en la práctica</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">EWS univariadas en la práctica</h1>
 </div>
@@ -383,8 +391,10 @@ window.Quarto = {
 <p><strong>Objetivos de aprendizaje</strong></p>
 <ul>
 <li>Estimar varianza y autocorrelación en <strong>ventanas móviles</strong> sobre una serie real o simulada.</li>
+<li>Distinguir <strong>ventana móvil</strong> de <strong>ventana expandible</strong>, implementar ambas y saber cuándo falla cada una.</li>
 <li>Aplicar <em>detrending</em> y cuantificar la tendencia del indicador con el <strong><span class="math inline">\(\tau\)</span> de Kendall</strong>.</li>
-<li>Conocer indicadores complementarios (asimetría/<em>skewness</em>) y la lógica de los <em>surrogates</em>.</li>
+<li>Reportar <strong>sensibilidad</strong> al tamaño de ventana y conocer la lógica de los <em>surrogates</em>.</li>
+<li>Reproducir todo el flujo con <code>ewstools</code> en tu propia máquina.</li>
 </ul>
 </div>
 <section id="sec-deriva" class="level2" data-number="1">
@@ -396,19 +406,122 @@ window.Quarto = {
 
 </div>
 <script type="pyodide-1-contents">
-eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaW1wb3J0IG51bXB5IGFzIG5wLCBtYXRwbG90bGliLnB5cGxvdCBhcyBwbHRcbmZyb20gc2NpcHkuc3RhdHMgaW1wb3J0IGtlbmRhbGx0YXVcblxucm5nID0gbnAucmFuZG9tLmRlZmF1bHRfcm5nKDEpXG5kZWYgZih4LCBoKTogcmV0dXJuIC14KiozICsgeCArIGhcblxuVCwgZHQsIHNpZ21hID0gNDAwLjAsIDAuMDUsIDAuMDRcbm4gPSBpbnQoVC9kdClcbmggPSBucC5saW5zcGFjZSgtMC4yLCAwLjYsIG4pICAgICAgICAgICMgcmFtcGEgbGVudGEgaGFjaWEgZWwgcGxpZWd1ZSAoaF9jIOKJiCAwLjM4NSlcbnggPSBucC5lbXB0eShuKTsgeFswXSA9IC0xLjBcbmZvciB0IGluIHJhbmdlKDEsIG4pOlxuICAgIHhbdF0gPSB4W3QtMV0gKyBkdCpmKHhbdC0xXSwgaFt0LTFdKSArIHNpZ21hKm5wLnNxcnQoZHQpKnJuZy5zdGFuZGFyZF9ub3JtYWwoKVxuXG50cmFucyA9IGludChucC5hcmdtYXgoeCA+IDApKSAgICAgICAgICAjIHByaW1lciBzYWx0byBhbCBvdHJvIHBvem9cbnByZSA9IHhbOnRyYW5zXVxuXG4jIGRldHJlbmRpbmcgcG9yIG1lZGlhIG3Ds3ZpbCB5IEVXUyBlbiB2ZW50YW5hIGRlc2xpemFudGVcbmRlZiBtZWRpYV9tb3ZpbChhLCBrKTpcbiAgICByZXR1cm4gbnAuY29udm9sdmUoYSwgbnAub25lcyhrKS9rLCBtb2RlPVwic2FtZVwiKVxuZGVmIGFjMShzKTpcbiAgICBzID0gcyAtIHMubWVhbigpOyByZXR1cm4gbnAuY29ycmNvZWYoc1s6LTFdLCBzWzE6XSlbMCwgMV1cblxucmVzaWQgPSBwcmUgLSBtZWRpYV9tb3ZpbChwcmUsIDQwMClcbncgPSA4MDBcbmlkeCA9IHJhbmdlKHcsIGxlbihyZXNpZCkpXG52YXJfcm9sbCA9IG5wLmFycmF5KFtyZXNpZFtpLXc6aV0udmFyKCkgIGZvciBpIGluIGlkeF0pXG5hY19yb2xsICA9IG5wLmFycmF5KFthYzEocmVzaWRbaS13OmldKSAgIGZvciBpIGluIGlkeF0pXG50dCA9IG5wLmFyYW5nZSh3LCBsZW4ocmVzaWQpKSAqIGR0XG5cbmZpZywgYXggPSBwbHQuc3VicGxvdHMoMywgMSwgZmlnc2l6ZT0oNi42LCA2KSwgc2hhcmV4PVRydWUpXG5heFswXS5wbG90KG5wLmFyYW5nZSh0cmFucykqZHQsIHByZSwgbHc9LjUsIGNvbG9yPVwiIzQ0NFwiKTsgYXhbMF0uc2V0X3lsYWJlbChcIngodClcIilcbmF4WzBdLnNldF90aXRsZShcIlNlcmllIHByZS10cmFuc2ljacOzblwiKVxuYXhbMV0ucGxvdCh0dCwgdmFyX3JvbGwsIGNvbG9yPVwiIzFmNTY3M1wiKTsgYXhbMV0uc2V0X3lsYWJlbChcInZhcmlhbnphIG3Ds3ZpbFwiKVxuYXhbMl0ucGxvdCh0dCwgYWNfcm9sbCwgIGNvbG9yPVwiI2IwM2EyZVwiKTsgYXhbMl0uc2V0X3lsYWJlbChcIkFDKDEpIG3Ds3ZpbFwiKTsgYXhbMl0uc2V0X3hsYWJlbChcInRcIilcbnBsdC50aWdodF9sYXlvdXQoKTsgcGx0LnNob3coKVxuXG5wcmludChcIktlbmRhbGwgz4QgKHZhcmlhbnphKTpcIiwgcm91bmQoa2VuZGFsbHRhdSh0dCwgdmFyX3JvbGwpWzBdLCAzKSlcbnByaW50KFwiS2VuZGFsbCDPhCAoQUMgZGUgcmV0YXJkby0xKTpcIiwgcm91bmQoa2VuZGFsbHRhdSh0dCwgYWNfcm9sbClbMF0sIDMpKSJ9
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaW1wb3J0IG51bXB5IGFzIG5wLCBtYXRwbG90bGliLnB5cGxvdCBhcyBwbHRcbmZyb20gc2NpcHkubmRpbWFnZSBpbXBvcnQgZ2F1c3NpYW5fZmlsdGVyMWRcbmZyb20gc2NpcHkuc3RhdHMgaW1wb3J0IGtlbmRhbGx0YXVcblxucm5nID0gbnAucmFuZG9tLmRlZmF1bHRfcm5nKDEpXG5kZWYgZih4LCBoKTogcmV0dXJuIC14KiozICsgeCArIGhcblxuVCwgZHQsIHNpZ21hID0gNDAwLjAsIDAuMDUsIDAuMDRcbm4gPSBpbnQoVC9kdClcbmggPSBucC5saW5zcGFjZSgtMC4yLCAwLjYsIG4pICAgICAgICAgICMgcmFtcGEgbGVudGEgaGFjaWEgZWwgcGxpZWd1ZSAoaF9jIOKJiCAwLjM4NSlcbnggPSBucC5lbXB0eShuKTsgeFswXSA9IC0xLjBcbmZvciB0IGluIHJhbmdlKDEsIG4pOlxuICAgIHhbdF0gPSB4W3QtMV0gKyBkdCpmKHhbdC0xXSwgaFt0LTFdKSArIHNpZ21hKm5wLnNxcnQoZHQpKnJuZy5zdGFuZGFyZF9ub3JtYWwoKVxuXG50cmFucyA9IGludChucC5hcmdtYXgoeCA+IDApKSAgICAgICAgICAjIHByaW1lciBzYWx0byBhbCBvdHJvIHBvem9cbnByZSA9IHhbOnRyYW5zXVxuXG4jIDEpIGRldHJlbmRpbmcgZ2F1c3NpYW5vIChlbCBtaXNtbyBxdWUgdXNhIGV3c3Rvb2xzIHBvciBvbWlzacOzbilcbnJlc2lkID0gcHJlIC0gZ2F1c3NpYW5fZmlsdGVyMWQocHJlLCAyMDAsIG1vZGU9XCJuZWFyZXN0XCIpXG5cbiMgMikgRVdTIGVuIHZlbnRhbmEgZGVzbGl6YW50ZVxuZGVmIGFjMShzKTpcbiAgICBzID0gcyAtIHMubWVhbigpOyByZXR1cm4gbnAuY29ycmNvZWYoc1s6LTFdLCBzWzE6XSlbMCwgMV1cblxudyA9IDgwMFxuaWR4ID0gcmFuZ2UodywgbGVuKHJlc2lkKSlcbnZhcl9yb2xsID0gbnAuYXJyYXkoW3Jlc2lkW2ktdzppXS52YXIoKSAgZm9yIGkgaW4gaWR4XSlcbmFjX3JvbGwgID0gbnAuYXJyYXkoW2FjMShyZXNpZFtpLXc6aV0pICAgZm9yIGkgaW4gaWR4XSlcbnR0ID0gbnAuYXJhbmdlKHcsIGxlbihyZXNpZCkpICogZHRcblxuZmlnLCBheCA9IHBsdC5zdWJwbG90cygzLCAxLCBmaWdzaXplPSg2LjYsIDYpLCBzaGFyZXg9VHJ1ZSlcbmF4WzBdLnBsb3QobnAuYXJhbmdlKHRyYW5zKSpkdCwgcHJlLCBsdz0uNSwgY29sb3I9XCIjNDQ0XCIpOyBheFswXS5zZXRfeWxhYmVsKFwieCh0KVwiKVxuYXhbMF0uc2V0X3RpdGxlKFwiU2VyaWUgcHJlLXRyYW5zaWNpw7NuXCIpXG5heFsxXS5wbG90KHR0LCB2YXJfcm9sbCwgY29sb3I9XCIjMWY1NjczXCIpOyBheFsxXS5zZXRfeWxhYmVsKFwidmFyaWFuemEgbcOzdmlsXCIpXG5heFsyXS5wbG90KHR0LCBhY19yb2xsLCAgY29sb3I9XCIjYjAzYTJlXCIpOyBheFsyXS5zZXRfeWxhYmVsKFwiQUMoMSkgbcOzdmlsXCIpOyBheFsyXS5zZXRfeGxhYmVsKFwidFwiKVxucGx0LnRpZ2h0X2xheW91dCgpOyBwbHQuc2hvdygpXG5cbnByaW50KFwiS2VuZGFsbCDPhCAodmFyaWFuemEpOlwiLCByb3VuZChrZW5kYWxsdGF1KHR0LCB2YXJfcm9sbClbMF0sIDMpKVxucHJpbnQoXCJLZW5kYWxsIM+EIChBQyBkZSByZXRhcmRvLTEpOlwiLCByb3VuZChrZW5kYWxsdGF1KHR0LCBhY19yb2xsKVswXSwgMykpIn0=
 </script>
 </div>
 </div>
 <p>Ambos indicadores <strong>tienden a subir</strong> antes del salto, y el <span class="math inline">\(\tau\)</span> de Kendall (cercano a <span class="math inline">\(+1\)</span>) lo confirma como una <strong>tendencia monótona creciente</strong>: la huella estadística de la ralentización crítica.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Un detalle que sí importa: cómo se quita la tendencia
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>El <em>detrending</em> aquí es un <strong>filtro gaussiano</strong> (<code>gaussian_filter1d</code>), no una media móvil con <code>np.convolve(..., mode="same")</code>. La diferencia no es cosmética: la convolución en modo <code>same</code> divide entre el ancho completo de la ventana también en los extremos, donde hay menos puntos, así que <strong>subestima la tendencia al principio y al final</strong> de la serie y deja residuos artificialmente grandes justo donde vamos a buscar la señal. Con <code>mode="nearest"</code> el filtro extiende la serie con su valor de borde y ese sesgo desaparece. Es exactamente el tipo de decisión de preprocesamiento que hay que reportar y someter a análisis de sensibilidad <span class="citation" data-cites="alvarez2026early">(<a href="#ref-alvarez2026early" role="doc-biblioref">Alvarez-Martinez y Miramontes 2026, sec. 3.1.4</a>)</span>.</p>
+</div>
+</div>
 </section>
-<section id="sec-practicas" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="sec-practicas"><span class="header-section-number">2</span> Buenas prácticas y trampas</h2>
+<section id="sec-ventanas" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="sec-ventanas"><span class="header-section-number">2</span> Ventana móvil y ventana expandible</h2>
+<p>Todo indicador EWS se calcula <strong>re-estimando un estadístico sobre segmentos sucesivos</strong> de la serie. Hay dos maneras de elegir esos segmentos, y no son equivalentes <span class="citation" data-cites="alvarez2026early">(<a href="#ref-alvarez2026early" role="doc-biblioref">Alvarez-Martinez y Miramontes 2026, sec. 3.1.1</a>)</span>:</p>
 <ul>
-<li><strong>Detrending.</strong> Hay que separar la <strong>deriva lenta</strong> de las fluctuaciones. Media móvil, filtro de Gauss o regresión local (LOESS) son habituales; la elección <strong>afecta</strong> el resultado <span class="citation" data-cites="dakos2012ews">(<a href="#ref-dakos2012ews" role="doc-biblioref">Dakos et&nbsp;al. 2012</a>)</span>.</li>
-<li><strong>Tamaño de ventana.</strong> Ventanas grandes suavizan pero retrasan la detección; pequeñas son ruidosas. Reporta sensibilidad a la ventana.</li>
-<li><strong>Indicadores complementarios.</strong> La <strong>asimetría</strong> (<em>skewness</em>) y la <strong>curtosis</strong> suelen crecer al deformarse el pozo; el espectro se desplaza hacia bajas frecuencias.</li>
-<li><strong>Significancia con <em>surrogates</em>.</strong> Para decidir si una tendencia es real, se compara contra series <strong>subrogadas</strong> (p.&nbsp;ej. con la misma autocorrelación pero permutadas) y se construye una distribución nula del <span class="math inline">\(\tau\)</span>.</li>
+<li><strong>Ventana móvil (deslizante, <em>rolling</em>).</strong> Se fija un ancho <span class="math inline">\(w\)</span> y se desliza: en cada tiempo <span class="math inline">\(t\)</span> el indicador se calcula con <span class="math inline">\(\{x_{t-w+1},\dots,x_t\}\)</span>. Imita el <strong>monitoreo prospectivo en tiempo real</strong>: solo usa las <span class="math inline">\(w\)</span> observaciones más recientes y <strong>descarta</strong> las viejas, que pueden pertenecer a otro régimen dinámico.</li>
+<li><strong>Ventana expandible (acumulativa, <em>expanding</em>).</strong> La ventana <strong>crece</strong>: el indicador en <span class="math inline">\(t\)</span> se calcula con <span class="math inline">\(\{x_1,\dots,x_t\}\)</span> (o desde un punto fijo tras un periodo de calentamiento). Al acumular más datos, <strong>reduce la varianza del estimador</strong> y da curvas más estables, sobre todo al principio del monitoreo, cuando una ventana móvil tendría muy pocos puntos.</li>
+</ul>
+<p>El precio de la ventana expandible es serio: si el sistema pasa por fases (una meseta estable larga y luego un forzamiento tardío), las observaciones antiguas <strong>diluyen</strong> la aceleración reciente del indicador y pueden enmascararla por completo.</p>
+<p><img src="images/fig4-ventanas.gif" class="img-fluid" style="width:100.0%" alt="Animación de cuatro paneles: arriba una ventana de ancho fijo se desliza sobre los residuos y su varianza estimada crece con fuerza al final; abajo una ventana que crece desde el inicio produce una varianza mucho más aplanada."></p>
+<p><em><strong>Figura 4.</strong> Las dos estrategias de ventana sobre la misma serie. Arriba: ventana móvil de ancho fijo <span class="math inline">\(w\)</span>. Abajo: ventana expandible que acumula desde el inicio. A la derecha, el indicador (varianza, escala logarítmica) que produce cada una, con la amplificación respecto a su valor inicial. Reconstrucción de la figura 3 de <span class="citation" data-cites="alvarez2026early">Alvarez-Martinez y Miramontes (<a href="#ref-alvarez2026early" role="doc-biblioref">2026</a>)</span>.</em></p>
+<p>Vamos a medirlo. El escenario es <strong>multifase</strong>, que es el caso realista y el que separa a las dos estrategias: el sistema pasa el primer 35 % del tiempo con el parámetro <strong>quieto</strong> y solo después empieza la rampa hacia el pliegue.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="" aria-current="page">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">R</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div>
+<div id="pyodide-2" class="exercise-cell">
+
+</div>
+<script type="pyodide-2-contents">
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaW1wb3J0IG51bXB5IGFzIG5wLCBtYXRwbG90bGliLnB5cGxvdCBhcyBwbHRcbmZyb20gc2NpcHkubmRpbWFnZSBpbXBvcnQgZ2F1c3NpYW5fZmlsdGVyMWRcbmZyb20gc2NpcHkuc3RhdHMgaW1wb3J0IGtlbmRhbGx0YXVcblxuZGVmIGYoeCwgaCk6IHJldHVybiAteCoqMyArIHggKyBoXG5kZWYgZmlqb3MoaCk6XG4gICAgciA9IG5wLnJvb3RzKFstMSwgMCwgMSwgaF0pOyByZXR1cm4gbnAuc29ydChyW25wLmFicyhyLmltYWcpIDwgMWUtNl0ucmVhbClcbmRlZiBhYzEocyk6XG4gICAgcyA9IHMgLSBzLm1lYW4oKTsgcmV0dXJuIG5wLmNvcnJjb2VmKHNbOi0xXSwgc1sxOl0pWzAsIDFdXG5cbiMgLS0tIHNlcmllIG11bHRpZmFzZTogbWVzZXRhIGVzdGFibGUgeSBsdWVnbyByYW1wYSBoYWNpYSBlbCBwbGllZ3VlIC0tLVxuZHQsIHNpZ21hLCBuID0gMC4wNSwgMC4wMzUsIDgwMDBcbmggPSBucC5jb25jYXRlbmF0ZShbbnAuZnVsbChpbnQoLjM1Km4pLCAtMC4yKSxcbiAgICAgICAgICAgICAgICAgICAgbnAubGluc3BhY2UoLTAuMiwgMC42LCBuIC0gaW50KC4zNSpuKSldKVxucm5nID0gbnAucmFuZG9tLmRlZmF1bHRfcm5nKDQpXG54ID0gbnAuZW1wdHkobik7IHhbMF0gPSBmaWpvcyhoWzBdKVswXSAgICAgICAgIyBhcnJhbmNhbW9zIGVuIGVsIHBvem8gaXpxdWllcmRvXG5mb3IgdCBpbiByYW5nZSgxLCBuKTpcbiAgICB4W3RdID0geFt0LTFdICsgZHQqZih4W3QtMV0sIGhbdC0xXSkgKyBzaWdtYSpucC5zcXJ0KGR0KSpybmcuc3RhbmRhcmRfbm9ybWFsKClcbnByZSA9IHhbOmludChucC5hcmdtYXgoeCA+IDApKSAtIDMwXVxucmVzaWQgPSBwcmUgLSBnYXVzc2lhbl9maWx0ZXIxZChwcmUsIDIwMCwgbW9kZT1cIm5lYXJlc3RcIilcblxuIyAtLS0gbGFzIGRvcyB2ZW50YW5hcywgc29icmUgZXhhY3RhbWVudGUgbG9zIG1pc21vcyByZXNpZHVvcyAtLS1cbncgPSA4MDAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAjIGFuY2hvIGRlIGxhIG3Ds3ZpbCAvIGNhbGVudGFtaWVudG8gZGUgbGEgZXhwYW5kaWJsZVxuaWR4ID0gbnAuYXJhbmdlKHcsIGxlbihyZXNpZCkpXG5cbnZhcl9tb3ZpbCA9IG5wLmFycmF5KFtyZXNpZFtpLXc6aV0udmFyKCkgZm9yIGkgaW4gaWR4XSkgICAjIHZlbnRhbmEgRklKQSBxdWUgc2UgZGVzbGl6YVxudmFyX2V4cGFuID0gbnAuYXJyYXkoW3Jlc2lkWzppXS52YXIoKSAgICBmb3IgaSBpbiBpZHhdKSAgICMgdmVudGFuYSBxdWUgQ1JFQ0UgZGVzZGUgMFxuYWNfbW92aWwgID0gbnAuYXJyYXkoW2FjMShyZXNpZFtpLXc6aV0pICBmb3IgaSBpbiBpZHhdKVxuYWNfZXhwYW4gID0gbnAuYXJyYXkoW2FjMShyZXNpZFs6aV0pICAgICBmb3IgaSBpbiBpZHhdKVxudHQgPSBpZHggKiBkdFxuXG5maWcsIGF4ID0gcGx0LnN1YnBsb3RzKDIsIDEsIGZpZ3NpemU9KDYuOCwgNSksIHNoYXJleD1UcnVlKVxuYXhbMF0ucGxvdCh0dCwgdmFyX21vdmlsLCBjb2xvcj1cIiMxZjU2NzNcIiwgbGFiZWw9XCJtw7N2aWwgKHcgZmlqYSlcIilcbmF4WzBdLnBsb3QodHQsIHZhcl9leHBhbiwgY29sb3I9XCIjOGE1YTAwXCIsIGxhYmVsPVwiZXhwYW5kaWJsZVwiKVxuYXhbMF0uc2V0X3lzY2FsZShcImxvZ1wiKTsgYXhbMF0uc2V0X3lsYWJlbChcInZhcmlhbnphXCIpOyBheFswXS5sZWdlbmQoKVxuYXhbMV0ucGxvdCh0dCwgYWNfbW92aWwsIGNvbG9yPVwiIzFmNTY3M1wiKTsgYXhbMV0ucGxvdCh0dCwgYWNfZXhwYW4sIGNvbG9yPVwiIzhhNWEwMFwiKVxuYXhbMV0uc2V0X3lsYWJlbChcIkFDKDEpXCIpOyBheFsxXS5zZXRfeGxhYmVsKFwidFwiKVxucGx0LnRpZ2h0X2xheW91dCgpOyBwbHQuc2hvdygpXG5cbnByaW50KGZcInsnaW5kaWNhZG9yJzo8MTJ9eyd2ZW50YW5hJzo8MTR9eyd0YXUgS2VuZGFsbCc6PjEyfXsnYW1wbGlmaWNhY2lvbic6PjE1fVwiKVxuZm9yIG5vbSwgbW8sIGV4IGluIFsoXCJ2YXJpYW56YVwiLCB2YXJfbW92aWwsIHZhcl9leHBhbiksIChcIkFDKDEpXCIsIGFjX21vdmlsLCBhY19leHBhbildOlxuICAgIGZvciBldHEsIHMgaW4gWyhcIm3Ds3ZpbFwiLCBtbyksIChcImV4cGFuZGlibGVcIiwgZXgpXTpcbiAgICAgICAgcHJpbnQoZlwie25vbTo8MTJ9e2V0cTo8MTR9e2tlbmRhbGx0YXUodHQsIHMpWzBdOjEyLjJmfXtzWy0xXS9zWzBdOjE0LjFmfXhcIikifQ==
+</script>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div>
+<div id="webr-3" class="exercise-cell">
+
+</div>
+<script type="webr-3-contents">
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZiA8LSBmdW5jdGlvbih4LCBoKSAteF4zICsgeCArIGhcbmZpam9zIDwtIGZ1bmN0aW9uKGgpIHsgciA8LSBwb2x5cm9vdChjKGgsIDEsIDAsIC0xKSk7IHNvcnQoUmUoclthYnMoSW0ocikpIDwgMWUtNl0pKSB9XG5hYzEgPC0gZnVuY3Rpb24ocykgeyBzIDwtIHMgLSBtZWFuKHMpOyBjb3Ioc1stbGVuZ3RoKHMpXSwgc1stMV0pIH1cblxuIyAtLS0gc2VyaWUgbXVsdGlmYXNlOiBtZXNldGEgZXN0YWJsZSB5IGx1ZWdvIHJhbXBhIGhhY2lhIGVsIHBsaWVndWUgLS0tXG5kdCA8LSAwLjA1OyBzaWdtYSA8LSAwLjAzNTsgbiA8LSA4MDAwXG5oIDwtIGMocmVwKC0wLjIsIGZsb29yKC4zNSpuKSksIHNlcSgtMC4yLCAwLjYsIGxlbmd0aC5vdXQgPSBuIC0gZmxvb3IoLjM1Km4pKSlcbnNldC5zZWVkKDQpOyB4IDwtIG51bWVyaWMobik7IHhbMV0gPC0gZmlqb3MoaFsxXSlbMV1cbmZvciAodCBpbiAyOm4pIHhbdF0gPC0geFt0LTFdICsgZHQqZih4W3QtMV0sIGhbdC0xXSkgKyBzaWdtYSpzcXJ0KGR0KSpybm9ybSgxKVxucHJlIDwtIHhbMTood2hpY2goeCA+IDApWzFdIC0gMzApXVxuXG4jIGRldHJlbmRpbmcgZ2F1c3NpYW5vIChlcXVpdmFsZSBhIGdhdXNzaWFuX2ZpbHRlcjFkIGNvbiBtb2RlID0gXCJuZWFyZXN0XCIpXG5zdWF2aXphZG8gPC0gZnVuY3Rpb24oeSwgYncpIHtcbiAgayA8LSByb3VuZCgzKmJ3KTsgZCA8LSAoLWspOmtcbiAgcGVzbyA8LSBleHAoLWReMi8oMipid14yKSk7IHBlc28gPC0gcGVzby9zdW0ocGVzbylcbiAgeXAgPC0gYyhyZXAoeVsxXSwgayksIHksIHJlcCh5W2xlbmd0aCh5KV0sIGspKSAgICAgICAgIyBib3JkZXM6IHZhbG9yIGV4dHJlbW9cbiAgYXMudmVjdG9yKHN0YXRzOjpmaWx0ZXIoeXAsIHBlc28sIHNpZGVzID0gMikpWyhrKzEpOihrK2xlbmd0aCh5KSldXG59XG5yZXNpZCA8LSBwcmUgLSBzdWF2aXphZG8ocHJlLCAyMDApXG5cbiMgLS0tIGxhcyBkb3MgdmVudGFuYXMsIHNvYnJlIGV4YWN0YW1lbnRlIGxvcyBtaXNtb3MgcmVzaWR1b3MgLS0tXG53IDwtIDgwMCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAjIGFuY2hvIGRlIGxhIG3Ds3ZpbCAvIGNhbGVudGFtaWVudG8gZGUgbGEgZXhwYW5kaWJsZVxuaWR4IDwtIHNlcSh3ICsgMSwgbGVuZ3RoKHJlc2lkKSwgYnkgPSAyNSkgIyBhdmFuemFtb3MgZGUgMjUgZW4gMjU6IG3DoXMgcsOhcGlkbyBlbiBlbCBuYXZlZ2Fkb3JcbnZhcl9tb3ZpbCA8LSBzYXBwbHkoaWR4LCBmdW5jdGlvbihpKSB2YXIocmVzaWRbKGktdysxKTppXSkpICAgIyB2ZW50YW5hIEZJSkEgcXVlIHNlIGRlc2xpemFcbnZhcl9leHBhbiA8LSBzYXBwbHkoaWR4LCBmdW5jdGlvbihpKSB2YXIocmVzaWRbMTppXSkpICAgICAgICAgIyB2ZW50YW5hIHF1ZSBDUkVDRSBkZXNkZSAwXG5hY19tb3ZpbCAgPC0gc2FwcGx5KGlkeCwgZnVuY3Rpb24oaSkgYWMxKHJlc2lkWyhpLXcrMSk6aV0pKVxuYWNfZXhwYW4gIDwtIHNhcHBseShpZHgsIGZ1bmN0aW9uKGkpIGFjMShyZXNpZFsxOmldKSlcbnR0IDwtIGlkeCAqIGR0XG5cbm9wIDwtIHBhcihtZnJvdyA9IGMoMiwgMSksIG1hciA9IGMoNCwgNCwgMiwgMSkpXG5wbG90KHR0LCB2YXJfbW92aWwsIHR5cGUgPSBcImxcIiwgY29sID0gXCIjMWY1NjczXCIsIGxvZyA9IFwieVwiLCBsd2QgPSAyLFxuICAgICB4bGFiID0gXCJcIiwgeWxhYiA9IFwidmFyaWFuemFcIiwgeWxpbSA9IHJhbmdlKGModmFyX21vdmlsLCB2YXJfZXhwYW4pKSlcbmxpbmVzKHR0LCB2YXJfZXhwYW4sIGNvbCA9IFwiIzhhNWEwMFwiLCBsd2QgPSAyKVxubGVnZW5kKFwidG9wbGVmdFwiLCBjKFwibcOzdmlsICh3IGZpamEpXCIsIFwiZXhwYW5kaWJsZVwiKSwgY29sID0gYyhcIiMxZjU2NzNcIiwgXCIjOGE1YTAwXCIpLFxuICAgICAgIGx3ZCA9IDIsIGJ0eSA9IFwiblwiKVxucGxvdCh0dCwgYWNfbW92aWwsIHR5cGUgPSBcImxcIiwgY29sID0gXCIjMWY1NjczXCIsIGx3ZCA9IDIsIHhsYWIgPSBcInRcIiwgeWxhYiA9IFwiQUMoMSlcIixcbiAgICAgeWxpbSA9IHJhbmdlKGMoYWNfbW92aWwsIGFjX2V4cGFuKSkpXG5saW5lcyh0dCwgYWNfZXhwYW4sIGNvbCA9IFwiIzhhNWEwMFwiLCBsd2QgPSAyKVxucGFyKG9wKVxuXG5mb3IgKHBhcl8gaW4gbGlzdChsaXN0KFwidmFyaWFuemFcIiwgdmFyX21vdmlsLCB2YXJfZXhwYW4pLCBsaXN0KFwiQUMoMSlcIiwgYWNfbW92aWwsIGFjX2V4cGFuKSkpIHtcbiAgZm9yIChrIGluIDI6Mykge1xuICAgIHMgPC0gcGFyX1tba11dOyBldHEgPC0gYyhcIm3Ds3ZpbFwiLCBcImV4cGFuZGlibGVcIilbayAtIDFdXG4gICAgY2F0KHNwcmludGYoXCIlLTEwcyAlLTEycyB0YXUgPSAlKzUuMmYgICBhbXBsaWZpY2FjaW9uID0gJTQuMWZ4XFxuXCIsXG4gICAgICAgICAgICAgICAgcGFyX1tbMV1dLCBldHEsIGNvcih0dCwgcywgbWV0aG9kID0gXCJrZW5kYWxsXCIpLCBzW2xlbmd0aChzKV0gLyBzWzFdKSlcbiAgfVxufSJ9
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>El resultado es el que hay que retener: <strong>el <span class="math inline">\(\tau\)</span> de Kendall no distingue las dos ventanas —puede incluso salir más alto en la expandible— pero la sensibilidad sí las distingue</strong>. La varianza en ventana móvil se multiplica por ~5 desde el inicio hasta el borde de la transición; la expandible, apenas por ~1.7 (prueba también la pestaña de R: los números cambian con la realización, la conclusión no). Como el <span class="math inline">\(\tau\)</span> solo mide <strong>monotonía</strong>, premia a la curva expandible por ser suave y no penaliza que haya <strong>diluido</strong> la aceleración tardía. Dos lecciones:</p>
+<ol type="1">
+<li><strong>Nunca resumas un indicador solo con <span class="math inline">\(\tau\)</span>.</strong> Reporta también la magnitud del cambio y mira la curva.</li>
+<li><strong>Para detectar una transición inminente, la ventana móvil suele ganar</strong> <span class="citation" data-cites="alvarez2026early">(<a href="#ref-alvarez2026early" role="doc-biblioref">Alvarez-Martinez y Miramontes 2026, sec. 3.1.1</a>)</span>. La expandible es útil para estimar un <strong>nivel de base</strong> estable al inicio del monitoreo, o combinada con pesos que favorezcan lo reciente.</li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>El traslape entre ventanas y el número de puntos independientes <span class="avanzado-tag">Avanzado</span>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Arriba avanzamos la ventana <strong>de un punto en un punto</strong>: traslape máximo. Eso da la curva más suave y la mejor resolución temporal, pero introduce una <strong>autocorrelación fortísima en la serie del indicador</strong>, que viola el supuesto de independencia de las pruebas de tendencia e <strong>infla la significancia</strong> <span class="citation" data-cites="alvarez2026early">(<a href="#ref-alvarez2026early" role="doc-biblioref">Alvarez-Martinez y Miramontes 2026, sec. 3.1.2</a>)</span>. Ventanas sin traslape eliminan ese problema pero dejan poquísimos puntos. El compromiso habitual es avanzar <span class="math inline">\(w/4\)</span> o <span class="math inline">\(w/2\)</span>:</p>
+<div class="cell">
+<div>
+<div id="pyodide-4" class="exercise-cell">
+
+</div>
+<script type="pyodide-4-contents">
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicGFzbyA9IHcgLy8gNCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAjIGF2YW56YXIgdy80IGVuIGx1Z2FyIGRlIDFcbmlkeDIgPSBucC5hcmFuZ2UodywgbGVuKHJlc2lkKSwgcGFzbylcbnZhcjIgPSBucC5hcnJheShbcmVzaWRbaS13OmldLnZhcigpIGZvciBpIGluIGlkeDJdKVxucHJpbnQoZlwidHJhc2xhcGUgbcOheGltbzoge2xlbihpZHgpfSBwdW50b3MgIHwgIHBhc28gdy80OiB7bGVuKGlkeDIpfSBwdW50b3NcIilcbnByaW50KFwidGF1IGNvbiBwYXNvIHcvNDpcIiwgcm91bmQoa2VuZGFsbHRhdShpZHgyKmR0LCB2YXIyKVswXSwgMykpIn0=
+</script>
+</div>
+</div>
+<p>Y ojo con la convención de fijar <span class="math inline">\(w = N/2\)</span>: con series cortas y paso <span class="math inline">\(w/2\)</span> quedan <strong>dos o tres ventanas</strong>, con las que ninguna prueba de tendencia tiene poder estadístico.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-sensibilidad" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="sec-sensibilidad"><span class="header-section-number">3</span> Cuánta ventana es suficiente: análisis de sensibilidad</h2>
+<p>No existe un <span class="math inline">\(w\)</span> correcto. La guía empírica es que <span class="math inline">\(w\)</span> debe ser <strong>grande</strong> para estimar bien varianza o autocorrelación (al menos 30–50 observaciones) y <strong>pequeño</strong> frente a la escala de tiempo de la transición hipotética. Por eso la buena práctica no es elegir un <span class="math inline">\(w\)</span> y callar, sino <strong>barrer</strong> un rango y reportar el resultado completo <span class="citation" data-cites="alvarez2026early dakos2012ews">(<a href="#ref-alvarez2026early" role="doc-biblioref">Alvarez-Martinez y Miramontes 2026, sec. 3.2.3</a>; <a href="#ref-dakos2012ews" role="doc-biblioref">Dakos et&nbsp;al. 2012</a>)</span>:</p>
+<div class="cell">
+<div>
+<div id="pyodide-5" class="exercise-cell">
+
+</div>
+<script type="pyodide-5-contents">
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoicHJpbnQoZlwieyd3Jzo+Nn17J3RhdSh2YXIpJzo+MTF9eyd0YXUoQUMxKSc6PjExfXsnbiB2ZW50YW5hcyc6PjEzfVwiKVxuZm9yIHdfIGluIFsyMDAsIDQwMCwgODAwLCAxNjAwLCAzMDAwXTpcbiAgICBpZiB3XyA+PSBsZW4ocmVzaWQpOiBjb250aW51ZVxuICAgIGlpID0gbnAuYXJhbmdlKHdfLCBsZW4ocmVzaWQpKVxuICAgIHYgPSBucC5hcnJheShbcmVzaWRbaS13XzppXS52YXIoKSBmb3IgaSBpbiBpaV0pXG4gICAgYSA9IG5wLmFycmF5KFthYzEocmVzaWRbaS13XzppXSkgIGZvciBpIGluIGlpXSlcbiAgICB0XyA9IGlpKmR0XG4gICAgcHJpbnQoZlwie3dfOjZkfXtrZW5kYWxsdGF1KHRfLCB2KVswXToxMS4yZn17a2VuZGFsbHRhdSh0XywgYSlbMF06MTEuMmZ9e2xlbihpaSk6MTNkfVwiKSJ9
+</script>
+</div>
+</div>
+<p>Si el signo y el orden de magnitud del <span class="math inline">\(\tau\)</span> <strong>sobreviven</strong> al barrido, la señal es robusta. Si aparecen y desaparecen según la ventana, lo honesto es decirlo.</p>
+</section>
+<section id="sec-practicas" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="sec-practicas"><span class="header-section-number">4</span> Buenas prácticas y trampas</h2>
+<ul>
+<li><strong>Detrending.</strong> Hay que separar la <strong>deriva lenta</strong> de las fluctuaciones. Filtro gaussiano, LOESS o media móvil son habituales; la elección <strong>afecta</strong> el resultado <span class="citation" data-cites="dakos2012ews">(<a href="#ref-dakos2012ews" role="doc-biblioref">Dakos et&nbsp;al. 2012</a>)</span>. El ancho de banda debe quitar tendencia y estacionalidad sin borrar las fluctuaciones de alta frecuencia que llevan la señal. La <strong>primera diferencia</strong> (<span class="math inline">\(\Delta x_t\)</span>) elimina tendencias lineales pero <strong>distorsiona la autocorrelación</strong>, así que es mala idea aquí <span class="citation" data-cites="alvarez2026early">(<a href="#ref-alvarez2026early" role="doc-biblioref">Alvarez-Martinez y Miramontes 2026, sec. 3.1.4</a>)</span>.</li>
+<li><strong>Estacionalidad.</strong> Con datos estacionales (casi todo dato ecológico de campo), hay que desestacionalizar antes: descomposición clásica, STL, o modelos de espacio de estados.</li>
+<li><strong>Tamaño y tipo de ventana.</strong> Ver <a href="#sec-ventanas" class="quarto-xref">Sección&nbsp;2</a> y <a href="#sec-sensibilidad" class="quarto-xref">Sección&nbsp;3</a>: reporta el barrido, no un solo número.</li>
+<li><strong>Indicadores complementarios.</strong> La <strong>asimetría</strong> (<em>skewness</em>) y la <strong>curtosis</strong> suelen crecer al deformarse el pozo; el espectro se <strong>enrojece</strong> (más potencia en bajas frecuencias); el <em>flickering</em> y la <strong>bimodalidad</strong> aparecen en sistemas biestables cerca del pliegue. Ninguno es informativo en todos los mecanismos: <em>flickering</em> y bimodalidad <strong>solo</strong> tienen sentido bajo B-tipping, mientras que el enrojecimiento espectral puede aparecer por variabilidad ambiental creciente sin bifurcación alguna <span class="citation" data-cites="alvarez2026early">(<a href="#ref-alvarez2026early" role="doc-biblioref">Alvarez-Martinez y Miramontes 2026, sec. 2.4</a>)</span>.</li>
+<li><strong>Significancia con <em>surrogates</em>.</strong> Para decidir si una tendencia es real, se compara contra series <strong>subrogadas</strong> (p.&nbsp;ej. con la misma autocorrelación o el mismo espectro, pero con la estructura temporal destruida) y se construye una distribución nula del <span class="math inline">\(\tau\)</span>.</li>
+<li><strong>Sesgo retrospectivo.</strong> Si solo analizas series que <strong>ya sabes</strong> que terminaron en transición, los indicadores tienden a salir positivos aunque no haya habido pérdida de resiliencia: es sesgo de muestreo condicional. Estimar la tasa de falsos positivos exige mirar también sistemas que <strong>no</strong> transitaron <span class="citation" data-cites="alvarez2026early boettiger2012">(<a href="#ref-alvarez2026early" role="doc-biblioref">Alvarez-Martinez y Miramontes 2026, sec. 3.2.2</a>; <a href="#ref-boettiger2012" role="doc-biblioref">Boettiger y Hastings 2012</a>)</span>.</li>
 </ul>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -416,68 +529,50 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaW1wb3J0IG51bXB5IGFzIG5w
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>En tu máquina: <code>ewstools</code> y <code>EWSmethods</code>
+<span class="screen-reader-only">Nota</span>En tu máquina: <code>ewstools</code> (Python) y <code>EWSmethods</code> (R)
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>En el navegador computamos las EWS “a mano” para que se vea la mecánica. En un flujo real conviene usar bibliotecas dedicadas. Este bloque <strong>no se ejecuta aquí</strong>; cópialo a tu entorno local:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Python (local)</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> ewstools</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>ts <span class="op">=</span> ewstools.TimeSeries(data<span class="op">=</span>serie, transition<span class="op">=</span>t_transicion)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>ts.detrend(method<span class="op">=</span><span class="st">"Gaussian"</span>, bandwidth<span class="op">=</span><span class="fl">0.2</span>)</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>ts.compute_var(rolling_window<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>ts.compute_auto(rolling_window<span class="op">=</span><span class="fl">0.5</span>, lag<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ts.compute_ktau()      <span class="co"># tau de Kendall por indicador</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>En el navegador computamos las EWS “a mano” para que se vea la mecánica. En un flujo real conviene usar bibliotecas dedicadas. Este bloque <strong>no se ejecuta aquí</strong>; cópialo a tu entorno local (versión completa en el <a href="./apB-recetario.html#sec-ewstools">apéndice B</a>):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Python (local):  pip install ewstools</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np, pandas <span class="im">as</span> pd, ewstools</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>ts <span class="op">=</span> ewstools.TimeSeries(data<span class="op">=</span>pre)          <span class="co"># pre = tramo anterior a la transición</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>ts.detrend(method<span class="op">=</span><span class="st">"Gaussian"</span>, bandwidth<span class="op">=</span><span class="fl">0.2</span>)   <span class="co"># bandwidth como fracción de la serie</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>ts.compute_var(rolling_window<span class="op">=</span><span class="fl">0.25</span>)            <span class="co"># 0.25 = w es el 25 % de la serie</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ts.compute_auto(rolling_window<span class="op">=</span><span class="fl">0.25</span>, lag<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>ts.compute_skew(rolling_window<span class="op">=</span><span class="fl">0.25</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>ts.compute_ktau()</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ts.ktau)                                  <span class="co"># {'variance': .., 'ac1': .., 'skew': ..}</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>ts.make_plotly().show()                         <span class="co"># figura interactiva</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ewstools SOLO implementa ventana móvil. La expandible se obtiene en una línea</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># sobre los mismos residuos que ya calculó:</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> ts.state[<span class="st">"residuals"</span>]</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>var_expandible <span class="op">=</span> res.expanding(min_periods<span class="op">=</span><span class="bu">int</span>(<span class="fl">0.25</span><span class="op">*</span><span class="bu">len</span>(res))).var()</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>ac_expandible  <span class="op">=</span> res.expanding(min_periods<span class="op">=</span><span class="bu">int</span>(<span class="fl">0.25</span><span class="op">*</span><span class="bu">len</span>(res))).<span class="bu">apply</span>(</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                     <span class="kw">lambda</span> s: pd.Series(s).autocorr(lag<span class="op">=</span><span class="dv">1</span>), raw<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R (local)</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(EWSmethods)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">uniEWS</span>(<span class="at">data =</span> <span class="fu">cbind</span>(tiempo, serie), <span class="at">metrics =</span> <span class="fu">c</span>(<span class="st">"SD"</span>,<span class="st">"ar1"</span>,<span class="st">"skew"</span>),</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"rolling"</span>, <span class="at">winsize =</span> <span class="dv">50</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"rolling"</span>, <span class="at">winsize =</span> <span class="dv">50</span>)   <span class="co"># winsize en % de la serie</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(res)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </section>
-<section id="sec-ej6" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="sec-ej6"><span class="header-section-number">3</span> Ejercicios</h2>
+<section id="sec-ej6" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="sec-ej6"><span class="header-section-number">5</span> Ejercicios</h2>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Ejercicio 6.1 — Sensibilidad a la ventana
+<span class="screen-reader-only">Tip</span>Ejercicio 7.1 — Sensibilidad a la ventana
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Cambia <code>w</code> a <code>400</code> y luego a <code>1500</code>. ¿Cómo afectan el ruido del indicador y el valor del <span class="math inline">\(\tau\)</span> de Kendall?</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Solución
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Con <code>w=400</code> las curvas de varianza/AC son más ruidosas y el <span class="math inline">\(\tau\)</span> puede bajar; con <code>w=1500</code> son más suaves pero la señal aparece más tarde y se pierde resolución cerca de la transición. No hay ventana “correcta”: por eso se reporta sensibilidad.</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Ejercicio 6.2 — ¿Y si no hay transición?
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Pon <code>sigma=0.04</code> y <code>h = np.linspace(-0.2, 0.2, n)</code> (la rampa <strong>no</strong> alcanza el pliegue). ¿Siguen subiendo los indicadores? ¿Qué dice esto sobre falsos positivos?</p>
+<p>Cambia <code>w</code> a <code>400</code> y luego a <code>1500</code> en la primera celda. ¿Cómo afectan el ruido del indicador y el valor del <span class="math inline">\(\tau\)</span> de Kendall? Compara con la tabla de <a href="#sec-sensibilidad" class="quarto-xref">Sección&nbsp;3</a>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -490,23 +585,113 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaW1wb3J0IG51bXB5IGFzIG5w
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
+<p>Con <code>w=400</code> las curvas de varianza/AC son más ruidosas y el <span class="math inline">\(\tau\)</span> puede bajar; con <code>w=1500</code> son más suaves pero la señal aparece más tarde y se pierde resolución cerca de la transición. No hay ventana “correcta”: por eso se reporta el barrido completo.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejercicio 7.2 — ¿Y si no hay transición?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pon <code>sigma=0.04</code> y <code>h = np.linspace(-0.2, 0.2, n)</code> (la rampa <strong>no</strong> alcanza el pliegue) en la primera celda. ¿Siguen subiendo los indicadores? ¿Qué dice esto sobre falsos positivos?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <p>Sin acercarse al pliegue, varianza y AC(1) se mantienen aproximadamente planas y el <span class="math inline">\(\tau\)</span> ronda 0. Esto ilustra que una <strong>tendencia creciente</strong> es la señal informativa; observar valores altos pero estables no implica transición inminente (cuidado con los falsos positivos, <span class="citation" data-cites="boettiger2012">Boettiger y Hastings (<a href="#ref-boettiger2012" role="doc-biblioref">2012</a>)</span>).</p>
 </div>
 </div>
 </div>
 </div>
 </div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejercicio 7.3 — Meseta más larga, dilución mayor
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En la celda de <a href="#sec-ventanas" class="quarto-xref">Sección&nbsp;2</a> cambia la meseta de <code>.35</code> a <code>.15</code> y luego a <code>.60</code> (la fracción de la serie con el parámetro quieto). Anota la amplificación de la varianza con cada ventana. ¿Qué le pasa a la ventaja de la ventana móvil?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Cuanto más larga la meseta, más datos “de régimen estable” acumula la ventana expandible y más diluye el ascenso final: su amplificación se acerca a 1 mientras la de la móvil se mantiene. Con meseta corta (<code>.15</code>) las dos estrategias casi coinciden, porque casi toda la serie pertenece ya a la fase de aproximación. La ventaja de la móvil crece exactamente con el grado de <strong>no monotonía</strong> del cambio.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ejercicio 7.4 — Ruido creciente, falso positivo garantizado
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Modifica la serie multifase para que <span class="math inline">\(h\)</span> <strong>no</strong> cambie (<code>h = np.full(n, -0.2)</code>) pero <span class="math inline">\(\sigma\)</span> crezca linealmente de <code>0.02</code> a <code>0.06</code> (usa <code>sig = np.linspace(0.02, 0.06, n)</code> dentro del bucle). Calcula el <span class="math inline">\(\tau\)</span> de la varianza y de la AC(1) en ventana móvil. ¿Cuál de los dos indicadores te engaña?</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>La <strong>varianza</strong> sube con fuerza y da un <span class="math inline">\(\tau\)</span> claramente positivo: es el falso positivo por ruido creciente <span class="citation" data-cites="alvarez2026early">(<a href="#ref-alvarez2026early" role="doc-biblioref">Alvarez-Martinez y Miramontes 2026, sec. 2.6.2</a>)</span>. La <strong>AC(1)</strong> se mantiene aproximadamente plana, porque <span class="math inline">\(\rho_1 = e^{-\lambda \Delta t}\)</span> no depende de <span class="math inline">\(\sigma\)</span>: la tasa de retorno no cambió. Ese contraste es un diagnóstico útil en la práctica: una varianza que sube <strong>sin</strong> que suba la autocorrelación apunta a variabilidad externa creciente, no a pérdida de resiliencia.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
 </section>
-<section id="para-seguir" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="para-seguir"><span class="header-section-number">4</span> Para seguir</h2>
-<p>El <a href="./p3-cap07-ews-multivariadas-ml.html">capítulo 7</a> generaliza a sistemas con <strong>muchas variables</strong> y presenta los enfoques de <strong>aprendizaje automático</strong>.</p>
+<section id="para-seguir" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="para-seguir"><span class="header-section-number">6</span> Para seguir</h2>
+<p>El <a href="./p3-cap07-ews-multivariadas-ml.html">capítulo 8</a> generaliza a sistemas con <strong>muchas variables</strong> y presenta los enfoques de <strong>aprendizaje automático</strong>.</p>
 
 
+<script type="webr-data">
+eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC42LjAvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsInN0YXRzIl0sInJlcG9zIjpbXX0sInJlbmRlcl9kZiI6ImRlZmF1bHQifQ==
+</script>
 <script type="pyodide-data">
 eyJvcHRpb25zIjp7ImVudiI6eyJQTE9UTFlfUkVOREVSRVIiOiJwbG90bHlfbWltZXR5cGUifSwiaW5kZXhVUkwiOiJodHRwczovL2Nkbi5qc2RlbGl2ci5uZXQvcHlvZGlkZS92MC4yOC4xL2Z1bGwvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsicHlvZGlkZV9odHRwIiwibWljcm9waXAiLCJpcHl0aG9uIiwibnVtcHkiLCJzY2lweSIsIm1hdHBsb3RsaWIiLCJwYW5kYXMiXX19
 </script>
 <script type="ojs-module-contents">
-eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJweW9kaWRlLTEiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF9weW9kaWRlX2VkaXRvcl8xID0ge1xuICBjb25zdCB7IFB5b2RpZGVFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwicHlvZGlkZS0xLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHB5b2RpZGUtMS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IoXG4gICAgcHlvZGlkZU9qcy5weW9kaWRlUHJvbWlzZSxcbiAgICBibG9jay5jb2RlLFxuICAgIG9wdGlvbnNcbiAgKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl9weW9kaWRlX3ZhbHVlXzEgPSBweW9kaWRlT2pzLnByb2Nlc3MoX3B5b2RpZGVfZWRpdG9yXzEsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJweW9kaWRlLXByZWx1ZGUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJweW9kaWRlT2pzID0ge1xuICBjb25zdCB7XG4gICAgUHlvZGlkZUV2YWx1YXRvcixcbiAgICBQeW9kaWRlRW52aXJvbm1lbnRNYW5hZ2VyLFxuICAgIHNldHVwUHl0aG9uLFxuICAgIHN0YXJ0UHlvZGlkZVdvcmtlcixcbiAgICBiNjREZWNvZGUsXG4gICAgY29sbGFwc2VQYXRoLFxuICB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzdGF0dXNDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctc3RhdHVzXCIpO1xuICBjb25zdCBpbmRpY2F0b3JDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpbmRpY2F0b3JDb250YWluZXIuY2xhc3NMaXN0LnJlbW92ZShcImQtbm9uZVwiKTtcblxuICBsZXQgc3RhdHVzVGV4dCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgc3RhdHVzVGV4dC5jbGFzc0xpc3QgPSBcImV4ZXJjaXNlLWxvYWRpbmctZGV0YWlsc1wiO1xuICBzdGF0dXNUZXh0ID0gc3RhdHVzQ29udGFpbmVyLmFwcGVuZENoaWxkKHN0YXR1c1RleHQpO1xuICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluaXRpYWxpc2VgO1xuXG4gIC8vIEhvaXN0IGluZGljYXRvciBvdXQgZnJvbSBmaW5hbCBzbGlkZSB3aGVuIHJ1bm5pbmcgdW5kZXIgcmV2ZWFsXG4gIGNvbnN0IHJldmVhbFN0YXR1cyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsIC5leGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaWYgKHJldmVhbFN0YXR1cykge1xuICAgIHJldmVhbFN0YXR1cy5yZW1vdmUoKTtcbiAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCA+IC5zbGlkZXNcIikuYXBwZW5kQ2hpbGQocmV2ZWFsU3RhdHVzKTtcbiAgfVxuXG4gIC8vIE1ha2UgYW55IHJldmVhbCBzbGlkZXMgd2l0aCBsaXZlIGNlbGxzIHNjcm9sbGFibGVcbiAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbChcIi5yZXZlYWwgLmV4ZXJjaXNlLWNlbGxcIikuZm9yRWFjaCgoZWwpID0+IHtcbiAgICBlbC5jbG9zZXN0KCdzZWN0aW9uLnNsaWRlJykuY2xhc3NMaXN0LmFkZChcInNjcm9sbGFibGVcIik7XG4gIH0pXG5cbiAgLy8gUHlvZGlkZSBzdXBwbGVtZW50YWwgZGF0YSBhbmQgb3B0aW9uc1xuICBjb25zdCBkYXRhQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJweW9kaWRlLWRhdGFcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBkYXRhID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZGF0YUNvbnRlbnQpKTtcblxuICAvLyBHcmFiIGxpc3Qgb2YgcmVzb3VyY2VzIHRvIGJlIGRvd25sb2FkZWRcbiAgY29uc3QgZmlsZXNDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInZmcy1maWxlXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZmlsZXMgPSBKU09OLnBhcnNlKGI2NERlY29kZShmaWxlc0NvbnRlbnQpKTtcblxuICBsZXQgcHlvZGlkZVByb21pc2UgPSAoYXN5bmMgKCkgPT4ge1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgUHlvZGlkZWA7XG4gICAgY29uc3QgcHlvZGlkZSA9IGF3YWl0IHN0YXJ0UHlvZGlkZVdvcmtlcihkYXRhLm9wdGlvbnMpO1xuXG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiBtaWNyb3BpcGA7XG4gICAgYXdhaXQgcHlvZGlkZS5sb2FkUGFja2FnZShcIm1pY3JvcGlwXCIpO1xuICAgIGNvbnN0IG1pY3JvcGlwID0gYXdhaXQgcHlvZGlkZS5weWltcG9ydChcIm1pY3JvcGlwXCIpO1xuICAgIGF3YWl0IGRhdGEucGFja2FnZXMucGtncy5tYXAoKHBrZykgPT4gKCkgPT4ge1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIG1pY3JvcGlwLmluc3RhbGwocGtnKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcbiAgICBhd2FpdCBtaWNyb3BpcC5kZXN0cm95KCk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgdHJ5IHtcbiAgICAgICAgICBhd2FpdCBweW9kaWRlLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgICAgaWYgKGUubmFtZSAhPT0gXCJFcnJub0Vycm9yXCIpIHRocm93IGU7XG4gICAgICAgICAgaWYgKGUuZXJybm8gIT09IDIwKSB7XG4gICAgICAgICAgICBjb25zdCBlcnJvclRleHRQdHIgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuX3N0cmVycm9yKGUuZXJybm8pO1xuICAgICAgICAgICAgY29uc3QgZXJyb3JUZXh0ID0gYXdhaXQgcHlvZGlkZS5fbW9kdWxlLlVURjhUb1N0cmluZyhlcnJvclRleHRQdHIpO1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBGaWxlc3lzdGVtIEVycm9yICR7ZS5lcnJub30gXCIke2Vycm9yVGV4dH1cIi5gKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHRyeSB7XG4gICAgICAgIHJldHVybiBhd2FpdCBweW9kaWRlLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgIGlmIChlLm5hbWUgIT09IFwiRXJybm9FcnJvclwiKSB0aHJvdyBlO1xuICAgICAgICBjb25zdCBlcnJvclRleHRQdHIgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuX3N0cmVycm9yKGUuZXJybm8pO1xuICAgICAgICBjb25zdCBlcnJvclRleHQgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuVVRGOFRvU3RyaW5nKGVycm9yVGV4dFB0cik7XG4gICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvciAke2UuZXJybm99IFwiJHtlcnJvclRleHR9XCIuYCk7XG4gICAgICB9XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFB5b2RpZGUgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUHl0aG9uKHB5b2RpZGUpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHB5b2RpZGU7XG4gIH0pKCkuY2F0Y2goKGVycikgPT4ge1xuICAgIHN0YXR1c1RleHQuc3R5bGUuY29sb3IgPSBcInZhcigtLWV4ZXJjaXNlLWVkaXRvci1obC1lciwgI0FEMDAwMClcIjtcbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gZXJyLm1lc3NhZ2U7XG4gICAgLy9pbmRpY2F0b3JDb250YWluZXIucXVlcnlTZWxlY3RvcihcIi5zcGlubmVyLWdyb3dcIikuY2xhc3NMaXN0LmFkZChcImQtbm9uZVwiKTtcbiAgICB0aHJvdyBlcnI7XG4gIH0pO1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCBweW9kaWRlID0gYXdhaXQgcHlvZGlkZVByb21pc2U7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFB5b2RpZGVFdmFsdWF0b3IocHlvZGlkZSwgY29udGV4dCk7XG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHlvZGlkZVByb21pc2UsXG4gICAgcmVuZGVyZWRPanMsXG4gICAgcHJvY2VzcyxcbiAgfTtcbn1cbiJ9XX0=
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJweW9kaWRlLTUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF9weW9kaWRlX2VkaXRvcl81ID0ge1xuICBjb25zdCB7IFB5b2RpZGVFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwicHlvZGlkZS01LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHB5b2RpZGUtNS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IoXG4gICAgcHlvZGlkZU9qcy5weW9kaWRlUHJvbWlzZSxcbiAgICBibG9jay5jb2RlLFxuICAgIG9wdGlvbnNcbiAgKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl9weW9kaWRlX3ZhbHVlXzUgPSBweW9kaWRlT2pzLnByb2Nlc3MoX3B5b2RpZGVfZWRpdG9yXzUsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJweW9kaWRlLTQiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF9weW9kaWRlX2VkaXRvcl80ID0ge1xuICBjb25zdCB7IFB5b2RpZGVFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwicHlvZGlkZS00LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHB5b2RpZGUtNC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IoXG4gICAgcHlvZGlkZU9qcy5weW9kaWRlUHJvbWlzZSxcbiAgICBibG9jay5jb2RlLFxuICAgIG9wdGlvbnNcbiAgKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl9weW9kaWRlX3ZhbHVlXzQgPSBweW9kaWRlT2pzLnByb2Nlc3MoX3B5b2RpZGVfZWRpdG9yXzQsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8zO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0zLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItMy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8zLCB7fSk7XG4ifSx7ImNlbGxOYW1lIjoicHlvZGlkZS0yIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfcHlvZGlkZV9lZGl0b3JfMiA9IHtcbiAgY29uc3QgeyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInB5b2RpZGUtMi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGBweW9kaWRlLTItY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgUHlvZGlkZUV4ZXJjaXNlRWRpdG9yKFxuICAgIHB5b2RpZGVPanMucHlvZGlkZVByb21pc2UsXG4gICAgYmxvY2suY29kZSxcbiAgICBvcHRpb25zXG4gICk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fcHlvZGlkZV92YWx1ZV8yID0gcHlvZGlkZU9qcy5wcm9jZXNzKF9weW9kaWRlX2VkaXRvcl8yLCB7fSk7XG4ifSx7ImNlbGxOYW1lIjoicHlvZGlkZS0xIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfcHlvZGlkZV9lZGl0b3JfMSA9IHtcbiAgY29uc3QgeyBQeW9kaWRlRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInB5b2RpZGUtMS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGBweW9kaWRlLTEtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgUHlvZGlkZUV4ZXJjaXNlRWRpdG9yKFxuICAgIHB5b2RpZGVPanMucHlvZGlkZVByb21pc2UsXG4gICAgYmxvY2suY29kZSxcbiAgICBvcHRpb25zXG4gICk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fcHlvZGlkZV92YWx1ZV8xID0gcHlvZGlkZU9qcy5wcm9jZXNzKF9weW9kaWRlX2VkaXRvcl8xLCB7fSk7XG4ifSx7ImNlbGxOYW1lIjoid2Vici1wcmVsdWRlIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoid2ViUk9qcyA9IHtcbiAgY29uc3QgeyBXZWJSLCBDaGFubmVsVHlwZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZS5XZWJSO1xuICBjb25zdCB7XG4gICAgV2ViUkV2YWx1YXRvcixcbiAgICBXZWJSRW52aXJvbm1lbnRNYW5hZ2VyLFxuICAgIHNldHVwUixcbiAgICBiNjREZWNvZGUsXG4gICAgY29sbGFwc2VQYXRoXG4gIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHN0YXR1c0NvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1zdGF0dXNcIik7XG4gIGNvbnN0IGluZGljYXRvckNvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGluZGljYXRvckNvbnRhaW5lci5jbGFzc0xpc3QucmVtb3ZlKFwiZC1ub25lXCIpO1xuXG4gIGxldCBzdGF0dXNUZXh0ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKVxuICBzdGF0dXNUZXh0LmNsYXNzTGlzdCA9IFwiZXhlcmNpc2UtbG9hZGluZy1kZXRhaWxzXCI7XG4gIHN0YXR1c1RleHQgPSBzdGF0dXNDb250YWluZXIuYXBwZW5kQ2hpbGQoc3RhdHVzVGV4dCk7XG4gIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5pdGlhbGlzZWA7XG5cbiAgLy8gSG9pc3QgaW5kaWNhdG9yIG91dCBmcm9tIGZpbmFsIHNsaWRlIHdoZW4gcnVubmluZyB1bmRlciByZXZlYWxcbiAgY29uc3QgcmV2ZWFsU3RhdHVzID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgLmV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpZiAocmV2ZWFsU3RhdHVzKSB7XG4gICAgcmV2ZWFsU3RhdHVzLnJlbW92ZSgpO1xuICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsID4gLnNsaWRlc1wiKS5hcHBlbmRDaGlsZChyZXZlYWxTdGF0dXMpO1xuICB9XG5cbiAgLy8gTWFrZSBhbnkgcmV2ZWFsIHNsaWRlcyB3aXRoIGxpdmUgY2VsbHMgc2Nyb2xsYWJsZVxuICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKFwiLnJldmVhbCAuZXhlcmNpc2UtY2VsbFwiKS5mb3JFYWNoKChlbCkgPT4ge1xuICAgIGVsLmNsb3Nlc3QoJ3NlY3Rpb24uc2xpZGUnKS5jbGFzc0xpc3QuYWRkKFwic2Nyb2xsYWJsZVwiKTtcbiAgfSlcblxuICAvLyB3ZWJSIHN1cHBsZW1lbnRhbCBkYXRhIGFuZCBvcHRpb25zXG4gIGNvbnN0IGRhdGFDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItZGF0YVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGRhdGEgPSBKU09OLnBhcnNlKGI2NERlY29kZShkYXRhQ29udGVudCkpO1xuXG4gIC8vIEdyYWIgbGlzdCBvZiByZXNvdXJjZXMgdG8gYmUgZG93bmxvYWRlZFxuICBjb25zdCBmaWxlc0NvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwidmZzLWZpbGVcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBmaWxlcyA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGZpbGVzQ29udGVudCkpO1xuXG4gIC8vIEluaXRpYWxpc2Ugd2ViUiBhbmQgc2V0dXAgZm9yIFIgY29kZSBldmFsdWF0aW9uXG4gIGxldCB3ZWJSUHJvbWlzZSA9IChhc3luYyAod2ViUikgPT4ge1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgd2ViUmA7XG4gICAgYXdhaXQgd2ViUi5pbml0KCk7XG5cbiAgICAvLyBJbnN0YWxsIHByb3ZpZGVkIGxpc3Qgb2YgcGFja2FnZXNcbiAgICAvLyBFbnN1cmUgd2ViUiBkZWZhdWx0IHJlcG8gaXMgaW5jbHVkZWRcbiAgICBkYXRhLnBhY2thZ2VzLnJlcG9zLnB1c2goXCJodHRwczovL3JlcG8uci13YXNtLm9yZ1wiKVxuICAgIGF3YWl0IGRhdGEucGFja2FnZXMucGtncy5tYXAoKHBrZykgPT4gKCkgPT4ge1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIHdlYlIuZXZhbFJWb2lkKGBcbiAgICAgICAgd2Vicjo6aW5zdGFsbChwa2csIHJlcG9zID0gcmVwb3MpXG4gICAgICAgIGxpYnJhcnkocGtnLCBjaGFyYWN0ZXIub25seSA9IFRSVUUpXG4gICAgICBgLCB7IGVudjoge1xuICAgICAgICBwa2c6IHBrZyxcbiAgICAgICAgcmVwb3M6IGRhdGEucGFja2FnZXMucmVwb3MsXG4gICAgICB9fSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgY29uc3QgYW5hbHlzaXMgPSBhd2FpdCB3ZWJSLkZTLmFuYWx5emVQYXRoKHBhdGgpO1xuICAgICAgICBpZiAoIWFuYWx5c2lzLmV4aXN0cykge1xuICAgICAgICAgIHRyeSB7XG4gICAgICAgICAgICBhd2FpdCB3ZWJSLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvcjogXCIke2UubWVzc2FnZX1cIi5gKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHJldHVybiBhd2FpdCB3ZWJSLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluc3RhbGxpbmcgd2ViUiBzaGltc2A7XG4gICAgYXdhaXQgd2ViUi5ldmFsUlZvaWQoYHdlYnI6OnNoaW1faW5zdGFsbCgpYCk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFdlYlIgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUih3ZWJSLCBkYXRhKTtcblxuICAgIHN0YXR1c1RleHQucmVtb3ZlKCk7XG4gICAgaWYgKHN0YXR1c0NvbnRhaW5lci5jaGlsZHJlbi5sZW5ndGggPT0gMCkge1xuICAgICAgc3RhdHVzQ29udGFpbmVyLnBhcmVudE5vZGUucmVtb3ZlKCk7XG4gICAgfVxuICAgIHJldHVybiB3ZWJSO1xuICB9KShuZXcgV2ViUihkYXRhLm9wdGlvbnMpKTtcblxuICAvLyBLZWVwIHRyYWNrIG9mIGluaXRpYWwgT0pTIGJsb2NrIHJlbmRlclxuICBjb25zdCByZW5kZXJlZE9qcyA9IHt9O1xuXG4gIGNvbnN0IHByb2Nlc3MgPSBhc3luYyAoY29udGV4dCwgaW5wdXRzKSA9PiB7XG4gICAgY29uc3Qgd2ViUiA9IGF3YWl0IHdlYlJQcm9taXNlO1xuICAgIGNvbnN0IGV2YWx1YXRvciA9IG5ldyBXZWJSRXZhbHVhdG9yKHdlYlIsIGNvbnRleHQpXG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHJvY2VzcyxcbiAgICB3ZWJSUHJvbWlzZSxcbiAgICByZW5kZXJlZE9qcyxcbiAgfTtcbn1cbiJ9LHsiY2VsbE5hbWUiOiJweW9kaWRlLXByZWx1ZGUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJweW9kaWRlT2pzID0ge1xuICBjb25zdCB7XG4gICAgUHlvZGlkZUV2YWx1YXRvcixcbiAgICBQeW9kaWRlRW52aXJvbm1lbnRNYW5hZ2VyLFxuICAgIHNldHVwUHl0aG9uLFxuICAgIHN0YXJ0UHlvZGlkZVdvcmtlcixcbiAgICBiNjREZWNvZGUsXG4gICAgY29sbGFwc2VQYXRoLFxuICB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcblxuICBjb25zdCBzdGF0dXNDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctc3RhdHVzXCIpO1xuICBjb25zdCBpbmRpY2F0b3JDb250YWluZXIgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpbmRpY2F0b3JDb250YWluZXIuY2xhc3NMaXN0LnJlbW92ZShcImQtbm9uZVwiKTtcblxuICBsZXQgc3RhdHVzVGV4dCA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIilcbiAgc3RhdHVzVGV4dC5jbGFzc0xpc3QgPSBcImV4ZXJjaXNlLWxvYWRpbmctZGV0YWlsc1wiO1xuICBzdGF0dXNUZXh0ID0gc3RhdHVzQ29udGFpbmVyLmFwcGVuZENoaWxkKHN0YXR1c1RleHQpO1xuICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluaXRpYWxpc2VgO1xuXG4gIC8vIEhvaXN0IGluZGljYXRvciBvdXQgZnJvbSBmaW5hbCBzbGlkZSB3aGVuIHJ1bm5pbmcgdW5kZXIgcmV2ZWFsXG4gIGNvbnN0IHJldmVhbFN0YXR1cyA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsIC5leGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaWYgKHJldmVhbFN0YXR1cykge1xuICAgIHJldmVhbFN0YXR1cy5yZW1vdmUoKTtcbiAgICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCA+IC5zbGlkZXNcIikuYXBwZW5kQ2hpbGQocmV2ZWFsU3RhdHVzKTtcbiAgfVxuXG4gIC8vIE1ha2UgYW55IHJldmVhbCBzbGlkZXMgd2l0aCBsaXZlIGNlbGxzIHNjcm9sbGFibGVcbiAgZG9jdW1lbnQucXVlcnlTZWxlY3RvckFsbChcIi5yZXZlYWwgLmV4ZXJjaXNlLWNlbGxcIikuZm9yRWFjaCgoZWwpID0+IHtcbiAgICBlbC5jbG9zZXN0KCdzZWN0aW9uLnNsaWRlJykuY2xhc3NMaXN0LmFkZChcInNjcm9sbGFibGVcIik7XG4gIH0pXG5cbiAgLy8gUHlvZGlkZSBzdXBwbGVtZW50YWwgZGF0YSBhbmQgb3B0aW9uc1xuICBjb25zdCBkYXRhQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJweW9kaWRlLWRhdGFcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBkYXRhID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZGF0YUNvbnRlbnQpKTtcblxuICAvLyBHcmFiIGxpc3Qgb2YgcmVzb3VyY2VzIHRvIGJlIGRvd25sb2FkZWRcbiAgY29uc3QgZmlsZXNDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcInZmcy1maWxlXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZmlsZXMgPSBKU09OLnBhcnNlKGI2NERlY29kZShmaWxlc0NvbnRlbnQpKTtcblxuICBsZXQgcHlvZGlkZVByb21pc2UgPSAoYXN5bmMgKCkgPT4ge1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgUHlvZGlkZWA7XG4gICAgY29uc3QgcHlvZGlkZSA9IGF3YWl0IHN0YXJ0UHlvZGlkZVdvcmtlcihkYXRhLm9wdGlvbnMpO1xuXG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiBtaWNyb3BpcGA7XG4gICAgYXdhaXQgcHlvZGlkZS5sb2FkUGFja2FnZShcIm1pY3JvcGlwXCIpO1xuICAgIGNvbnN0IG1pY3JvcGlwID0gYXdhaXQgcHlvZGlkZS5weWltcG9ydChcIm1pY3JvcGlwXCIpO1xuICAgIGF3YWl0IGRhdGEucGFja2FnZXMucGtncy5tYXAoKHBrZykgPT4gKCkgPT4ge1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIG1pY3JvcGlwLmluc3RhbGwocGtnKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcbiAgICBhd2FpdCBtaWNyb3BpcC5kZXN0cm95KCk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgdHJ5IHtcbiAgICAgICAgICBhd2FpdCBweW9kaWRlLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgICAgaWYgKGUubmFtZSAhPT0gXCJFcnJub0Vycm9yXCIpIHRocm93IGU7XG4gICAgICAgICAgaWYgKGUuZXJybm8gIT09IDIwKSB7XG4gICAgICAgICAgICBjb25zdCBlcnJvclRleHRQdHIgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuX3N0cmVycm9yKGUuZXJybm8pO1xuICAgICAgICAgICAgY29uc3QgZXJyb3JUZXh0ID0gYXdhaXQgcHlvZGlkZS5fbW9kdWxlLlVURjhUb1N0cmluZyhlcnJvclRleHRQdHIpO1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBGaWxlc3lzdGVtIEVycm9yICR7ZS5lcnJub30gXCIke2Vycm9yVGV4dH1cIi5gKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHRyeSB7XG4gICAgICAgIHJldHVybiBhd2FpdCBweW9kaWRlLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgICB9IGNhdGNoIChlKSB7XG4gICAgICAgIGlmIChlLm5hbWUgIT09IFwiRXJybm9FcnJvclwiKSB0aHJvdyBlO1xuICAgICAgICBjb25zdCBlcnJvclRleHRQdHIgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuX3N0cmVycm9yKGUuZXJybm8pO1xuICAgICAgICBjb25zdCBlcnJvclRleHQgPSBhd2FpdCBweW9kaWRlLl9tb2R1bGUuVVRGOFRvU3RyaW5nKGVycm9yVGV4dFB0cik7XG4gICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvciAke2UuZXJybm99IFwiJHtlcnJvclRleHR9XCIuYCk7XG4gICAgICB9XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFB5b2RpZGUgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUHl0aG9uKHB5b2RpZGUpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHB5b2RpZGU7XG4gIH0pKCkuY2F0Y2goKGVycikgPT4ge1xuICAgIHN0YXR1c1RleHQuc3R5bGUuY29sb3IgPSBcInZhcigtLWV4ZXJjaXNlLWVkaXRvci1obC1lciwgI0FEMDAwMClcIjtcbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gZXJyLm1lc3NhZ2U7XG4gICAgLy9pbmRpY2F0b3JDb250YWluZXIucXVlcnlTZWxlY3RvcihcIi5zcGlubmVyLWdyb3dcIikuY2xhc3NMaXN0LmFkZChcImQtbm9uZVwiKTtcbiAgICB0aHJvdyBlcnI7XG4gIH0pO1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCBweW9kaWRlID0gYXdhaXQgcHlvZGlkZVByb21pc2U7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFB5b2RpZGVFdmFsdWF0b3IocHlvZGlkZSwgY29udGV4dCk7XG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHlvZGlkZVByb21pc2UsXG4gICAgcmVuZGVyZWRPanMsXG4gICAgcHJvY2VzcyxcbiAgfTtcbn1cbiJ9XX0=
 </script>
 <div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
 <div id="exercise-loading-status" class="d-flex gap-2">
@@ -523,6 +708,9 @@ W10=
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-alvarez2026early" class="csl-entry" role="listitem">
+Alvarez-Martinez, Roberto, y Pedro Miramontes. 2026. <span>«Early Warning Signals in Ecological Time-Series»</span>. <em>Entropy</em> 28 (6): 628. <a href="https://doi.org/10.3390/e28060628">https://doi.org/10.3390/e28060628</a>.
+</div>
 <div id="ref-boettiger2012" class="csl-entry" role="listitem">
 Boettiger, Carl, y Alan Hastings. 2012. <span>«Quantifying Limits to Detection of Early Warning for Critical Transitions»</span>. <em>Journal of the Royal Society Interface</em> 9 (75): 2527-39. <a href="https://doi.org/10.1098/rsif.2012.0125">https://doi.org/10.1098/rsif.2012.0125</a>.
 </div>

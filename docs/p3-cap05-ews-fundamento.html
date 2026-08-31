@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -88,7 +88,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./p3-cap06-ews-univariadas.html" rel="next">
-<link href="./p2-cap04-empiricas.html" rel="prev">
+<link href="./p3-tipos-de-tipping.html" rel="prev">
 <link href=".//images/logo-lab.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -96,7 +96,7 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-aafd05f385ac8229ba2214b6c0c13563.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -174,7 +174,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Parte III · Señales de Alerta Temprana (EWS)</a></li><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Fundamento de las EWS: ralentización crítica</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./p3-tipos-de-tipping.html">Parte III · Señales de Alerta Temprana (EWS)</a></li><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Fundamento de las EWS: ralentización crítica</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -270,6 +270,12 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./p3-tipos-de-tipping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tipos de transición: bifurcación, ruido, tasa y choque</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./p3-cap05-ews-fundamento.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Fundamento de las EWS: ralentización crítica</span></a>
   </div>
@@ -360,7 +366,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Parte III · Señales de Alerta Temprana (EWS)</a></li><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Fundamento de las EWS: ralentización crítica</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./p3-tipos-de-tipping.html">Parte III · Señales de Alerta Temprana (EWS)</a></li><li class="breadcrumb-item"><a href="./p3-cap05-ews-fundamento.html">Fundamento de las EWS: ralentización crítica</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Fundamento de las EWS: ralentización crítica</h1>
 </div>
@@ -389,7 +395,8 @@ window.Quarto = {
 </div>
 <section id="sec-csd" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="sec-csd"><span class="header-section-number">1</span> La idea central</h2>
-<p>Cerca de un punto fijo estable, la dinámica linealiza a <span class="math inline">\(\dot{\eta} \approx -\lambda\,\eta\)</span> con <span class="math inline">\(\lambda = -f'(x^*) = |f'(x^*)| &gt; 0\)</span>. La <strong>tasa de retorno</strong> <span class="math inline">\(\lambda\)</span> mide qué tan rápido el sistema reabsorbe una perturbación. Al acercarse a una bifurcación, <span class="math inline">\(f'(x^*)\to 0\)</span>, así que <span class="math inline">\(\lambda\to 0\)</span>: el sistema se vuelve <strong>lento y “blando”</strong>. Eso es el ralentización crítica, ya medido en cianobacterias <span class="citation" data-cites="veraart2012">(<a href="#ref-veraart2012" role="doc-biblioref">Veraart et&nbsp;al. 2012</a>)</span>.</p>
+<p>Cerca de un punto fijo estable, la dinámica linealiza a <span class="math inline">\(\dot{\eta} \approx -\lambda\,\eta\)</span> con <span class="math inline">\(\lambda = -f'(x^*) = |f'(x^*)| &gt; 0\)</span>. La <strong>tasa de retorno</strong> <span class="math inline">\(\lambda\)</span> mide qué tan rápido el sistema reabsorbe una perturbación. Al acercarse a una bifurcación, <span class="math inline">\(f'(x^*)\to 0\)</span>, así que <span class="math inline">\(\lambda\to 0\)</span> y el <strong>tiempo característico de retorno</strong> <span class="math inline">\(\tau_r = 1/\lambda\)</span> diverge: el sistema se vuelve <strong>lento y “blando”</strong>. Eso es la ralentización crítica, ya medida en cianobacterias <span class="citation" data-cites="veraart2012">(<a href="#ref-veraart2012" role="doc-biblioref">Veraart et&nbsp;al. 2012</a>)</span>.</p>
+<p>Conviene tener presente el linaje de la idea: la ralentización crítica nace en física estadística (Van Hove, Landau–Khalatnikov, Hohenberg–Halperin) y Wissel la trasladó en 1984 a sistemas dinámicos de dimensión finita cerca de una bifurcación local; solo después Scheffer, Carpenter y Dakos la convirtieron en herramienta ecológica <span class="citation" data-cites="alvarez2026early">(<a href="#ref-alvarez2026early" role="doc-biblioref">Alvarez-Martinez y Miramontes 2026, sec. 2.3</a>)</span>.</p>
 <p>Con ruido, el sistema obedece un proceso de <strong>Ornstein–Uhlenbeck</strong>: <span id="eq-ou"><span class="math display">\[
 dx = -\lambda\,x\,dt + \sigma\,dW .
 \tag{1}\]</span></span> De aquí salen dos predicciones que <strong>no requieren conocer el modelo</strong>, solo la serie de tiempo:</p>
@@ -441,11 +448,24 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaW1wb3J0IG51bXB5IGFzIG5w
 </div>
 </div>
 </div>
-<p>Cuando <span class="math inline">\(\lambda \to 0\)</span>: la <strong>varianza explota</strong> y la <strong>autocorrelación tiende a 1</strong>. Son las dos señales de alerta temprana canónicas <span class="citation" data-cites="scheffer2009 dakos2012">(<a href="#ref-scheffer2009" role="doc-biblioref">Scheffer et&nbsp;al. 2009</a>; <a href="#ref-dakos2012" role="doc-biblioref">Dakos et&nbsp;al. 2012</a>)</span>.</p>
+<p>Cuando <span class="math inline">\(\lambda \to 0\)</span>: la <strong>varianza explota</strong> y la <strong>autocorrelación tiende a 1</strong>. Son las dos señales de alerta temprana canónicas <span class="citation" data-cites="scheffer2009 dakos2012">(<a href="#ref-scheffer2009" role="doc-biblioref">Scheffer et&nbsp;al. 2009</a>; <a href="#ref-dakos2012" role="doc-biblioref">Dakos et&nbsp;al. 2012</a>)</span>, pero no las únicas: asimetría, curtosis, enrojecimiento espectral, <em>flickering</em>, heterocedasticidad condicional e indicadores espaciales completan el catálogo. Ninguno sustituye a los otros; lo que da confianza es la <strong>evidencia convergente</strong> de varios indicadores <span class="citation" data-cites="alvarez2026early">(<a href="#ref-alvarez2026early" role="doc-biblioref">Alvarez-Martinez y Miramontes 2026, sec. 2.4</a>)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Importante</span><span class="math inline">\(\lambda\)</span> pequeña no es lo mismo que salto inminente
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Aun cuando la ralentización crítica sea real y detectable, informa sobre la <strong>aproximación a la inestabilidad</strong>: no dice <strong>cuándo</strong> ocurrirá el salto, ni de qué <strong>magnitud</strong> será, ni a qué estado llevará <span class="citation" data-cites="alvarez2026early">(<a href="#ref-alvarez2026early" role="doc-biblioref">Alvarez-Martinez y Miramontes 2026, sec. 2.5</a>)</span>. Es una medida de riesgo cambiante, no un pronóstico con fecha.</p>
+</div>
+</div>
 <p>Mueve <span class="math inline">\(\lambda\)</span> y observa ambas predicciones:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb1" data-startfrom="107" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 106;"><span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>viewof lam <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="fl">0.05</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span></span>
-<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>  <span class="dt">label</span><span class="op">:</span> <span class="st">"λ = |f'(x*)|  (→ 0 al acercarse a la bifurcación)"</span>})</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb1" data-startfrom="114" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 113;"><span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>viewof lam <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="fl">0.05</span><span class="op">,</span> <span class="dv">2</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.01</span><span class="op">,</span></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>  <span class="dt">label</span><span class="op">:</span> <span class="st">"λ = |f'(x*)|  (→ 0 al acercarse a la bifurcación)"</span>})</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-1" data-nodetype="declaration">
 
@@ -453,11 +473,11 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaW1wb3J0IG51bXB5IGFzIG5w
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb2" data-startfrom="113" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 112;"><span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div style="font-family:system-ui;font-size:1.05rem;line-height:1.7"&gt;</span></span>
-<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;b&gt;Predicción analítica (proceso OU, σ=0.1, Δt=0.05):&lt;/b&gt;&lt;br&gt;</span></span>
-<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a><span class="vs">Varianza estacionaria&amp;nbsp; σ²/(2λ) = &lt;b style="color:#1f5673"&gt;</span><span class="sc">${</span>(<span class="fl">0.01</span><span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>lam))<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt;&lt;br&gt;</span></span>
-<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a><span class="vs">Autocorrelación&amp;nbsp; ρ₁ = e&lt;sup&gt;−λΔt&lt;/sup&gt; = &lt;b style="color:#b03a2e"&gt;</span><span class="sc">${</span><span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(<span class="op">-</span>lam<span class="op">*</span><span class="fl">0.05</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">3</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt;</span></span>
-<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;/div&gt;`</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb2" data-startfrom="120" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 119;"><span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div style="font-family:system-ui;font-size:1.05rem;line-height:1.7"&gt;</span></span>
+<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;b&gt;Predicción analítica (proceso OU, σ=0.1, Δt=0.05):&lt;/b&gt;&lt;br&gt;</span></span>
+<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a><span class="vs">Varianza estacionaria&amp;nbsp; σ²/(2λ) = &lt;b style="color:#1f5673"&gt;</span><span class="sc">${</span>(<span class="fl">0.01</span><span class="op">/</span>(<span class="dv">2</span><span class="op">*</span>lam))<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">4</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt;&lt;br&gt;</span></span>
+<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a><span class="vs">Autocorrelación&amp;nbsp; ρ₁ = e&lt;sup&gt;−λΔt&lt;/sup&gt; = &lt;b style="color:#b03a2e"&gt;</span><span class="sc">${</span><span class="bu">Math</span><span class="op">.</span><span class="fu">exp</span>(<span class="op">-</span>lam<span class="op">*</span><span class="fl">0.05</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">3</span>)<span class="sc">}</span><span class="vs">&lt;/b&gt;</span></span>
+<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;/div&gt;`</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-2" data-nodetype="expression">
 
@@ -507,13 +527,13 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoib3UgPC0gZnVuY3Rpb24obGFt
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Ejercicio 5.1 — Predicción vs.&nbsp;simulación
+<span class="screen-reader-only">Tip</span>Ejercicio 6.1 — Predicción vs.&nbsp;simulación
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Usa <a href="#eq-ews" class="quarto-xref">Ecuación&nbsp;2</a> para predecir la varianza y AC(1) con <span class="math inline">\(\lambda=0.2\)</span>, <span class="math inline">\(\sigma=0.1\)</span>, <span class="math inline">\(\Delta t=0.05\)</span>. Compara con los números que imprime la celda.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -522,7 +542,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoib3UgPC0gZnVuY3Rpb24obGFt
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><span class="math inline">\(\operatorname{Var}=0.1^2/(2\cdot 0.2)=0.025\)</span> y <span class="math inline">\(\rho_1=e^{-0.2\cdot 0.05}=e^{-0.01}\approx 0.990\)</span>. Los valores muestrales rondan esas cifras (con fluctuación por tamaño de muestra y discretización).</p>
 </div>
@@ -536,13 +556,13 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoib3UgPC0gZnVuY3Rpb24obGFt
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Ejercicio 5.2 — Computacional
+<span class="screen-reader-only">Tip</span>Ejercicio 6.2 — Computacional
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Reduce <span class="math inline">\(\lambda\)</span> a <code>0.05</code> en la celda. ¿La varianza sube por un factor cercano a 4 respecto a <span class="math inline">\(\lambda=0.2\)</span>? ¿Por qué?</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -551,7 +571,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoib3UgPC0gZnVuY3Rpb24obGFt
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Sí: <span class="math inline">\(\operatorname{Var}\propto 1/\lambda\)</span>, y <span class="math inline">\(0.2/0.05=4\)</span>. Al dividir <span class="math inline">\(\lambda\)</span> entre 4, la varianza estacionaria se <strong>cuadruplica</strong> (salvo fluctuación muestral).</p>
 </div>
@@ -562,7 +582,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoib3UgPC0gZnVuY3Rpb24obGFt
 </section>
 <section id="para-seguir" class="level2" data-number="4">
 <h2 data-number="4" class="anchored" data-anchor-id="para-seguir"><span class="header-section-number">4</span> Para seguir</h2>
-<p>En el <a href="./p3-cap06-ews-univariadas.html">capítulo 6</a> llevamos esto a la práctica: estimar varianza y AC(1) en <strong>ventanas móviles</strong> sobre una serie que se acerca a un pliegue, con <em>detrending</em> y prueba de tendencia.</p>
+<p>En el <a href="./p3-cap06-ews-univariadas.html">capítulo 7</a> llevamos esto a la práctica: estimar varianza y AC(1) sobre una serie que se acerca a un pliegue, con <em>detrending</em>, prueba de tendencia y las dos estrategias de ventana —<strong>móvil</strong> y <strong>expandible</strong>— que definen el resto del método.</p>
 
 
 <script type="webr-data">
@@ -589,6 +609,9 @@ W10=
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-alvarez2026early" class="csl-entry" role="listitem">
+Alvarez-Martinez, Roberto, y Pedro Miramontes. 2026. <span>«Early Warning Signals in Ecological Time-Series»</span>. <em>Entropy</em> 28 (6): 628. <a href="https://doi.org/10.3390/e28060628">https://doi.org/10.3390/e28060628</a>.
+</div>
 <div id="ref-dakos2012" class="csl-entry" role="listitem">
 Dakos, Vasilis, Stephen R. Carpenter, William A. Brock, et&nbsp;al. 2012. <span>«Methods for Detecting Early Warnings of Critical Transitions in Time Series Illustrated Using Simulated Ecological Data»</span>. <em>PLoS ONE</em> 7 (7): e41010. <a href="https://doi.org/10.1371/journal.pone.0041010">https://doi.org/10.1371/journal.pone.0041010</a>.
 </div>
@@ -1017,8 +1040,8 @@ window._ojs.runtime.interpretFromScriptTags();
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./p2-cap04-empiricas.html" class="pagination-link" aria-label="Del modelo al laboratorio: bifurcaciones empíricas">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Del modelo al laboratorio: bifurcaciones empíricas</span>
+      <a href="./p3-tipos-de-tipping.html" class="pagination-link" aria-label="Tipos de transición: bifurcación, ruido, tasa y choque">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Tipos de transición: bifurcación, ruido, tasa y choque</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

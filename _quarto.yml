@@ -35,6 +35,7 @@ website:
           - p2-cap04-empiricas.qmd
       - section: "Parte III · Señales de Alerta Temprana (EWS)"
         contents:
+          - p3-tipos-de-tipping.qmd
           - p3-cap05-ews-fundamento.qmd
           - p3-cap06-ews-univariadas.qmd
           - p3-cap07-ews-multivariadas-ml.qmd

@@ -84,7 +84,7 @@ El caso clásico de **histéresis ecosistémica** [@scheffer2001]. Un lago somer
 
 ## Abruptas vs. no abruptas {#sec-abruptas}
 
-No toda transición tiene un pliegue. Una bifurcación **transcrítica** o un cambio **suave** mueven el sistema de manera gradual y **reversible**. Las transiciones **abruptas** (saddle-node/fold) traen salto e histéresis. Esta distinción —¿es el cambio brusco e irreversible, o suave?— gobierna **qué** señales de alerta esperar y **cuánta** anticipación es posible [@deb2022]. Es el tema de la Parte III.
+No toda transición tiene un pliegue. Una bifurcación **transcrítica** o un cambio **suave** mueven el sistema de manera gradual y **reversible**. Las transiciones **abruptas** (saddle-node/fold) traen salto e histéresis. Esta distinción —¿es el cambio brusco e irreversible, o suave?— gobierna **qué** señales de alerta esperar y **cuánta** anticipación es posible [@deb2022]. Y hay una segunda distinción, igual de decisiva, que abre la Parte III: **por qué mecanismo** ocurre el salto (bifurcación, ruido, tasa o choque), porque solo el primero garantiza una firma anticipatoria en los datos [@alvarez2026early]. Es el tema de la Parte III.
 
 ::: {.callout-note}
 ## Hacia el taller
@@ -115,4 +115,4 @@ Un Hill más empinado (cooperatividad más fuerte) ensancha la región de biesta
 
 ## Para seguir
 
-Entramos a la [Parte III](p3-cap05-ews-fundamento.qmd): ¿podemos **anticipar** estos pliegues solo mirando la serie de tiempo, antes de que ocurra el salto?
+Entramos a la [Parte III](p3-tipos-de-tipping.qmd): ¿podemos **anticipar** estos pliegues solo mirando la serie de tiempo, antes de que ocurra el salto?

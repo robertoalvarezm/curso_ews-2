@@ -19,7 +19,12 @@ El curso se vive en **tres partes por tema**, más un taller práctico transvers
 
 - **Parte I · Bifurcaciones en sistemas 1-D.** La teoría mínima: estabilidad, las tres bifurcaciones locales (saddle-node, transcrítica, pitchfork), formas normales, potenciales e histéresis.
 - **Parte II · Bifurcaciones empíricas en biología.** Cómo se manifiestan en el laboratorio y el campo: levaduras [@dai2012], cianobacterias [@veraart2012], lagos enteros [@carpenter2011] y la histéresis claro↔turbio.
-- **Parte III · Señales de Alerta Temprana.** Ralentización crítica, varianza y autocorrelación, indicadores univariados y multivariados, y enfoques de aprendizaje automático [@deb2022; @bury2021; @alvarez2026early].
+- **Parte III · Señales de Alerta Temprana.** Mecanismos de *tipping* (bifurcación, ruido, tasa y choque), ralentización crítica, varianza y autocorrelación, ventanas móviles y expandibles, indicadores multivariados y enfoques de aprendizaje automático [@deb2022; @bury2021].
+
+::: {.callout-note}
+## Referencia de cabecera de la Parte III
+La Parte III sigue de cerca la revisión **@alvarez2026early**, *Early Warning Signals in Ecological Time-Series* (Entropy 28:628), que sintetiza el fundamento dinámico, el catálogo de indicadores, las decisiones metodológicas del pipeline (ventanas, *detrending*, prueba de tendencia, sensibilidad) y la tipología de mecanismos de *tipping*. Cada capítulo remite a la sección correspondiente.
+:::
 - **Taller transversal.** De datos **simulados** a datos **reales**: detectar una transición con tu propio pipeline.
 
 ## Cómo usar el material interactivo
@@ -32,7 +37,7 @@ Este curso **se ejecuta en tu navegador**. No necesitas instalar nada para exper
 
 ::: {.callout-note}
 ## Lenguajes
-**Python es el lenguaje primario** del curso; **R aparece como apoyo** donde resulta natural. En el taller usarás `numpy`/`scipy`/`pandas` en el navegador y verás cómo replicarlo localmente con `ewstools` (Python) y `EWSmethods` (R).
+**Python es el lenguaje primario** del curso; **R aparece como apoyo** donde resulta natural. En el navegador usarás `numpy`/`scipy`/`pandas` para ver la mecánica de cada indicador "a mano"; en paralelo, cada capítulo de la Parte III muestra el flujo equivalente con **`ewstools`** [@bury2023ewstools] en Python y `EWSmethods` en R, que es lo que conviene usar en un análisis real. El [apéndice B](apB-recetario.qmd#sec-ewstools) reúne ese pipeline completo.
 :::
 
 ::: {.callout-tip collapse="true"}

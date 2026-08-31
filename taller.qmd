@@ -16,25 +16,31 @@ Trabajaremos en **dos fases**: A) datos **simulados** (univariado y multivariado
 
 ### A.1 Un pipeline EWS reutilizable
 
-Definimos una función única que hace *detrending*, calcula varianza y AC(1) en ventana móvil y devuelve el $\tau$ de Kendall. Ejecuta esta celda primero:
+Definimos una función única que hace *detrending* gaussiano, calcula varianza y AC(1) sobre la ventana que le pidamos (**móvil** o **expandible**) y devuelve el $\tau$ de Kendall. Es la misma del [recetario](apB-recetario.qmd#sec-univar). Ejecuta esta celda primero:
 
 ```{pyodide}
 import numpy as np
+from scipy.ndimage import gaussian_filter1d
 from scipy.stats import kendalltau
 
-def ews_univariado(serie, dt=1.0, k_trend=400, w=800):
-    """Devuelve tiempos, varianza móvil, AC(1) móvil y taus de Kendall."""
+def detrend_gauss(serie, bw=200):
     serie = np.asarray(serie, float)
-    trend = np.convolve(serie, np.ones(k_trend)/k_trend, mode="same")
-    resid = serie - trend
-    def ac1(s):
-        s = s - s.mean(); return np.corrcoef(s[:-1], s[1:])[0, 1]
-    rng = range(w, len(resid))
-    var_roll = np.array([resid[i-w:i].var() for i in rng])
-    ac_roll  = np.array([ac1(resid[i-w:i])  for i in rng])
-    tt = np.arange(w, len(resid)) * dt
-    taus = {"var": kendalltau(tt, var_roll)[0], "ac1": kendalltau(tt, ac_roll)[0]}
-    return tt, var_roll, ac_roll, taus
+    return serie - gaussian_filter1d(serie, bw, mode="nearest")
+
+def ac1(s):
+    s = s - s.mean(); return np.corrcoef(s[:-1], s[1:])[0, 1]
+
+def ews_univariado(serie, dt=1.0, bw=200, w=800, ventana="movil", paso=1):
+    """ventana: 'movil' (ancho fijo w) o 'expandible' (acumula desde el inicio).
+       Devuelve tiempos, varianza, AC(1) y los taus de Kendall."""
+    resid = detrend_gauss(serie, bw)
+    idx = np.arange(w, len(resid), paso)
+    corta = (lambda i: resid[i-w:i]) if ventana == "movil" else (lambda i: resid[:i])
+    var = np.array([corta(i).var() for i in idx])
+    ac  = np.array([ac1(corta(i))  for i in idx])
+    tt  = idx * dt
+    taus = {"var": kendalltau(tt, var)[0], "ac1": kendalltau(tt, ac)[0]}
+    return tt, var, ac, taus
 
 print("Pipeline cargado. ✔")
 ```
@@ -45,9 +51,12 @@ print("Pipeline cargado. ✔")
 import matplotlib.pyplot as plt
 rng = np.random.default_rng(7)
 
-def simula_fold(h0=-0.2, h1=0.6, T=400, dt=0.05, sigma=0.04, x0=-1.0, seed=7):
+def simula_fold(h0=-0.2, h1=0.6, T=400, dt=0.05, sigma=0.04, x0=-1.0, seed=7,
+                meseta=0.0):
+    """meseta: fracción inicial del tiempo con h fijo (escenario multifase)."""
     r = np.random.default_rng(seed)
-    n = int(T/dt); h = np.linspace(h0, h1, n)
+    n = int(T/dt); k = int(meseta*n)
+    h = np.concatenate([np.full(k, h0), np.linspace(h0, h1, n - k)])
     x = np.empty(n); x[0] = x0
     for t in range(1, n):
         x[t] = x[t-1] + dt*(-x[t-1]**3 + x[t-1] + h[t-1]) + sigma*np.sqrt(dt)*r.standard_normal()
@@ -66,7 +75,7 @@ print("Índice de transición:", trans)
 
 ```{pyodide}
 pre = x[:trans]
-tt, var_roll, ac_roll, taus = ews_univariado(pre, dt=dt, k_trend=400, w=800)
+tt, var_roll, ac_roll, taus = ews_univariado(pre, dt=dt, w=800)
 
 fig, ax = plt.subplots(2, 1, figsize=(6.6, 4.4), sharex=True)
 ax[0].plot(tt, var_roll, color="#1f5673"); ax[0].set_ylabel("varianza")
@@ -76,6 +85,35 @@ plt.tight_layout(); plt.show()
 ```
 
 Deberías ver ambos indicadores creciendo y $\tau$ positivos: **el pipeline detecta el acercamiento al pliegue**.
+
+### A.3b Las dos ventanas, y por qué el $\tau$ no basta
+
+El mismo pipeline con `ventana="expandible"`, sobre un escenario **multifase** (meseta larga + rampa tardía), que es donde las dos estrategias se separan [@alvarez2026early, sec. 3.1.1]:
+
+```{pyodide}
+xm, transm, dtm = simula_fold(T=400, sigma=0.035, seed=4, meseta=0.35)
+prem = xm[:transm - 30]
+
+fig, ax = plt.subplots(figsize=(6.6, 3.2))
+for v, col in [("movil", "#1f5673"), ("expandible", "#8a5a00")]:
+    tt2, var2, ac2, t2 = ews_univariado(prem, dt=dtm, w=800, ventana=v)
+    ax.plot(tt2, var2, color=col, label=f"{v}: τ={t2['var']:+.2f}, ×{var2[-1]/var2[0]:.1f}")
+ax.set_yscale("log"); ax.set_xlabel("t"); ax.set_ylabel("varianza"); ax.legend()
+plt.tight_layout(); plt.show()
+```
+
+Los dos $\tau$ se parecen; las **amplificaciones** no. La ventana expandible diluyó la aceleración final con datos de la fase estable. Cuando lo que te importa es detectar una transición **inminente**, la ventana móvil es la opción por defecto; la expandible sirve para fijar un nivel de base al inicio del monitoreo.
+
+### A.3c ¿Sobrevive la señal a un cambio de ventana?
+
+```{pyodide}
+print(f"{'w':>6}{'tau(var)':>11}{'tau(AC1)':>11}")
+for w_ in [200, 400, 800, 1600]:
+    _, _, _, t_ = ews_univariado(pre, dt=dt, w=w_)
+    print(f"{w_:6d}{t_['var']:11.2f}{t_['ac1']:11.2f}")
+```
+
+Reportar este barrido —y no un solo número— es parte del estándar mínimo de un análisis EWS [@alvarez2026early, sec. 3.2.3].
 
 ### A.4 Versión multivariada
 
@@ -123,15 +161,25 @@ El navegador (Pyodide/WebR) no descarga libremente archivos de otros dominios po
 ### B.1 Flujo local (no se ejecuta aquí)
 
 ```python
-# Python (local) con ewstools
+# Python (local) con ewstools  ->  pip install ewstools
 import pandas as pd, ewstools
+from scipy.stats import kendalltau
+
 serie = pd.read_csv("paleoclima.csv")["valor"]      # ajusta a tu archivo
 ts = ewstools.TimeSeries(data=serie)
-ts.detrend(method="Lowess", span=0.2)
-ts.compute_var(rolling_window=0.5)
-ts.compute_auto(rolling_window=0.5, lag=1)
+ts.detrend(method="Lowess", span=0.2)               # o method="Gaussian", bandwidth=0.2
+ts.compute_var(rolling_window=0.25)
+ts.compute_auto(rolling_window=0.25, lag=1)
+ts.compute_skew(rolling_window=0.25)
 ts.compute_ktau()
+print(ts.ktau)                                      # taus por indicador
 ts.make_plotly().show()
+
+# ventana expandible sobre los mismos residuos (ewstools solo trae la móvil)
+res = ts.state["residuals"].dropna()
+w   = int(0.25*len(res))
+var_exp = res.expanding(min_periods=w).var().dropna()
+print("tau varianza (expandible):", round(kendalltau(var_exp.index, var_exp)[0], 3))
 ```
 
 ```r
@@ -142,6 +190,10 @@ res <- uniEWS(data = df[, c("tiempo","valor")],
               metrics = c("SD","ar1","skew"),
               method = "rolling", winsize = 50)
 plot(res)
+
+res_exp <- uniEWS(data = df[, c("tiempo","valor")], metrics = c("SD","ar1"),
+                  method = "expanding", burn_in = 50, threshold = 2)
+plot(res_exp)
 ```
 
 ### B.2 Sustituto sintético tipo "registro paleoclimático"
@@ -162,7 +214,7 @@ y = y + np.linspace(0, 2, n)                 # deriva lenta (tendencia)
 trans = int(0.92*n)
 pre = y[:trans]
 
-tt, var_roll, ac_roll, taus = ews_univariado(pre, dt=1.0, k_trend=400, w=600)
+tt, var_roll, ac_roll, taus = ews_univariado(pre, dt=1.0, bw=200, w=600)
 fig, ax = plt.subplots(3, 1, figsize=(6.6, 6), sharex=True)
 ax[0].plot(np.arange(trans), pre, lw=.5, color="#444"); ax[0].set_ylabel("y")
 ax[1].plot(tt, var_roll, color="#1f5673"); ax[1].set_ylabel("varianza")
@@ -175,12 +227,24 @@ El **mismo** pipeline de la Fase A funciona sin cambios: esa es la idea de un fl
 
 ## Cierre crítico {#sec-cierre}
 
-Las EWS son una herramienta poderosa pero **no infalible** [@boettiger2012; @dakos2012ews]:
+Las EWS son una herramienta poderosa pero **no infalible** [@alvarez2026early; @boettiger2012; @dakos2012ews]:
 
-- **Falsos positivos:** varianza/autocorrelación pueden subir por ruido externo o cambios de muestreo sin que haya pérdida de resiliencia.
-- **Falsos negativos:** transiciones inducidas por ruido o por choques abruptos del forzamiento pueden no dejar firma anticipatoria.
-- **Dependencia de elecciones:** *detrending*, tamaño de ventana y frecuencia de muestreo cambian el resultado; siempre reporta sensibilidad y usa *surrogates* para la significancia.
-- **El tipo importa:** la firma clásica corresponde a bifurcaciones tipo fold; otras transiciones requieren métodos distintos (de ahí el atractivo de los enfoques de ML del [capítulo 7](p3-cap07-ews-multivariadas-ml.qmd)).
+- **Falsos positivos:** varianza/autocorrelación pueden subir por ruido externo creciente, por cambios de instrumento de medición o por muestreo distinto, sin que haya pérdida de resiliencia.
+- **Falsos negativos:** transiciones inducidas por ruido, por la tasa de forzamiento o por un choque abrupto pueden no dejar firma anticipatoria.
+- **Sesgo retrospectivo:** analizar solo series que **ya sabemos** que terminaron en transición infla los indicadores; para calibrar la tasa de falsos positivos hay que mirar también sistemas que no transitaron.
+- **Dependencia de elecciones:** *detrending*, tipo y tamaño de ventana, traslape y frecuencia de muestreo cambian el resultado; siempre reporta el barrido de sensibilidad y usa *surrogates* para la significancia.
+- **El tipo importa:** la firma clásica corresponde a bifurcaciones tipo fold; otras transiciones requieren métodos distintos (de ahí el atractivo de los enfoques de ML del [capítulo 8](p3-cap07-ews-multivariadas-ml.qmd)).
+- **Qué se puede afirmar:** un indicador creciente es una **evaluación probabilística de resiliencia decreciente**, no una predicción de colapso inminente con fecha y magnitud [@alvarez2026early].
+
+::: {.callout-tip}
+## Ejercicio A2 — Meseta y dilución
+En A.3b cambia `meseta=0.35` por `0.6` y luego por `0.1`. ¿Cómo cambian las dos amplificaciones? ¿En qué escenario la ventana expandible es *casi* tan buena como la móvil?
+
+::: {.callout-note collapse="true"}
+## Solución
+Con meseta larga (`0.6`) la expandible acumula muchísimos datos del régimen estable y su amplificación se acerca a 1: la señal queda enterrada. Con meseta corta (`0.1`) casi toda la serie pertenece a la fase de aproximación, las dos ventanas ven prácticamente lo mismo y sus amplificaciones convergen. La ventaja de la móvil crece con la **no monotonía** del proceso.
+:::
+:::
 
 ::: {.callout-tip}
 ## Ejercicio B — Tu propio dataset

@@ -7,7 +7,7 @@ title: "Apéndice B — Recetario de código"
 ::: {.objetivos}
 **Para qué sirve este apéndice**
 
-Funciones reutilizables de simulación e indicadores EWS, listas para copiar a tu propio análisis. Las celdas son ejecutables aquí.
+Funciones reutilizables de simulación e indicadores EWS, listas para copiar a tu propio análisis. Las celdas son ejecutables aquí; al final está el equivalente con `ewstools`, para correr en tu máquina.
 :::
 
 ## Simulación de una EDE con bifurcación fold
@@ -15,11 +15,14 @@ Funciones reutilizables de simulación e indicadores EWS, listas para copiar a t
 ```{pyodide}
 import numpy as np
 
-def simula_fold(h0=-0.2, h1=0.6, T=400, dt=0.05, sigma=0.04, x0=-1.0, seed=0):
-    """Doble pozo  dx = (-x^3 + x + h(t)) dt + sigma dW, con h en rampa lineal.
+def simula_fold(h0=-0.2, h1=0.6, T=400, dt=0.05, sigma=0.04, x0=-1.0, seed=0,
+                meseta=0.0):
+    """Doble pozo  dx = (-x^3 + x + h(t)) dt + sigma dW.
+       meseta: fracción inicial del tiempo con h fijo en h0 (escenario multifase).
        Devuelve (x, indice_transicion, dt)."""
     r = np.random.default_rng(seed)
-    n = int(T/dt); h = np.linspace(h0, h1, n)
+    n = int(T/dt); k = int(meseta*n)
+    h = np.concatenate([np.full(k, h0), np.linspace(h0, h1, n - k)])
     x = np.empty(n); x[0] = x0
     for t in range(1, n):
         x[t] = x[t-1] + dt*(-x[t-1]**3 + x[t-1] + h[t-1]) + sigma*np.sqrt(dt)*r.standard_normal()
@@ -30,26 +33,84 @@ x, trans, dt = simula_fold(seed=1)
 print("longitud:", len(x), " transición en índice:", trans)
 ```
 
-## Indicadores EWS univariados (ventana móvil + Kendall τ)
+## Detrending y indicadores univariados (ventana móvil **o** expandible) {#sec-univar}
 
 ```{pyodide}
+from scipy.ndimage import gaussian_filter1d
 from scipy.stats import kendalltau
 
-def ews_univariado(serie, dt=1.0, k_trend=400, w=800):
+def detrend_gauss(serie, bw=200):
+    """Residuos tras quitar la tendencia con filtro gaussiano (como ewstools).
+       mode='nearest' evita el sesgo de borde de np.convolve(..., 'same')."""
     serie = np.asarray(serie, float)
-    trend = np.convolve(serie, np.ones(k_trend)/k_trend, mode="same")
-    resid = serie - trend
-    def ac1(s):
-        s = s - s.mean(); return np.corrcoef(s[:-1], s[1:])[0, 1]
-    rng = range(w, len(resid))
-    var_roll = np.array([resid[i-w:i].var() for i in rng])
-    ac_roll  = np.array([ac1(resid[i-w:i])  for i in rng])
-    tt = np.arange(w, len(resid)) * dt
-    taus = {"var": kendalltau(tt, var_roll)[0], "ac1": kendalltau(tt, ac_roll)[0]}
-    return tt, var_roll, ac_roll, taus
+    return serie - gaussian_filter1d(serie, bw, mode="nearest")
 
-tt, vr, ar, taus = ews_univariado(x[:trans], dt=dt)
-print("τ varianza:", round(taus["var"], 3), " τ AC(1):", round(taus["ac1"], 3))
+def ac1(s):
+    s = s - s.mean(); return np.corrcoef(s[:-1], s[1:])[0, 1]
+
+def ews_univariado(serie, dt=1.0, bw=200, w=800, ventana="movil", paso=1):
+    """EWS sobre 'serie'.
+       ventana : 'movil'      -> segmento {i-w, ..., i}   (ancho fijo)
+                 'expandible' -> segmento {0,   ..., i}   (acumulativo, w = calentamiento)
+       paso    : avance entre ventanas (1 = traslape máximo; w//4 reduce la
+                 autocorrelación del indicador).
+       Devuelve tiempos, varianza, AC(1) y los taus de Kendall."""
+    resid = detrend_gauss(serie, bw)
+    idx = np.arange(w, len(resid), paso)
+    corta = (lambda i: resid[i-w:i]) if ventana == "movil" else (lambda i: resid[:i])
+    var = np.array([corta(i).var() for i in idx])
+    ac  = np.array([ac1(corta(i))  for i in idx])
+    tt  = idx * dt
+    taus = {"var": kendalltau(tt, var)[0], "ac1": kendalltau(tt, ac)[0]}
+    return tt, var, ac, taus
+
+pre = x[:trans]
+for v in ("movil", "expandible"):
+    tt, var, ac, taus = ews_univariado(pre, dt=dt, ventana=v)
+    print(f"{v:<12} τ_var = {taus['var']:+.3f}   τ_AC1 = {taus['ac1']:+.3f}"
+          f"   amplificación var = {var[-1]/var[0]:.1f}x")
+```
+
+## Barrido de sensibilidad al tamaño de ventana
+
+```{pyodide}
+def barrido_ventana(serie, dt=1.0, bw=200, ws=(200, 400, 800, 1600)):
+    print(f"{'w':>6}{'tau(var)':>11}{'tau(AC1)':>11}{'n ventanas':>13}")
+    for w in ws:
+        if w >= len(serie): continue
+        tt, var, ac, taus = ews_univariado(serie, dt=dt, bw=bw, w=w)
+        print(f"{w:6d}{taus['var']:11.2f}{taus['ac1']:11.2f}{len(tt):13d}")
+
+barrido_ventana(pre, dt=dt)
+```
+
+## Significancia con *surrogates*
+
+```{pyodide}
+def tau_var(resid, w, paso):
+    idx = np.arange(w, len(resid), paso)
+    v = np.array([resid[i-w:i].var() for i in idx])
+    return kendalltau(idx, v)[0]
+
+def p_surrogate(serie, bw=200, w=800, n_sur=100, seed=0):
+    """Distribución nula del tau de la varianza con subrogados de fase
+       aleatorizada (preservan el espectro y, por tanto, la autocorrelación)."""
+    r = np.random.default_rng(seed)
+    resid = detrend_gauss(serie, bw)
+    paso = max(1, w//8)                       # submuestreo: mismo criterio en todo
+    tau_obs = tau_var(resid, w, paso)
+    F = np.abs(np.fft.rfft(resid))
+    nulos = np.empty(n_sur)
+    for k in range(n_sur):
+        fases = r.uniform(0, 2*np.pi, len(F)); fases[0] = 0
+        sur = np.fft.irfft(F*np.exp(1j*fases), n=len(resid))
+        nulos[k] = tau_var(sur, w, paso)
+    return tau_obs, float((nulos >= tau_obs).mean()), nulos
+
+tau_obs, p, nulos = p_surrogate(pre)
+print(f"tau observado = {tau_obs:+.3f}")
+print(f"nulo: media = {nulos.mean():+.3f}, percentil 95 = {np.percentile(nulos, 95):+.3f}")
+print(f"p (una cola, {len(nulos)} subrogados) = {p:.3f}")
 ```
 
 ## Indicador multivariado (autovalor dominante de la covarianza)
@@ -77,21 +138,123 @@ print("λmax final:", round(lambda_max_movil(X)[-1], 3))
 ## Equivalentes en R (base)
 
 ```{webr}
-# Indicador AC(1) y varianza en ventana móvil, base R
-ews_univariado <- function(serie, w = 50, k_trend = 25) {
-  trend <- stats::filter(serie, rep(1/k_trend, k_trend), sides = 2)
-  resid <- serie - trend
-  resid <- resid[!is.na(resid)]
-  idx <- (w + 1):length(resid)
-  varr <- sapply(idx, function(i) var(resid[(i - w):i]))
-  ac1  <- sapply(idx, function(i) {
-    s <- resid[(i - w):i]; s <- s - mean(s); cor(s[-length(s)], s[-1])
-  })
-  list(var = varr, ac1 = ac1,
-       tau_var = cor(seq_along(varr), varr, method = "kendall"),
-       tau_ac1 = cor(seq_along(ac1),  ac1,  method = "kendall"))
+# Detrending gaussiano con bordes bien tratados
+detrend_gauss <- function(y, bw = 200) {
+  k <- round(3*bw); d <- (-k):k
+  peso <- exp(-d^2/(2*bw^2)); peso <- peso/sum(peso)
+  yp <- c(rep(y[1], k), y, rep(y[length(y)], k))
+  y - as.vector(stats::filter(yp, peso, sides = 2))[(k+1):(k+length(y))]
 }
-set.seed(1); y <- cumsum(rnorm(500, sd = 0.2)) + rnorm(500, sd = 0.5)
-r <- ews_univariado(y, w = 60)
-cat("tau var:", round(r$tau_var, 3), " tau AC1:", round(r$tau_ac1, 3), "\n")
+
+ac1 <- function(s) { s <- s - mean(s); cor(s[-length(s)], s[-1]) }
+
+# ventana = "movil" o "expandible"
+ews_univariado <- function(serie, dt = 1, bw = 50, w = 100,
+                           ventana = "movil", paso = 1) {
+  resid <- detrend_gauss(serie, bw)
+  idx <- seq(w + 1, length(resid), by = paso)
+  corta <- if (ventana == "movil")
+             function(i) resid[(i-w+1):i] else function(i) resid[1:i]
+  varr <- sapply(idx, function(i) var(corta(i)))
+  acr  <- sapply(idx, function(i) ac1(corta(i)))
+  tt   <- idx * dt
+  list(t = tt, var = varr, ac1 = acr,
+       tau_var = cor(tt, varr, method = "kendall"),
+       tau_ac1 = cor(tt, acr,  method = "kendall"))
+}
+
+# Simulación del fold (equivalente a simula_fold en Python)
+simula_fold <- function(h0 = -0.2, h1 = 0.6, T = 400, dt = 0.05, sigma = 0.04,
+                        x0 = -1, seed = 1, meseta = 0) {
+  set.seed(seed)
+  n <- T/dt; k <- floor(meseta*n)
+  h <- c(rep(h0, k), seq(h0, h1, length.out = n - k))
+  x <- numeric(n); x[1] <- x0
+  for (t in 2:n) x[t] <- x[t-1] + dt*(-x[t-1]^3 + x[t-1] + h[t-1]) +
+                          sigma*sqrt(dt)*rnorm(1)
+  trans <- which(x > 0)[1]; if (is.na(trans)) trans <- n
+  list(x = x, trans = trans, dt = dt)
+}
+
+sim <- simula_fold(seed = 1)
+pre <- sim$x[1:(sim$trans - 1)]
+for (v in c("movil", "expandible")) {
+  r <- ews_univariado(pre, dt = sim$dt, bw = 200, w = 800, ventana = v, paso = 25)
+  cat(sprintf("%-12s tau var = %+5.3f  tau AC1 = %+5.3f  amplificacion = %4.1fx\n",
+              v, r$tau_var, r$tau_ac1, r$var[length(r$var)] / r$var[1]))
+}
+```
+
+## El mismo flujo con `ewstools` (local, no se ejecuta aquí) {#sec-ewstools}
+
+`ewstools` [@bury2023ewstools] es la biblioteca de referencia en Python para EWS: hace el *detrending*, calcula los indicadores en ventana móvil, saca los $\tau$ de Kendall, dibuja todo con Plotly y aplica clasificadores profundos. Instálala con `pip install ewstools` (y `tensorflow` si quieres los clasificadores).
+
+```python
+# ---- pipeline completo con ewstools -------------------------------------
+import numpy as np, pandas as pd, ewstools
+
+serie = pd.Series(pre)                        # tu serie (índice = tiempo)
+ts = ewstools.TimeSeries(data=serie, transition=len(serie))
+
+ts.detrend(method="Gaussian", bandwidth=0.2)  # bandwidth = fracción de la serie
+# ts.detrend(method="Lowess", span=0.2)       # alternativa
+
+ts.compute_var(rolling_window=0.25)           # w = 25 % de la serie
+ts.compute_auto(rolling_window=0.25, lag=1)
+ts.compute_skew(rolling_window=0.25)
+ts.compute_kurt(rolling_window=0.25)
+
+# indicadores espectrales: primero el espectro, luego Smax / tipo de bifurcación
+ts.compute_spectrum(rolling_window=0.25)
+ts.compute_smax()                             # enrojecimiento: potencia máxima
+ts.compute_spec_type()                        # pesos AIC: fold / Hopf / nulo
+
+ts.compute_ktau()                             # llena el diccionario ts.ktau
+print(ts.ktau)                                # {'variance': .., 'ac1': .., 'skew': ..}
+
+ts.state.head()      # columnas: state, smoothing, residuals
+ts.ews.head()        # columnas: variance, ac1, skew, kurtosis, ...
+ts.make_plotly().show()
+
+# ---- ventana EXPANDIBLE: ewstools no la trae, se añade en dos líneas -----
+res = ts.state["residuals"].dropna()
+w   = int(0.25*len(res))
+var_exp = res.expanding(min_periods=w).var().dropna()
+ac_exp  = res.expanding(min_periods=w).apply(lambda s: pd.Series(s).autocorr(lag=1),
+                                             raw=False).dropna()
+
+from scipy.stats import kendalltau
+print("tau varianza (expandible):", round(kendalltau(var_exp.index, var_exp)[0], 3))
+print("tau AC(1)   (expandible):", round(kendalltau(ac_exp.index, ac_exp)[0], 3))
+
+# ---- barrido de sensibilidad al tamaño de ventana -----------------------
+for rw in [0.1, 0.2, 0.3, 0.5]:
+    t2 = ewstools.TimeSeries(data=serie, transition=len(serie))
+    t2.detrend(method="Gaussian", bandwidth=0.2)
+    t2.compute_var(rolling_window=rw)
+    t2.compute_auto(rolling_window=rw, lag=1)
+    t2.compute_ktau()
+    print(rw, {k: round(v, 2) for k, v in t2.ktau.items()})
+```
+
+Para el caso multivariado, `ewstools.MultiTimeSeries` calcula covarianza y autovalor dominante en ventana móvil con la misma lógica:
+
+```python
+mts = ewstools.MultiTimeSeries(data=df)       # df: columnas = variables
+mts.detrend(method="Gaussian", bandwidth=0.2)
+mts.compute_covar(rolling_window=0.25, leading_eval=True)
+mts.compute_corr(rolling_window=0.25)
+```
+
+Y en R, `EWSMethods` cubre el flujo univariado y comunitario:
+
+```r
+library(EWSmethods)
+res <- uniEWS(data = cbind(tiempo, serie), metrics = c("SD", "ar1", "skew"),
+              method = "rolling", winsize = 50)     # winsize en % de la serie
+plot(res)
+
+res_exp <- uniEWS(data = cbind(tiempo, serie), metrics = c("SD", "ar1"),
+                  method = "expanding", burn_in = 50, threshold = 2)  # expandible
+plot(res_exp)
 ```

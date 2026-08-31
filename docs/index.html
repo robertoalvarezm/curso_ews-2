@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -61,7 +61,7 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-aafd05f385ac8229ba2214b6c0c13563.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -206,6 +206,12 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./p3-tipos-de-tipping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tipos de transición: bifurcación, ruido, tasa y choque</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./p3-cap05-ews-fundamento.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Fundamento de las EWS: ralentización crítica</span></a>
   </div>
@@ -321,7 +327,7 @@ div.csl-indent {
     <div>
     <div class="quarto-title-meta-heading">Fecha de publicación</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">17 de junio de 2026</p>
+      <p class="date">30 de agosto de 2026</p>
     </div>
   </div>
   
@@ -343,7 +349,22 @@ div.csl-indent {
 <ul>
 <li><strong>Parte I · Bifurcaciones en sistemas 1-D.</strong> La teoría mínima: estabilidad, las tres bifurcaciones locales (saddle-node, transcrítica, pitchfork), formas normales, potenciales e histéresis.</li>
 <li><strong>Parte II · Bifurcaciones empíricas en biología.</strong> Cómo se manifiestan en el laboratorio y el campo: levaduras <span class="citation" data-cites="dai2012">(<a href="#ref-dai2012" role="doc-biblioref">Dai et&nbsp;al. 2012</a>)</span>, cianobacterias <span class="citation" data-cites="veraart2012">(<a href="#ref-veraart2012" role="doc-biblioref">Veraart et&nbsp;al. 2012</a>)</span>, lagos enteros <span class="citation" data-cites="carpenter2011">(<a href="#ref-carpenter2011" role="doc-biblioref">Carpenter et&nbsp;al. 2011</a>)</span> y la histéresis claro↔︎turbio.</li>
-<li><strong>Parte III · Señales de Alerta Temprana.</strong> Ralentización crítica, varianza y autocorrelación, indicadores univariados y multivariados, y enfoques de aprendizaje automático <span class="citation" data-cites="deb2022 bury2021 alvarez2026early">(<a href="#ref-deb2022" role="doc-biblioref">Deb et&nbsp;al. 2022</a>; <a href="#ref-bury2021" role="doc-biblioref">Bury et&nbsp;al. 2021</a>; <a href="#ref-alvarez2026early" role="doc-biblioref">Alvarez-Martinez y Miramontes 2026</a>)</span>.</li>
+<li><strong>Parte III · Señales de Alerta Temprana.</strong> Mecanismos de <em>tipping</em> (bifurcación, ruido, tasa y choque), ralentización crítica, varianza y autocorrelación, ventanas móviles y expandibles, indicadores multivariados y enfoques de aprendizaje automático <span class="citation" data-cites="deb2022 bury2021">(<a href="#ref-deb2022" role="doc-biblioref">Deb et&nbsp;al. 2022</a>; <a href="#ref-bury2021" role="doc-biblioref">Bury et&nbsp;al. 2021</a>)</span>.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Referencia de cabecera de la Parte III
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La Parte III sigue de cerca la revisión <strong><span class="citation" data-cites="alvarez2026early">Alvarez-Martinez y Miramontes (<a href="#ref-alvarez2026early" role="doc-biblioref">2026</a>)</span></strong>, <em>Early Warning Signals in Ecological Time-Series</em> (Entropy 28:628), que sintetiza el fundamento dinámico, el catálogo de indicadores, las decisiones metodológicas del pipeline (ventanas, <em>detrending</em>, prueba de tendencia, sensibilidad) y la tipología de mecanismos de <em>tipping</em>. Cada capítulo remite a la sección correspondiente.</p>
+</div>
+</div>
+<ul>
 <li><strong>Taller transversal.</strong> De datos <strong>simulados</strong> a datos <strong>reales</strong>: detectar una transición con tu propio pipeline.</li>
 </ul>
 </section>
@@ -365,11 +386,11 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>Python es el lenguaje primario</strong> del curso; <strong>R aparece como apoyo</strong> donde resulta natural. En el taller usarás <code>numpy</code>/<code>scipy</code>/<code>pandas</code> en el navegador y verás cómo replicarlo localmente con <code>ewstools</code> (Python) y <code>EWSmethods</code> (R).</p>
+<p><strong>Python es el lenguaje primario</strong> del curso; <strong>R aparece como apoyo</strong> donde resulta natural. En el navegador usarás <code>numpy</code>/<code>scipy</code>/<code>pandas</code> para ver la mecánica de cada indicador “a mano”; en paralelo, cada capítulo de la Parte III muestra el flujo equivalente con <strong><code>ewstools</code></strong> <span class="citation" data-cites="bury2023ewstools">(<a href="#ref-bury2023ewstools" role="doc-biblioref">Bury 2023</a>)</span> en Python y <code>EWSmethods</code> en R, que es lo que conviene usar en un análisis real. El <a href="./apB-recetario.html#sec-ewstools">apéndice B</a> reúne ese pipeline completo.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -378,7 +399,7 @@ div.csl-indent {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Cálculo diferencial, nociones de ecuaciones diferenciales ordinarias y de programación. No se requiere (<strong>tanta</strong>) experiencia previa con sistemas dinámicos.</p>
 </div>
@@ -408,7 +429,10 @@ W10=
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-alvarez2026early" class="csl-entry" role="listitem">
-Alvarez-Martinez, Roberto, y Pedro Miramontes. 2026. <span>«Early Warning Signals in Ecological Time-Series»</span>. <em>Entropy</em> 28 (6): 628.
+Alvarez-Martinez, Roberto, y Pedro Miramontes. 2026. <span>«Early Warning Signals in Ecological Time-Series»</span>. <em>Entropy</em> 28 (6): 628. <a href="https://doi.org/10.3390/e28060628">https://doi.org/10.3390/e28060628</a>.
+</div>
+<div id="ref-bury2023ewstools" class="csl-entry" role="listitem">
+Bury, Thomas M. 2023. <span>«ewstools: A Python Package for Early Warning Signals of Bifurcations in Time Series Data»</span>. <em>Journal of Open Source Software</em> 8 (82): 5038. <a href="https://doi.org/10.21105/joss.05038">https://doi.org/10.21105/joss.05038</a>.
 </div>
 <div id="ref-bury2021" class="csl-entry" role="listitem">
 Bury, Thomas M., R. I. Sujith, Induja Pavithran, et&nbsp;al. 2021. <span>«Deep Learning for Early Warning Signals of Tipping Points»</span>. <em>Proceedings of the National Academy of Sciences</em> 118 (39): e2106140118. <a href="https://doi.org/10.1073/pnas.2106140118">https://doi.org/10.1073/pnas.2106140118</a>.

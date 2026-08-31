@@ -24,7 +24,7 @@ Las celdas `{pyodide}` (Python) y `{webr}` (R) **no se ejecutan al renderizar**:
 Desde la carpeta del proyecto:
 
 ```bash
-quarto render          # genera el sitio en _site/
+quarto render          # genera el sitio en docs/ (output-dir del proyecto)
 quarto preview         # vista previa con recarga en vivo
 ```
 
@@ -55,7 +55,9 @@ webr:
   packages: [stats]
 ```
 
-Pyodide trae `numpy`/`scipy`/`matplotlib`/`pandas` listos. Bibliotecas como `ewstools` (Python) o `EWSmethods` (R) **no** se usan en el navegador en este curso: aparecen como código para correr **localmente** (ver Taller y capítulo 6).
+Pyodide trae `numpy`/`scipy`/`matplotlib`/`pandas` listos. Bibliotecas como `ewstools` (Python) o `EWSmethods` (R) **no** se ejecutan en el navegador: `ewstools` depende de `arch`, que es código compilado sin rueda para WebAssembly, y arrastraría además `plotly`, `statsmodels` y `EntropyHub` (decenas de MB de descarga por visita). Por eso aparecen en todo el curso como bloques de código para correr **localmente**, con la API real (capítulos 5 y 7, taller y [apéndice B](apB-recetario.qmd#sec-ewstools)).
+
+Las animaciones de la Parte III son archivos `.gif` en `images/`, generados fuera de línea con matplotlib; los paneles interactivos son celdas `{ojs}` que corren en JavaScript (Observable Plot), sin esperar a que arranque Pyodide.
 
 ## Reproducibilidad local del taller
 
@@ -64,6 +66,7 @@ Para la Fase B del taller (datos reales) trabaja en un entorno local:
 ```bash
 # Python
 pip install ewstools pandas numpy scipy matplotlib
+pip install "ewstools[tf]"      # opcional: clasificadores profundos (TensorFlow)
 ```
 
 ```r
@@ -81,7 +84,8 @@ curso_ews/
 ├── index.qmd              # presentación
 ├── p1-cap01..03.qmd       # Parte I
 ├── p2-cap04.qmd           # Parte II
-├── p3-cap05..07.qmd       # Parte III
+├── p3-tipos-de-tipping.qmd + p3-cap05..07.qmd   # Parte III
+├── images/                # logo y animaciones (.gif) de la Parte III
 ├── taller.qmd             # taller transversal
 ├── apA/apB/apC + referencias.qmd
 └── _extensions/r-wasm/live/   # extensión quarto-live (incluida)

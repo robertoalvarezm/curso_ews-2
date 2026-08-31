@@ -38,7 +38,7 @@ $V(x)$. Los **mínimos** de $V$ son puntos fijos **estables**; los
 La **profundidad de un pozo** mide la **resiliencia** del estado: cuánta perturbación hace falta para sacar a la canica de él.
 
 
-### Ejercicios {#sec-potencial}
+### Ejercicios {#sec-ej-potencial}
 
 :::: callout-tip
 ## Ejercicio Potencial de las formas normales de  las bifurcaciones
@@ -146,8 +146,7 @@ ${raices.map(r => `x* = ${r.x.toFixed(3)} <span style="color:${r.estable ? "#1f5
 ### Estabilidad: ¿quién es atractor? {#sec-cusp-estab}
 
 La estabilidad se decide con el signo de
-$$f'(x) = \mu - 3x^2 .$$
- {#eq-cusp-fprime}
+$$f'(x) = \mu - 3x^2 .$$ {#eq-cusp-fprime}
 
 Un equilibrio es **estable** si $f'(x^*)<0$, es decir $x^{*2}>\mu/3$.
 
@@ -160,11 +159,11 @@ la biestabilidad.
 
 Un **pliegue** (saddle-node) ocurre cuando dos equilibrios chocan y se
 aniquilan: ahí $f=0$ **y** $f'=0$ a la vez. De @eq-cusp-fprime,
-$$x_c = \pm\sqrt{\tfrac{\mu}{3}} ,$$
- {#eq-cusp-xc} y sustituyendo en $\alpha = x^3-\mu x$ se obtiene el
+$$x_c = \pm\sqrt{\tfrac{\mu}{3}} ,$$ {#eq-cusp-xc}
+
+y sustituyendo en $\alpha = x^3-\mu x$ se obtiene el
 valor crítico del forzamiento:
-$$\alpha_c = \pm\frac{2\mu}{3}\sqrt{\frac{\mu}{3}} = \pm\frac{2}{3\sqrt{3}}\,\mu^{3/2}.$$
- {#eq-cusp-alphac}
+$$\alpha_c = \pm\frac{2\mu}{3}\sqrt{\frac{\mu}{3}} = \pm\frac{2}{3\sqrt{3}}\,\mu^{3/2}.$$ {#eq-cusp-alphac}
 
 Equivalente: la cúbica $x^3-\mu x-\alpha=0$ tiene tres raíces reales
 cuando su discriminante es positivo, $4\mu^3-27\alpha^2>0$, es decir
@@ -437,7 +436,12 @@ se le llama **histéresis**, y al salto, **bifurcación catastrófica**
 La consecuencia ecológica es central [@scheffer2001]: el umbral para
 **colapsar** a un estado degradado difiere del umbral necesario para
 **recuperar** el estado original. Restaurar no es simplemente "deshacer"
-la perturbación.
+la perturbación. Este paisaje de potencial es, además, el marco en el que
+se define la **resiliencia**: la profundidad del pozo (cuánta perturbación
+absorbe el sistema antes de caer al otro estado) y la curvatura en el fondo
+(qué tan rápido se recupera de un empujón pequeño) son dos cosas distintas,
+y solo la segunda es lo que miden las señales de alerta temprana de la
+[Parte III](p3-tipos-de-tipping.qmd) [@alvarez2026early].
 
 <!-- Cap. 3 · catástrofe e histéresis -->
 
@@ -553,7 +557,7 @@ la **varianza** justo antes del salto.
 Es compatible con una saddle-node: forzamiento suave, salto abrupto e
 (idealmente) histéresis. Antes del pliegue, por enlentecimiento crítico,
 esperaríamos un aumento de varianza y de autocorrelación —las EWS de la
-[Parte III](p3-cap05-ews-fundamento.qmd)—, sujeto a las limitaciones de
+[Parte III](p3-tipos-de-tipping.qmd)—, sujeto a las limitaciones de
 muestreo del registro.
 :::
 ::::
@@ -631,5 +635,8 @@ alerta temprana de la Parte III.
 
 En la [Parte II](p2-cap04-empiricas.qmd) veremos estos
 pliegues e histéresis **medidos** en levaduras, cianobacterias y lagos
-enteros, sueño e hibernación.
+enteros, sueño e hibernación. Y en la [Parte III](p3-tipos-de-tipping.qmd)
+usaremos este mismo doble pozo como banco de pruebas: la canica que
+fluctúa dentro del pozo es, literalmente, la serie de tiempo sobre la que
+se calculan las señales de alerta temprana.
 

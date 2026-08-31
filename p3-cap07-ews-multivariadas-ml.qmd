@@ -14,7 +14,9 @@ title: "EWS multivariadas y aprendizaje automático"
 
 ## De una variable a muchas {#sec-multi}
 
-En comunidades microbianas o redes tróficas medimos **muchas** variables a la vez. Cerca de una bifurcación, el fenómeno de la ralentización crítica se manifiesta como un crecimiento de la **varianza colectiva** alineada con el modo que se desestabiliza. Un resumen natural es el **autovalor dominante** $\lambda_{\max}$ de la matriz de covarianza en ventana móvil: tiende a crecer al acercarse al umbral, igual que la varianza univariada.
+En comunidades microbianas o redes tróficas medimos **muchas** variables a la vez. Cerca de una bifurcación, el fenómeno de la ralentización crítica se manifiesta como un crecimiento de la **varianza colectiva** alineada con el modo que se desestabiliza. Un resumen natural es el **autovalor dominante** $\lambda_{\max}$ de la matriz de covarianza en ventana móvil: tiende a crecer al acercarse al umbral, igual que la varianza univariada [@alvarez2026early, sec. 5.2.1].
+
+La ventaja de mirar el sistema completo es doble: se detecta el **modo lento** aunque ninguna variable por separado dé señal clara, y se puede identificar **qué subconjunto** de variables lidera la pérdida de resiliencia (la lógica de los *dynamic network biomarkers*). El precio es el habitual en alta dimensión: se necesitan más datos y las decisiones de preprocesamiento se multiplican.
 
 Simulamos dos variables acopladas cuya tasa de retorno se desvanece y seguimos $\lambda_{\max}$:
 
@@ -49,8 +51,11 @@ Otros indicadores multivariados útiles: la **correlación cruzada** entre varia
 
 Los indicadores clásicos exigen elegir *detrending*, ventana y umbral, y fallan en transiciones que **no** son saddle-node. Una línea reciente entrena modelos que **aprenden la firma** de una transición inminente:
 
-- @deb2022 muestran que modelos entrenados con **dinámicas sencillas simuladas** generalizan y **predicen transiciones críticas en sistemas naturales complejos**, sin ajustar a cada caso.
+- @deb2022 muestran que modelos entrenados con **dinámicas sencillas simuladas** generalizan y **predicen transiciones críticas en sistemas naturales complejos**, sin ajustar a cada caso; su modelo preentrenado se distribuye como **EWSNet**.
 - @bury2021 usan **redes profundas** (CNN + LSTM) entrenadas sobre una biblioteca de bifurcaciones para clasificar el **tipo** de transición y anticiparla; sus datos termoacústicos y el código de entrenamiento son públicos (los usaremos en el [taller](taller.qmd)).
+- Una tercera línea combina **varios indicadores clásicos** como variables explicativas de un clasificador (bosques aleatorios, regresión logística): en lugar de decidir *a priori* qué indicador usar, el algoritmo aprende cuáles y con qué umbrales son fiables [@alvarez2026early, sec. 3.3.2].
+
+La promesa es real y el límite también: si la transición **no** deja firma dinámica —ruido, tasa o choque—, no hay arquitectura que la aprenda.
 
 ::: {.callout-note collapse="true"}
 ## Profundización (opcional): por qué entrenar con modelos simples funciona [Avanzado]{.avanzado-tag}
@@ -58,22 +63,31 @@ Las formas normales (Parte I) son **universales** cerca del punto crítico: la d
 :::
 
 ::: {.callout-note}
-## En tu máquina: `EWSNet`
-Modelo preentrenado de @bury2021 / línea de Deb. No se ejecuta aquí; úsalo localmente:
+## En tu máquina: clasificadores profundos desde `ewstools`
+`ewstools` [@bury2023ewstools] no solo calcula los indicadores clásicos: también aplica los clasificadores profundos de @bury2021 sobre la misma serie, con la misma API. No se ejecuta aquí; úsalo localmente:
 
 ```python
-# Python (local) — esquema
-from ewsnet import EWSNet            # según la implementación que instales
-modelo = EWSNet(weights="pretrained")
-prob = modelo.predict(serie)         # P(transición), y tipo si aplica
-print(prob)
+# Python (local):  pip install ewstools tensorflow
+import ewstools
+from tensorflow.keras.models import load_model
+
+ts = ewstools.TimeSeries(data=serie, transition=t_transicion)
+ts.detrend(method="Gaussian", bandwidth=0.2)
+ts.compute_var(rolling_window=0.25)
+ts.compute_auto(rolling_window=0.25, lag=1)
+
+clasificador = load_model("ruta/al/modelo_entrenado.pkl")   # pesos de Bury et al.
+ts.apply_classifier(clasificador, tmin=0, tmax=t_transicion, name="c1")
+print(ts.dl_preds.groupby("time").mean())   # P(fold), P(Hopf), P(transcrítica), P(nada)
 ```
+
+El modelo preentrenado **EWSNet** de @deb2022 se distribuye por separado (`ewsnet`), con una interfaz análoga.
 :::
 
 ## Ejercicios {#sec-ej7}
 
 ::: {.callout-tip}
-## Ejercicio 7.1 — Acoplamiento
+## Ejercicio 8.1 — Acoplamiento
 Cambia `c` a `0.0` (variables independientes) y a `0.8` (fuerte acoplamiento). ¿Cómo cambia la forma del autovalor dominante hacia el final?
 
 ::: {.callout-note collapse="true"}
@@ -83,7 +97,7 @@ Con acoplamiento fuerte, las variables comparten el modo lento y el autovalor do
 :::
 
 ::: {.callout-tip}
-## Ejercicio 7.2 — Conceptual
+## Ejercicio 8.2 — Conceptual
 ¿Por qué un detector basado solo en "varianza alta" daría falsos positivos, y cómo lo mitiga un enfoque que mira la **tendencia** y el **tipo** de transición?
 
 ::: {.callout-note collapse="true"}

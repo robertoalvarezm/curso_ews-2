@@ -14,7 +14,9 @@ title: "Fundamento de las EWS: ralentización crítica"
 
 ## La idea central {#sec-csd}
 
-Cerca de un punto fijo estable, la dinámica linealiza a $\dot{\eta} \approx -\lambda\,\eta$ con $\lambda = -f'(x^*) = |f'(x^*)| > 0$. La **tasa de retorno** $\lambda$ mide qué tan rápido el sistema reabsorbe una perturbación. Al acercarse a una bifurcación, $f'(x^*)\to 0$, así que $\lambda\to 0$: el sistema se vuelve **lento y "blando"**. Eso es el ralentización crítica, ya medido en cianobacterias [@veraart2012].
+Cerca de un punto fijo estable, la dinámica linealiza a $\dot{\eta} \approx -\lambda\,\eta$ con $\lambda = -f'(x^*) = |f'(x^*)| > 0$. La **tasa de retorno** $\lambda$ mide qué tan rápido el sistema reabsorbe una perturbación. Al acercarse a una bifurcación, $f'(x^*)\to 0$, así que $\lambda\to 0$ y el **tiempo característico de retorno** $\tau_r = 1/\lambda$ diverge: el sistema se vuelve **lento y "blando"**. Eso es la ralentización crítica, ya medida en cianobacterias [@veraart2012].
+
+Conviene tener presente el linaje de la idea: la ralentización crítica nace en física estadística (Van Hove, Landau–Khalatnikov, Hohenberg–Halperin) y Wissel la trasladó en 1984 a sistemas dinámicos de dimensión finita cerca de una bifurcación local; solo después Scheffer, Carpenter y Dakos la convirtieron en herramienta ecológica [@alvarez2026early, sec. 2.3].
 
 Con ruido, el sistema obedece un proceso de **Ornstein–Uhlenbeck**:
 $$
@@ -99,7 +101,12 @@ Los puntos caen sobre la recta teórica: al dividir $\lambda$ entre 2, la varian
 :::
 
 
-Cuando $\lambda \to 0$: la **varianza explota** y la **autocorrelación tiende a 1**. Son las dos señales de alerta temprana canónicas [@scheffer2009; @dakos2012].
+Cuando $\lambda \to 0$: la **varianza explota** y la **autocorrelación tiende a 1**. Son las dos señales de alerta temprana canónicas [@scheffer2009; @dakos2012], pero no las únicas: asimetría, curtosis, enrojecimiento espectral, *flickering*, heterocedasticidad condicional e indicadores espaciales completan el catálogo. Ninguno sustituye a los otros; lo que da confianza es la **evidencia convergente** de varios indicadores [@alvarez2026early, sec. 2.4].
+
+::: {.callout-important}
+## $\lambda$ pequeña no es lo mismo que salto inminente
+Aun cuando la ralentización crítica sea real y detectable, informa sobre la **aproximación a la inestabilidad**: no dice **cuándo** ocurrirá el salto, ni de qué **magnitud** será, ni a qué estado llevará [@alvarez2026early, sec. 2.5]. Es una medida de riesgo cambiante, no un pronóstico con fecha.
+:::
 
 Mueve $\lambda$ y observa ambas predicciones:
 
@@ -176,7 +183,7 @@ La serie "cerca" es visiblemente más **ancha** (mayor varianza) y más **suave/
 ## Ejercicios {#sec-ej5}
 
 ::: {.callout-tip}
-## Ejercicio 5.1 — Predicción vs. simulación
+## Ejercicio 6.1 — Predicción vs. simulación
 Usa @eq-ews para predecir la varianza y AC(1) con $\lambda=0.2$, $\sigma=0.1$, $\Delta t=0.05$. Compara con los números que imprime la celda.
 
 ::: {.callout-note collapse="true"}
@@ -186,7 +193,7 @@ $\operatorname{Var}=0.1^2/(2\cdot 0.2)=0.025$ y $\rho_1=e^{-0.2\cdot 0.05}=e^{-0
 :::
 
 ::: {.callout-tip}
-## Ejercicio 5.2 — Computacional
+## Ejercicio 6.2 — Computacional
 Reduce $\lambda$ a `0.05` en la celda. ¿La varianza sube por un factor cercano a 4 respecto a $\lambda=0.2$? ¿Por qué?
 
 ::: {.callout-note collapse="true"}
@@ -197,4 +204,4 @@ Sí: $\operatorname{Var}\propto 1/\lambda$, y $0.2/0.05=4$. Al dividir $\lambda$
 
 ## Para seguir
 
-En el [capítulo 6](p3-cap06-ews-univariadas.qmd) llevamos esto a la práctica: estimar varianza y AC(1) en **ventanas móviles** sobre una serie que se acerca a un pliegue, con *detrending* y prueba de tendencia.
+En el [capítulo 7](p3-cap06-ews-univariadas.qmd) llevamos esto a la práctica: estimar varianza y AC(1) sobre una serie que se acerca a un pliegue, con *detrending*, prueba de tendencia y las dos estrategias de ventana —**móvil** y **expandible**— que definen el resto del método.

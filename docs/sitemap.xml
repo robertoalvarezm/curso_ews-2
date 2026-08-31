@@ -2,19 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://example.org/curso-ews/taller.html</loc>
-    <lastmod>2026-06-15T04:16:02.000Z</lastmod>
+    <lastmod>2026-08-30T23:50:38.030Z</lastmod>
   </url>
   <url>
     <loc>https://example.org/curso-ews/p3-cap07-ews-multivariadas-ml.html</loc>
-    <lastmod>2026-06-16T22:25:26.845Z</lastmod>
+    <lastmod>2026-08-28T03:41:14.793Z</lastmod>
   </url>
   <url>
     <loc>https://example.org/curso-ews/p3-cap05-ews-fundamento.html</loc>
-    <lastmod>2026-06-16T22:42:28.371Z</lastmod>
+    <lastmod>2026-08-30T23:50:36.929Z</lastmod>
   </url>
   <url>
     <loc>https://example.org/curso-ews/p1-cap03-potenciales-catastrofe.html</loc>
-    <lastmod>2026-06-17T04:01:23.084Z</lastmod>
+    <lastmod>2026-08-28T03:41:16.009Z</lastmod>
   </url>
   <url>
     <loc>https://example.org/curso-ews/p1-cap01-sistemas-1d.html</loc>
@@ -34,7 +34,7 @@
   </url>
   <url>
     <loc>https://example.org/curso-ews/index.html</loc>
-    <lastmod>2026-06-17T01:56:21.806Z</lastmod>
+    <lastmod>2026-08-30T23:50:39.416Z</lastmod>
   </url>
   <url>
     <loc>https://example.org/curso-ews/p1-cap02-formas-normales.html</loc>
@@ -42,14 +42,18 @@
   </url>
   <url>
     <loc>https://example.org/curso-ews/p2-cap04-empiricas.html</loc>
-    <lastmod>2026-06-15T02:00:12.444Z</lastmod>
+    <lastmod>2026-08-28T03:41:15.670Z</lastmod>
   </url>
   <url>
     <loc>https://example.org/curso-ews/p3-cap06-ews-univariadas.html</loc>
-    <lastmod>2026-06-16T22:25:34.697Z</lastmod>
+    <lastmod>2026-08-30T23:50:37.236Z</lastmod>
   </url>
   <url>
     <loc>https://example.org/curso-ews/referencias.html</loc>
     <lastmod>2026-06-17T08:34:09.085Z</lastmod>
+  </url>
+  <url>
+    <loc>https://example.org/curso-ews/p3-tipos-de-tipping.html</loc>
+    <lastmod>2026-08-30T23:50:36.596Z</lastmod>
   </url>
 </urlset>
