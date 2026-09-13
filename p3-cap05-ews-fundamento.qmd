@@ -14,7 +14,7 @@ title: "Fundamento de las EWS: ralentización crítica"
 
 ## La idea central {#sec-csd}
 
-Cerca de un punto fijo estable, la dinámica linealiza a $\dot{\eta} \approx -\lambda\,\eta$ con $\lambda = -f'(x^*) = |f'(x^*)| > 0$. La **tasa de retorno** $\lambda$ mide qué tan rápido el sistema reabsorbe una perturbación. Al acercarse a una bifurcación, $f'(x^*)\to 0$, así que $\lambda\to 0$ y el **tiempo característico de retorno** $\tau_r = 1/\lambda$ diverge: el sistema se vuelve **lento y "blando"**. Eso es la ralentización crítica, ya medida en cianobacterias [@veraart2012].
+Cerca de un punto fijo estable, la dinámica linealiza a $\dot{\eta} \approx -\lambda\,\eta$ con $\lambda = -f'(x^*) = |f'(x^*)| > 0$. La **tasa de retorno** $\lambda$ mide qué tan rápido el sistema reabsorbe una perturbación. Al acercarse a una bifurcación, $f'(x^*)\to 0$, así que $\lambda\to 0$ y el **tiempo característico de retorno** $\tau_r = 1/\lambda$ diverge: el sistema se vuelve **lento**. Eso es la ralentización crítica, ya medida en cianobacterias y en múltiples sistemas [@veraart2012].
 
 Conviene tener presente el linaje de la idea: la ralentización crítica nace en física estadística (Van Hove, Landau–Khalatnikov, Hohenberg–Halperin) y Wissel la trasladó en 1984 a sistemas dinámicos de dimensión finita cerca de una bifurcación local; solo después Scheffer, Carpenter y Dakos la convirtieron en herramienta ecológica [@alvarez2026early, sec. 2.3].
 
@@ -43,7 +43,7 @@ $$
 d(x^2) = \big(-2\lambda x^2 + \sigma^2\big)\,dt + 2\sigma x\,dW .
 $$
 
-Tomando esperanza, el término de ruido se anula porque $\mathbb{E}[x\,dW]=0$:
+Tomando el valor esperado, el término de ruido se anula porque $\mathbb{E}[x\,dW]=0$:
 
 $$
 \frac{d\,\mathbb{E}[x^2]}{dt} = -2\lambda\,\mathbb{E}[x^2] + \sigma^2 .
@@ -105,7 +105,7 @@ Cuando $\lambda \to 0$: la **varianza explota** y la **autocorrelación tiende a
 
 ::: {.callout-important}
 ## $\lambda$ pequeña no es lo mismo que salto inminente
-Aun cuando la ralentización crítica sea real y detectable, informa sobre la **aproximación a la inestabilidad**: no dice **cuándo** ocurrirá el salto, ni de qué **magnitud** será, ni a qué estado llevará [@alvarez2026early, sec. 2.5]. Es una medida de riesgo cambiante, no un pronóstico con fecha.
+Aun cuando la ralentización crítica sea real y detectable, esta informa sobre la **aproximación a la inestabilidad**: no dice **cuándo** ocurrirá el salto, ni de qué **magnitud** será, ni a qué estado llevará [@alvarez2026early, sec. 2.5]. Es una medida de riesgo cambiante, no un pronóstico con fecha precisa.
 :::
 
 Mueve $\lambda$ y observa ambas predicciones:
@@ -153,7 +153,7 @@ for lmbda, etq in [(2.0, "LEJOS"), (0.2, "CERCA")]:
 
 fig, ax = plt.subplots(1, 2, figsize=(8.5, 3), sharey=True)
 ax[0].plot(ou(2.0), lw=.5, color="#1f5673"); ax[0].set_title("lejos (λ=2): rígido, ruido blanco")
-ax[1].plot(ou(0.2), lw=.5, color="#b03a2e"); ax[1].set_title("cerca (λ=0.2): lento, autocorrelado")
+ax[1].plot(ou(0.2), lw=.5, color="#b03a2e"); ax[1].set_title("cerca (λ=0.2): lento, autocorrelacionado")
 plt.tight_layout(); plt.show()
 ```
 
@@ -178,7 +178,7 @@ par(op)
 
 :::
 
-La serie "cerca" es visiblemente más **ancha** (mayor varianza) y más **suave/correlacionada** (mayor AC). Eso es lo que un detector de EWS busca **a lo largo del tiempo** conforme el sistema deriva hacia el umbral.
+La serie "cerca" es visiblemente más **ancha** (mayor varianza) y más **suave/correlacionada** (mayor AC). Eso es lo que un detector de EWS busca **a lo largo del tiempo** conforme el sistema se acerca hacia el umbral.
 
 ## Ejercicios {#sec-ej5}
 
@@ -202,6 +202,6 @@ Sí: $\operatorname{Var}\propto 1/\lambda$, y $0.2/0.05=4$. Al dividir $\lambda$
 :::
 :::
 
-## Para seguir
+## Lo que sigue
 
-En el [capítulo 7](p3-cap06-ews-univariadas.qmd) llevamos esto a la práctica: estimar varianza y AC(1) sobre una serie que se acerca a un pliegue, con *detrending*, prueba de tendencia y las dos estrategias de ventana —**móvil** y **expandible**— que definen el resto del método.
+En el [capítulo 7](p3-cap06-ews-univariadas.qmd) llevamos esto a la práctica: estimar varianza y AC(1) sobre una serie que se acerca a un pliegue, con *detrending*, prueba de tendencia y las dos estrategias de ventana, **móvil** y **expandible**, que definen el resto del método.

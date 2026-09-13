@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -96,10 +99,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-aafd05f385ac8229ba2214b6c0c13563.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-edb0a7dcd21651b81f6df2fd410f67d7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
 <link href="site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -134,7 +137,7 @@ div.csl-indent {
 <link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -363,7 +366,7 @@ window.Quarto = {
   <li><a href="#clasifiquémoslo-con-código" id="toc-clasifiquémoslo-con-código" class="nav-link" data-scroll-target="#clasifiquémoslo-con-código">Clasifiquémoslo con código</a></li>
   </ul></li>
   <li><a href="#sec-ej1" id="toc-sec-ej1" class="nav-link" data-scroll-target="#sec-ej1"><span class="header-section-number">4</span> Ejercicios</a></li>
-  <li><a href="#para-seguir" id="toc-para-seguir" class="nav-link" data-scroll-target="#para-seguir"><span class="header-section-number">5</span> Para seguir</a></li>
+  <li><a href="#lo-que-sigue" id="toc-lo-que-sigue" class="nav-link" data-scroll-target="#lo-que-sigue"><span class="header-section-number">5</span> Lo que sigue</a></li>
   </ul>
 </nav>
     </div>
@@ -393,7 +396,7 @@ window.Quarto = {
 <p><strong>Objetivos de aprendizaje</strong></p>
 <ul>
 <li>Interpretar una EDO autónoma <span class="math inline">\(\dot{x}=f_\mu(x)\)</span> como un flujo sobre la recta.</li>
-<li>Localizar puntos fijos y decidir su estabilidad de forma intuitiva (signo del flujo) y formal (linealización).</li>
+<li>Localizar puntos fijos o de equilibrio y decidir su estabilidad de forma intuitiva (signo del flujo) y formal (linealización).</li>
 <li>Reconocer el papel del parámetro de control <span class="math inline">\(\mu\)</span> como elemento previo de las bifurcaciones.</li>
 </ul>
 </div>
@@ -405,7 +408,7 @@ window.Quarto = {
 <ul>
 <li><span class="math inline">\(x(t)\)</span> es el función del tiempo que describe el <strong>estado</strong> del sistema,</li>
 <li><span class="math inline">\(f\)</span> es una función suave que dicta su tasa de cambio ( el mdoelo del sistema), y</li>
-<li><span class="math inline">\(\mu\)</span> es un <strong>parámetro de control</strong> (o, en general, un vector de parámetros) que el ambiente o un experimento detrminan: una tasa de dilución, un nivel de luz, una carga de nutrientes.</li>
+<li><span class="math inline">\(\mu\)</span> es un <strong>parámetro de control</strong> (o, en general, un vector de parámetros) que el ambiente o un experimento determinan: una tasa de dilución, un nivel de luz, una carga de nutrientes.</li>
 </ul>
 <p>Que la EDO sea <strong>autónoma</strong> significa que <span class="math inline">\(f\)</span> <strong>no</strong> depende explícitamente del tiempo: la regla de evolución es la misma hoy que mañana. Eso nos permite pensar geométricamente. Imagina una partícula sobre la recta cuya velocidad en cada punto <span class="math inline">\(x\)</span> es <span class="math inline">\(f_\mu(x)\)</span>: donde <span class="math inline">\(f&gt;0\)</span> se mueve a la derecha, donde <span class="math inline">\(f&lt;0\)</span> a la izquierda.</p>
 </section>
@@ -526,7 +529,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaW1wb3J0IG51bXB5IGFzIG5w
 
 </div>
 <script type="webr-2-contents">
-eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiciA8LSAxOyBLIDwtIDEwXG5mICAgICAgPC0gZnVuY3Rpb24oeCkgciAqIHggKiAoMSAtIHggLyBLKVxuZnByaW1lIDwtIGZ1bmN0aW9uKHgpIHIgKiAoMSAtIDIgKiB4IC8gSylcblxuZm9yICh4ZiBpbiBjKDAsIEspKSB7XG4gIHMgPC0gZnByaW1lKHhmKVxuICBlc3RhZG8gPC0gaWYgKHMgPCAwKSBcImVzdGFibGVcIiBlbHNlIGlmIChzID4gMCkgXCJpbmVzdGFibGVcIiBlbHNlIFwibWFyZ2luYWxcIlxuICBjYXQoc3ByaW50ZihcIngqID0gJS4yZiAgZicoeCopID0gJSsuMmYgID0+ICVzXFxuXCIsIHhmLCBzLCBlc3RhZG8pKVxufVxuXG4jIEludGVncmFjacOzbiBwb3IgRXVsZXIgKGJhc2UgUiwgc2luIHBhcXVldGVzIGV4dGVybm9zKVxuZXVsZXIgPC0gZnVuY3Rpb24oeDAsIGR0ID0gMC4wMiwgVCA9IDEyKSB7XG4gIG4gPC0gVCAvIGR0OyB4IDwtIG51bWVyaWMobiArIDEpOyB4WzFdIDwtIHgwXG4gIGZvciAoaSBpbiAxOm4pIHhbaSArIDFdIDwtIHhbaV0gKyBkdCAqIGYoeFtpXSlcbiAgZGF0YS5mcmFtZSh0ID0gc2VxKDAsIFQsIGJ5ID0gZHQpLCB4ID0geClcbn1cbnBsb3QoZXVsZXIoMC4wNSksIHR5cGUgPSBcImxcIiwgeWxpbSA9IGMoMCwgMS44KSwgY29sID0gXCJzdGVlbGJsdWVcIixcbiAgICAgeGxhYiA9IFwidFwiLCB5bGFiID0gXCJ4KHQpXCIpXG5mb3IgKHgwIGluIGMoMC40LCAwLjksIDEuNikpIGxpbmVzKGV1bGVyKHgwKSwgY29sID0gXCJzdGVlbGJsdWVcIilcbmFibGluZShoID0gSywgbHR5ID0gMiwgY29sID0gXCJyZWRcIikifQ==
+eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiciA8LSAxOyBLIDwtIDEwXG5mICAgICAgPC0gZnVuY3Rpb24oeCkgciAqIHggKiAoMSAtIHggLyBLKVxuZnByaW1lIDwtIGZ1bmN0aW9uKHgpIHIgKiAoMSAtIDIgKiB4IC8gSylcblxuZm9yICh4ZiBpbiBjKDAsIEspKSB7XG4gIHMgPC0gZnByaW1lKHhmKVxuICBlc3RhZG8gPC0gaWYgKHMgPCAwKSBcImVzdGFibGVcIiBlbHNlIGlmIChzID4gMCkgXCJpbmVzdGFibGVcIiBlbHNlIFwibWFyZ2luYWxcIlxuICBjYXQoc3ByaW50ZihcIngqID0gJS4yZiAgZicoeCopID0gJSsuMmYgID0+ICVzXFxuXCIsIHhmLCBzLCBlc3RhZG8pKVxufVxuXG4jIEludGVncmFjacOzbiBwb3IgRXVsZXIgKGJhc2UgUiwgc2luIHBhcXVldGVzIGV4dGVybm9zKVxuZXVsZXIgPC0gZnVuY3Rpb24oeDAsIGR0ID0gMC4wMiwgVCA9IDEyKSB7XG4gIG4gPC0gVCAvIGR0OyB4IDwtIG51bWVyaWMobiArIDEpOyB4WzFdIDwtIHgwXG4gIGZvciAoaSBpbiAxOm4pIHhbaSArIDFdIDwtIHhbaV0gKyBkdCAqIGYoeFtpXSlcbiAgZGF0YS5mcmFtZSh0ID0gc2VxKDAsIFQsIGJ5ID0gZHQpLCB4ID0geClcbn1cbnBsb3QoZXVsZXIoMC4wNSksIHR5cGUgPSBcImxcIiwgeWxpbSA9IGMoMCwgSys1KSwgY29sID1cImJsdWVcIixcbiAgICAgeGxhYiA9IFwidFwiLCB5bGFiID0gXCJ4KHQpXCIpXG5jb2xvcmVzPC1jKFwiYmxhY2tcIixcImdyZWVuXCIsXCJvcmFuZ2VcIilcbmZvciAoeDAgaW4gcnVuaWYoNCwwLjEsSys1KSkgbGluZXMoZXVsZXIoeDApLCBjb2wgPSBzYW1wbGUoY29sb3JlcywgMSkpXG5hYmxpbmUoaCA9IEssIGx0eSA9IDIsIGNvbCA9IFwicmVkXCIpIn0=
 </script>
 </div>
 </div>
@@ -625,8 +628,8 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiciA8LSAxOyBLIDwtIDEwXG5m
 </div>
 </div>
 </section>
-<section id="para-seguir" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="para-seguir"><span class="header-section-number">5</span> Para seguir</h2>
+<section id="lo-que-sigue" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="lo-que-sigue"><span class="header-section-number">5</span> Lo que sigue</h2>
 <p>En el <a href="./p1-cap02-formas-normales.html">capítulo 2</a> veremos qué ocurre cuando, al mover <span class="math inline">\(\mu\)</span>, un punto fijo alcanza <span class="math inline">\(f'(x^*)=0\)</span>: ahí nacen, mueren o intercambian estabilidad los equilibrios. Tratamiento clásico en el muy recomendable ( <strong>yo diría fundamental</strong>) libro de <span class="citation" data-cites="strogatz2015">Strogatz (<a href="#ref-strogatz2015" role="doc-biblioref">2015</a>)</span>.</p>
 
 

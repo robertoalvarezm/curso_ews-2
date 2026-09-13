@@ -8,7 +8,7 @@ title: "Sistemas dinámicos 1-D y estabilidad"
 **Objetivos de aprendizaje**
 
 - Interpretar una EDO autónoma $\dot{x}=f_\mu(x)$ como un flujo sobre la recta.
-- Localizar puntos fijos y decidir su estabilidad de forma intuitiva (signo del flujo) y formal (linealización).
+- Localizar puntos fijos o de equilibrio y decidir su estabilidad de forma intuitiva (signo del flujo) y formal (linealización).
 - Reconocer el papel del parámetro de control $\mu$ como elemento previo de las bifurcaciones.
 :::
 
@@ -22,7 +22,7 @@ Aquí
 
 - $x(t)$ es el función del tiempo que describe el **estado** del sistema,
 - $f$ es una función suave que dicta su tasa de cambio ( el mdoelo del sistema), y
-- $\mu$ es un **parámetro de control** (o, en general, un vector de parámetros) que el ambiente o un experimento detrminan: una tasa de dilución, un nivel de luz, una carga de nutrientes.
+- $\mu$ es un **parámetro de control** (o, en general, un vector de parámetros) que el ambiente o un experimento determinan: una tasa de dilución, un nivel de luz, una carga de nutrientes.
 
 Que la EDO sea **autónoma** significa que $f$ **no** depende explícitamente del tiempo: la regla de evolución es la misma hoy que mañana. Eso nos permite pensar geométricamente. Imagina una partícula sobre la recta cuya velocidad en cada punto $x$ es $f_\mu(x)$: donde $f>0$ se mueve a la derecha, donde $f<0$ a la izquierda.
 
@@ -143,9 +143,10 @@ euler <- function(x0, dt = 0.02, T = 12) {
   for (i in 1:n) x[i + 1] <- x[i] + dt * f(x[i])
   data.frame(t = seq(0, T, by = dt), x = x)
 }
-plot(euler(0.05), type = "l", ylim = c(0, 1.8), col = "steelblue",
+plot(euler(0.05), type = "l", ylim = c(0, K+5), col ="blue",
      xlab = "t", ylab = "x(t)")
-for (x0 in c(0.4, 0.9, 1.6)) lines(euler(x0), col = "steelblue")
+colores<-c("black","green","orange")
+for (x0 in runif(4,0.1,K+5)) lines(euler(x0), col = sample(colores, 1))
 abline(h = K, lty = 2, col = "red")
 ```
 :::
@@ -188,6 +189,6 @@ Puntos fijos en $x^*=n\pi$. Como $f'(x)=\cos x$, los $\cos(n\pi)=(-1)^n$ alterna
 :::
 ::::
 
-## Para seguir
+## Lo que sigue
 
 En el [capítulo 2](p1-cap02-formas-normales.qmd) veremos qué ocurre cuando, al mover $\mu$, un punto fijo alcanza $f'(x^*)=0$: ahí nacen, mueren o intercambian estabilidad los equilibrios. Tratamiento clásico en el muy recomendable ( **yo diría fundamental**) libro de @strogatz2015.

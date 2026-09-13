@@ -508,7 +508,7 @@ legend("topleft", c("h creciente", "h decreciente"),
 ```
 :::
 
-El lazo abierto entre ambas curvas **es** la histéresis: los saltos
+La curva que conecta  ambas curvas **es** la histéresis: los saltos
 ocurren a distinto $h$ según la dirección del barrido.
 
 ### Ejercicios {#sec-ej-cusp}
@@ -631,7 +631,8 @@ microscópico hacia la **ralentización crítica** y las señales de
 alerta temprana de la Parte III.
 :::
 
-## Para seguir
+## Lo que sigue
+
 
 En la [Parte II](p2-cap04-empiricas.qmd) veremos estos
 pliegues e histéresis **medidos** en levaduras, cianobacterias y lagos

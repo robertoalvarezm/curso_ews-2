@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.37">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -42,10 +45,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-aafd05f385ac8229ba2214b6c0c13563.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-edb0a7dcd21651b81f6df2fd410f67d7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
 <link href="site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -80,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -216,6 +219,12 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./p3-tipos-de-tipping.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tipos de transición: bifurcación, ruido, tasa y choque</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./p3-cap05-ews-fundamento.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Fundamento de las EWS: ralentización crítica</span></a>
   </div>
@@ -336,11 +345,23 @@ window.Quarto = {
 <p><strong>Ralentización crítica (<em>critical slowing down</em>).</strong> Pérdida de velocidad de recuperación (<span class="math inline">\(1/|f'(x^*)|\to\infty\)</span>) al acercarse a una bifurcación.</p>
 <p><strong>Señales de alerta temprana (EWS).</strong> Estadísticos que anticipan una transición: principalmente aumento de <strong>varianza</strong> y de <strong>autocorrelación de retardo-1</strong>.</p>
 <p><strong>Autocorrelación de retardo-1 (<span class="math inline">\(\rho_1\)</span>).</strong> Correlación de la serie consigo misma desfasada un paso; crece hacia 1 cerca del umbral.</p>
-<p><strong>Detrending.</strong> Remoción de la tendencia lenta para aislar las fluctuaciones sobre las que se calculan las EWS.</p>
+<p><strong>Detrending.</strong> Remoción de la tendencia lenta para aislar las fluctuaciones sobre las que se calculan las EWS. Habitualmente un filtro gaussiano o LOESS; la primera diferencia se evita porque distorsiona la autocorrelación.</p>
+<p><strong>Ventana móvil (<em>rolling</em>).</strong> Segmento de ancho <strong>fijo</strong> <span class="math inline">\(w\)</span> que se desliza sobre la serie: en cada tiempo el indicador usa solo las <span class="math inline">\(w\)</span> observaciones más recientes. Imita el monitoreo en tiempo real y es sensible a los cambios tardíos.</p>
+<p><strong>Ventana expandible (<em>expanding</em>).</strong> Segmento que <strong>crece</strong>: el indicador acumula todas las observaciones desde un inicio fijo. Estabiliza el estimador pero puede <strong>diluir</strong> una aceleración reciente con datos de un régimen anterior.</p>
+<p><strong>Traslape.</strong> Fracción compartida entre ventanas consecutivas. El traslape máximo (avanzar un punto) suaviza la curva del indicador pero introduce autocorrelación en ella e infla la significancia; avanzar <span class="math inline">\(w/4\)</span> o <span class="math inline">\(w/2\)</span> es el compromiso habitual.</p>
+<p><strong>Análisis de sensibilidad.</strong> Repetir el cálculo variando ventana, ancho de banda y método de <em>detrending</em>, y reportar el resultado completo, no solo la combinación que da la señal más bonita.</p>
 <p><strong><span class="math inline">\(\tau\)</span> de Kendall.</strong> Medida no paramétrica de tendencia monótona; se usa para cuantificar si un indicador EWS crece con el tiempo.</p>
 <p><strong>Surrogates (subrogados).</strong> Series sintéticas que preservan ciertas propiedades (p.&nbsp;ej. autocorrelación) usadas para construir una distribución nula y evaluar significancia.</p>
 <p><strong>EWS multivariadas.</strong> Indicadores sobre varias variables: covarianza, autovalor dominante, correlación cruzada, varianza espacial.</p>
 <p><strong>Proceso de Ornstein–Uhlenbeck (OU).</strong> Modelo lineal estocástico <span class="math inline">\(dx=-\lambda x\,dt+\sigma\,dW\)</span> usado para derivar las predicciones de varianza y autocorrelación.</p>
+<p><strong>B-tipping (inducido por bifurcación).</strong> El parámetro de control cruza un valor crítico y el estado pierde estabilidad. Es el único mecanismo que <strong>garantiza</strong> ralentización crítica y, por tanto, EWS clásicas.</p>
+<p><strong>N-tipping (inducido por ruido).</strong> El paisaje no cambia; una fluctuación suficientemente grande cruza la barrera. El tiempo de espera sigue una ley tipo Kramers, <span class="math inline">\(\tau_K \propto e^{\Delta V/\sigma^2}\)</span>. Sin ralentización crítica previa.</p>
+<p><strong>R-tipping (inducido por la tasa).</strong> El sistema salta porque el parámetro cambia más rápido de lo que el estado puede seguirlo, sin cruzar ningún umbral estático. <span class="math inline">\(\lambda\)</span> nunca se anula: no hay firma anticipatoria.</p>
+<p><strong>S-tipping (inducido por choque).</strong> Una perturbación única y de gran amplitud desplaza el estado a la otra cuenca de atracción. No hay dinámica precursora; solo cabe el diagnóstico posterior.</p>
+<p><strong>Flickering.</strong> Excursiones esporádicas de ida y vuelta entre dos estados antes de la transición definitiva; indicador propio de sistemas biestables cerca de un pliegue.</p>
+<p><strong>Enrojecimiento espectral.</strong> Desplazamiento de la potencia del espectro hacia bajas frecuencias al ralentizarse el sistema.</p>
+<p><strong>Sesgo retrospectivo.</strong> Distorsión que aparece al analizar únicamente series seleccionadas porque terminaron en una transición; infla los indicadores aunque no haya habido pérdida de resiliencia.</p>
+<p><strong><code>ewstools</code>.</strong> Biblioteca de Python para EWS (detrending, indicadores en ventana móvil, <span class="math inline">\(\tau\)</span> de Kendall, espectro, clasificadores profundos). Su equivalente en R es <code>EWSmethods</code>.</p>
 
 
 <script type="ojs-module-contents">

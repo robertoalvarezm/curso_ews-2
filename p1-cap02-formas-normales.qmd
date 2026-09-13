@@ -18,7 +18,7 @@ Una **bifurcación** es un cambio **cualitativo** en el retrato de fases, númer
 
 :::{.callout-important}
 ## Idea importante
-Una idea poderosa es que, **cerca** del punto crítico, casi cualquier sistema se comporta como uno de unos pocos modelos arquetípicos: sus **formas normales**. Estudiar tres polinomios sencillos nos da el vocabulario para reconocerlas en cualquier sistema.
+Una idea poderosa es que, **cerca** del punto crítico, casi cualquier sistema se comporta como uno de unos pocos modelos arquetípicos: a esto llamamos sus **formas normales**. Estudiar tres polinomios sencillos nos da el vocabulario para reconocerlas en cualquier sistema.
 
 :::
 
@@ -197,6 +197,6 @@ Usa `roots = [0] + ([sqrt(-mu), -sqrt(-mu)] if mu < 0 else [])` y `fp = lambda x
 **Condiciones de no-degeneración.** Una saddle-node genérica requiere, en $(\mu_c,x^*)$: $f=0$, $\partial_x f=0$, $\partial_{xx} f\neq 0$ y $\partial_\mu f\neq 0$. La transcrítica y la pitchfork añaden la restricción $\partial_\mu f=0$ en el equilibrio persistente más condiciones de simetría. El **teorema de la variedad central** justifica por qué basta estudiar la dinámica reducida a 1-D cerca del punto crítico, aun en sistemas de mayor dimensión.
 :::
 
-## Para seguir
+## Lo que sigue
 
 En el [capítulo 3](p1-cap03-potenciales-catastrofe.qmd) reescribimos la dinámica como el descenso por un **paisaje de potencial** y vemos cómo, combinando bifurcaciones, surgen la **catástrofe** y la **histéresis**.

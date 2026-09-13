@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,10 +12,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -96,10 +99,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-aafd05f385ac8229ba2214b6c0c13563.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-edb0a7dcd21651b81f6df2fd410f67d7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
 <link href="site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
@@ -134,7 +137,7 @@ div.csl-indent {
 <link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -271,7 +274,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./p3-tipos-de-tipping.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Tipos de transición: bifurcación, ruido y tasa</span></a>
+ <span class="menu-text">Tipos de transición: bifurcación, ruido, tasa y choque</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -464,7 +467,7 @@ eyJhdHRyIjp7ImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiaW1wb3J0IG51bXB5IGFzIG5w
 </section>
 <section id="sec-abruptas" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="sec-abruptas"><span class="header-section-number">2</span> Abruptas vs.&nbsp;no abruptas</h2>
-<p>No toda transición tiene un pliegue. Una bifurcación <strong>transcrítica</strong> o un cambio <strong>suave</strong> mueven el sistema de manera gradual y <strong>reversible</strong>. Las transiciones <strong>abruptas</strong> (saddle-node/fold) traen salto e histéresis. Esta distinción —¿es el cambio brusco e irreversible, o suave?— gobierna <strong>qué</strong> señales de alerta esperar y <strong>cuánta</strong> anticipación es posible <span class="citation" data-cites="deb2022">(<a href="#ref-deb2022" role="doc-biblioref">Deb et&nbsp;al. 2022</a>)</span>. Es el tema de la Parte III.</p>
+<p>No toda transición tiene un pliegue. Una bifurcación <strong>transcrítica</strong> o un cambio <strong>suave</strong> mueven el sistema de manera gradual y <strong>reversible</strong>. Las transiciones <strong>abruptas</strong> (saddle-node/fold) traen salto e histéresis. Esta distinción —¿es el cambio brusco e irreversible, o suave?— gobierna <strong>qué</strong> señales de alerta esperar y <strong>cuánta</strong> anticipación es posible <span class="citation" data-cites="deb2022">(<a href="#ref-deb2022" role="doc-biblioref">Deb et&nbsp;al. 2022</a>)</span>. Y hay una segunda distinción, igual de decisiva, que abre la Parte III: <strong>por qué mecanismo</strong> ocurre el salto (bifurcación, ruido, tasa o choque), porque solo el primero garantiza una firma anticipatoria en los datos <span class="citation" data-cites="alvarez2026early">(<a href="#ref-alvarez2026early" role="doc-biblioref">Alvarez-Martinez y Miramontes 2026</a>)</span>. Es el tema de la Parte III.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -566,6 +569,9 @@ W10=
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-alvarez2026early" class="csl-entry" role="listitem">
+Alvarez-Martinez, Roberto, y Pedro Miramontes. 2026. <span>«Early Warning Signals in Ecological Time-Series»</span>. <em>Entropy</em> 28 (6): 628. <a href="https://doi.org/10.3390/e28060628">https://doi.org/10.3390/e28060628</a>.
+</div>
 <div id="ref-carpenter2011" class="csl-entry" role="listitem">
 Carpenter, Stephen R., Jonathan J. Cole, Michael L. Pace, et&nbsp;al. 2011. <span>«Early Warnings of Regime Shifts: A Whole-Ecosystem Experiment»</span>. <em>Science</em> 332 (6033): 1079-82. <a href="https://doi.org/10.1126/science.1203672">https://doi.org/10.1126/science.1203672</a>.
 </div>
@@ -1005,8 +1011,8 @@ window._ojs.runtime.interpretFromScriptTags();
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./p3-tipos-de-tipping.html" class="pagination-link" aria-label="Tipos de transición: bifurcación, ruido y tasa">
-        <span class="nav-page-text">Tipos de transición: bifurcación, ruido y tasa</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./p3-tipos-de-tipping.html" class="pagination-link" aria-label="Tipos de transición: bifurcación, ruido, tasa y choque">
+        <span class="nav-page-text">Tipos de transición: bifurcación, ruido, tasa y choque</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

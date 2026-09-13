@@ -22,7 +22,7 @@ El curso se vive en **tres partes por tema**, más un taller práctico transvers
 - **Parte III · Señales de Alerta Temprana.** Mecanismos de *tipping* (bifurcación, ruido, tasa y choque), ralentización crítica, varianza y autocorrelación, ventanas móviles y expandibles, indicadores multivariados y enfoques de aprendizaje automático [@deb2022; @bury2021].
 
 ::: {.callout-note}
-## Referencia de cabecera de la Parte III
+## Referencia principal de la Parte III
 La Parte III sigue de cerca la revisión **@alvarez2026early**, *Early Warning Signals in Ecological Time-Series* (Entropy 28:628), que sintetiza el fundamento dinámico, el catálogo de indicadores, las decisiones metodológicas del pipeline (ventanas, *detrending*, prueba de tendencia, sensibilidad) y la tipología de mecanismos de *tipping*. Cada capítulo remite a la sección correspondiente.
 :::
 - **Taller transversal.** De datos **simulados** a datos **reales**: detectar una transición con tu propio pipeline.
